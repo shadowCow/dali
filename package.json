@@ -4,29 +4,21 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "foreman": "^3.0.1",
-    "react-scripts": "^1.1.4"
+    "browser-sync": "^2.26.3",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "test-once": "CI=true react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "dev": "nf start -p 3000"
+    "start": "cd src && browser-sync start --server --port 3000 --files \"js/**/*.js\" \"index.js\" \"*.css\" \"*.html\" "
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shadowCow/dali.git"
   },
-  "author": "dwadesonts <dan.wadeson@tryonsolutions.com> (www.tryonsolutions.com)",
+  "author": "shadowCow <shadowcow84@gmail.com> (www.tryonsolutions.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/shadowCow/dali/issues"
