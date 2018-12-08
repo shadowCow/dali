@@ -136,14 +136,18 @@ function drawPolygon(
 
 function drawPath(
   id,
-  points,
+  startX,
+  startY,
+  segments,
   fill,
   stroke,
   strokeWidth
 ) {
   let params = {
-    id: id,
-    points: points
+    id,
+    startX,
+    startY,
+    segments
   }
   if (fill) { params.fill = fill }
   if (stroke) { params.stroke = stroke }
@@ -155,6 +159,69 @@ function drawPath(
   }
 }
 
+const SEGMENT_TYPES = Object.freeze({
+  MOVE_TO: "move_to",
+  LINE_TO: 'line_to',
+  BEZIER_CURVE_TO: 'bezier_curve_to',
+  QUADRATIC_CURVE_TO: 'quadratic_curve_to'
+});
+
+function moveToPathSegment(
+  x,
+  y
+) {
+  return {
+    type: SEGMENT_TYPES.MOVE_TO,
+    x,
+    y
+  }
+}
+
+function linePathSegment(
+  toX,
+  toY
+) {
+  return {
+    type: SEGMENT_TYPES.LINE_TO,
+    toX,
+    toY
+  }
+}
+
+function bezierCurvePathSegment(
+  cp1x,
+  cp1y,
+  cp2x,
+  cp2y,
+  toX,
+  toY
+) {
+  return {
+    type: SEGMENT_TYPES.BEZIER_CURVE_TO,
+    cp1x,
+    cp1y,
+    cp2x,
+    cp2y,
+    toX,
+    toY
+  }
+}
+
+function quadraticCurvePathSegment(
+  cpx,
+  cpy,
+  toX,
+  toY
+) {
+  return {
+    type: SEGMENT_TYPES.QUADRATIC_CURVE_TO,
+    cpx,
+    cpy,
+    toX,
+    toY
+  }
+}
+
 export {
   COMMAND_NAMES,
   drawEllipse,
@@ -162,5 +229,10 @@ export {
   drawLine,
   drawPolyline,
   drawPolygon,
-  drawPath
+  drawPath,
+  SEGMENT_TYPES,
+  moveToPathSegment,
+  linePathSegment,
+  bezierCurvePathSegment,
+  quadraticCurvePathSegment
 }

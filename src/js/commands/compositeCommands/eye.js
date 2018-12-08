@@ -1,5 +1,4 @@
-import actionCreators from '../actionCreators'
-const {drawCircle, drawEllipse} = actionCreators
+import {drawEllipse} from '../primitiveShapeCommands.js'
 
 function drawEye(
   id,
@@ -16,11 +15,11 @@ function drawEye(
 }
 
 function drawIris(eyeId, centerX, centerY, radius, color) {
-  return drawCircle(eyeId + "-iris", centerX, centerY, radius, color)
+  return drawEllipse(eyeId + "-iris", centerX, centerY, radius, radius, color)
 }
 
 function drawPupil(eyeId, centerX, centerY, radius) {
-  return drawCircle(eyeId + "-pupil", centerX, centerY, radius, "black")
+  return drawEllipse(eyeId + "-pupil", centerX, centerY, radius, radius, "black")
 }
 
 function drawEyeOutline(eyeId, centerX, centerY, irisRadius) {
@@ -46,7 +45,7 @@ function drawEyePair(id, centerX, centerY, eyeSpacing, irisRadius, irisColor) {
   ]
 }
 
-export default {
+export {
   drawEye,
   drawEyePair
 }

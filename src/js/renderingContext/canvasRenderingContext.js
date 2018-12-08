@@ -1,4 +1,4 @@
-import {COMMAND_NAMES} from '../commands/primitiveShapeCommands.js';
+import {COMMAND_NAMES, SEGMENT_TYPES} from '../commands/primitiveShapeCommands.js';
 
 let canvas;
 let ctx;
@@ -166,14 +166,50 @@ function drawPath(pathData) {
   ctx.strokeStyle = pathData.stroke || ctx.strokeStyle;
   ctx.lineWidth = pathData.strokeWidth || ctx.lineWidth;
 
-  const points = pathData.points;
   ctx.beginPath();
-  ctx.moveTo(points[0].x, points[0].y);
-  for (let i = 1; i < points.length; i++) {
-    ctx.lineTo(points[i].x, points[i].y);
+  ctx.moveTo(pathData.startX, pathData.startY);
+  pathData.segments.forEach(s => _drawPathSegment(ctx, s));
+
+  if (pathData.fill) {
+    ctx.fill();
   }
-  ctx.stroke();
+
+  if (pathData.stroke) {
+    ctx.stroke();
+  }
+
   ctx.closePath();
+}
+
+function _drawPathSegment(ctx, segment) {
+  switch (segment.type) {
+    case SEGMENT_TYPES.MOVE_TO:
+      ctx.moveTo(segment.x, segment.y);
+      break;
+    case SEGMENT_TYPES.LINE_TO:
+      ctx.lineTo(segment.toX, segment.toY);
+      break;
+    case SEGMENT_TYPES.BEZIER_CURVE_TO:
+      ctx.bezierCurveTo(
+        segment.cp1x,
+        segment.cp1y,
+        segment.cp2x,
+        segment.cp2y,
+        segment.toX,
+        segment.toY
+      )
+      break;
+    case SEGMENT_TYPES.QUADRATIC_CURVE_TO:
+      ctx.quadraticCurveTo(
+        segment.cpx,
+        segment.cpy,
+        segment.toX,
+        segment.toY
+      )
+      break;
+    default:
+      throw `Unknown path segment type: ${segment.type}`
+  }
 }
 
 
