@@ -1,4 +1,5 @@
 const COMMAND_NAMES = Object.freeze({
+  DRAW_TEXT: 'draw_text',
   DRAW_ELLIPSE: 'draw_ellipse',
   DRAW_RECT: 'draw_rect',
   DRAW_LINE: 'draw_line',
@@ -7,6 +8,33 @@ const COMMAND_NAMES = Object.freeze({
   DRAW_PATH: 'draw_path',
   DRAW_GROUP: 'draw_group',
 })
+
+function drawText(
+  id,
+  x,
+  y,
+  text,
+  font,
+  fill,
+  stroke,
+  strokeWidth
+) {
+  let params = {
+    id,
+    x,
+    y,
+    text,
+    font
+  }
+  if (fill) { params.fill = fill }
+  if (stroke) { params.stroke = stroke }
+  if (strokeWidth) { params.strokeWidth = strokeWidth }
+
+  return {
+    name: COMMAND_NAMES.DRAW_TEXT,
+    params
+  }
+}
 
 function drawEllipse(
   id,
@@ -296,6 +324,7 @@ function skew(
 export {
   COMMAND_NAMES,
   drawGroup,
+  drawText,
   drawEllipse,
   drawRect,
   drawLine,

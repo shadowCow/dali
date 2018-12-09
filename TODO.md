@@ -1,6 +1,6 @@
 # TODO
 
-  
+  - draw text
   - finish transforms
   - polish groups?
   - add more composites

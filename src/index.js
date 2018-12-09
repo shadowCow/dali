@@ -1,6 +1,7 @@
 
 import {RENDERING_CONTEXT_TYPES, RenderingContextLoader} from './js/renderingContext/renderingContexts.js';
 import {
+  drawText,
   drawGroup,
   drawEllipse,
   drawRect,
@@ -40,7 +41,8 @@ const exampleData = [
   ),
   drawRect("6", 500, 200, 100, 100, 15, 15, "orange", undefined, undefined),
   ...drawEyePair("7", 400, 200, 50, 25, "blue"),
-  drawWave("8", 100, 400, 50, 50, 20, undefined, "blue", 3)
+  drawWave("8", 100, 400, 50, 50, 20, undefined, "blue", 3),
+  drawText("t1", 250, 50, "hello", "50px serif", "purple", undefined, 1)
 ]
 
 renderingContext.drawPrimitives(exampleData);

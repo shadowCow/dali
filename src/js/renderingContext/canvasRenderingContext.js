@@ -31,6 +31,9 @@ function drawPrimitives(primitives) {
 
 function _drawPrimitive(p) {
   switch (p.name) {
+    case COMMAND_NAMES.DRAW_TEXT:
+      drawText(p.params);
+      break;
     case COMMAND_NAMES.DRAW_ELLIPSE:
       drawEllipse(p.params);
       break;
@@ -51,6 +54,21 @@ function _drawPrimitive(p) {
       break;
     default:
       throw `Unknown primitive ${p.name}`;
+  }
+}
+
+function drawText(textData) {
+  if (textData.font) {
+    ctx.font = textData.font;
+  }
+  if (textData.fill) {
+    ctx.fillStyle = textData.fill;
+    ctx.fillText(textData.text, textData.x, textData.y);
+  }
+  if (textData.stroke) {
+    ctx.strokeStyle = textData.stroke;
+    ctx.lineWidth = textData.strokeWidth;
+    ctx.strokeText(textData.text, textData.x, textData.y);
   }
 }
 
