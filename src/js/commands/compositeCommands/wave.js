@@ -1,3 +1,4 @@
+import { drawPath, quadraticCurvePathSegment } from "../primitiveShapeCommands.js";
 
 function drawWave(
   id,
@@ -10,12 +11,36 @@ function drawWave(
   stroke,
   strokeWidth
 ) {
-  let d = `M ${startX},${startY} ` +
-           `Q ${startX + waveLength/2},${startY - amplitude} ${startX + waveLength},${startY} ` +
-           "t"
 
-  for (let i = 0; i < numCycles; i++) {
-    d += ` ${waveLength},0`
+  let segments = [
+    quadraticCurvePathSegment(
+      startX + waveLength/2,
+      startY + amplitude,
+      startX + waveLength,
+      startY
+    )
+  ];
+
+  for (let i = 1; i < numCycles; i++) {
+    segments.push(quadraticCurvePathSegment(
+      segments[i-1].toX + waveLength/2,
+      segments[i-1].toY + amplitude,
+      segments[i-1].toX + waveLength,
+      segments[i-1].toY
+    ));
   }
-  return drawPath(id, d, fill, stroke, strokeWidth)
+
+  return drawPath(
+    id,
+    startX,
+    startY,
+    segments,
+    fill,
+    stroke,
+    strokeWidth
+  )
+}
+
+export {
+  drawWave
 }

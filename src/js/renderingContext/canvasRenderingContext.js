@@ -24,30 +24,34 @@ function init(containerId, canvasId) {
 
 function drawPrimitives(primitives) {
   primitives.forEach(p => {
-    console.log('drawing primitive', p);
-    switch (p.name) {
-      case COMMAND_NAMES.DRAW_ELLIPSE:
-        drawEllipse(p.params);
-        break;
-      case COMMAND_NAMES.DRAW_RECT:
-        drawRect(p.params);
-        break;
-      case COMMAND_NAMES.DRAW_LINE:
-        drawLine(p.params);
-        break;
-      case COMMAND_NAMES.DRAW_POLYLINE:
-        drawPolyline(p.params);
-        break;
-      case COMMAND_NAMES.DRAW_POLYGON:
-        drawPolygon(p.params);
-        break;
-      case COMMAND_NAMES.DRAW_PATH:
-        drawPath(p.params);
-        break;
-      default:
-        throw `Unknown primitive ${p.name}`;
-    }
+    // console.log('drawing primitive', p);
+    _drawPrimitive(p);
   });
+}
+
+function _drawPrimitive(p) {
+  switch (p.name) {
+    case COMMAND_NAMES.DRAW_ELLIPSE:
+      drawEllipse(p.params);
+      break;
+    case COMMAND_NAMES.DRAW_RECT:
+      drawRect(p.params);
+      break;
+    case COMMAND_NAMES.DRAW_LINE:
+      drawLine(p.params);
+      break;
+    case COMMAND_NAMES.DRAW_POLYLINE:
+      drawPolyline(p.params);
+      break;
+    case COMMAND_NAMES.DRAW_POLYGON:
+      drawPolygon(p.params);
+      break;
+    case COMMAND_NAMES.DRAW_PATH:
+      drawPath(p.params);
+      break;
+    default:
+      throw `Unknown primitive ${p.name}`;
+  }
 }
 
 function drawEllipse(ellipseData) {
@@ -212,6 +216,18 @@ function _drawPathSegment(ctx, segment) {
   }
 }
 
+function drawGroup(
+  group
+) {
+  if (group.params.transform) {
+    let {a,b,c,d,e,f} = group.params.transform;
+    ctx.transform(a,b,c,d,e,f);
+  }
+  
+  group.params.primitives.forEach(p => _drawPrimitive(p));
+
+  ctx.setTransform(1,0,0,1,0,0);
+}
 
 export default {
   init,
@@ -221,5 +237,6 @@ export default {
   drawLine,
   drawPolyline,
   drawPolygon,
-  drawPath
+  drawPath,
+  drawGroup
 }

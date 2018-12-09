@@ -1,7 +1,9 @@
 # TODO
 
- - fill in the rest of the canvasRenderingContext and svgRenderingContext
- - add more composites
- - add animations
- - add drawing language 
- 
+  
+  - finish transforms
+  - polish groups?
+  - add more composites
+  - add drawing language
+  - fill in the rest of the svgRenderingContext
+  - add animations

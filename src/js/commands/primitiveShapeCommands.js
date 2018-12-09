@@ -5,6 +5,7 @@ const COMMAND_NAMES = Object.freeze({
   DRAW_POLYLINE: 'draw_polyline',
   DRAW_POLYGON: 'draw_polygon',
   DRAW_PATH: 'draw_path',
+  DRAW_GROUP: 'draw_group',
 })
 
 function drawEllipse(
@@ -222,8 +223,79 @@ function quadraticCurvePathSegment(
   }
 }
 
+function drawGroup(
+  id,
+  primitives,
+  transform
+) {
+  const params = {
+    id,
+    primitives,
+    transform
+  }
+
+  return {
+    name: COMMAND_NAMES.DRAW_GROUP,
+    params
+  }
+}
+
+const TRANSFORM_OPS = Object.freeze({
+  TRANSLATE: 'translate',
+  ROTATE: 'rotate',
+  SCALE: 'scale',
+  SKEW: 'skew'
+});
+
+function translate(
+  x,
+  y
+) {
+  return {
+    type: TRANSFORM_OPS.TRANSLATE,
+    x,
+    y
+  }
+}
+
+function rotate(
+  a,
+  x,
+  y
+) {
+  return {
+    type: TRANSFORM_OPS.ROTATE,
+    a,
+    x,
+    y
+  }
+}
+
+function scale(
+  x,
+  y
+) {
+  return {
+    type: TRANSFORM_OPS.SCALE,
+    x,
+    y
+  }
+}
+
+function skew(
+  x,
+  y
+) {
+  return {
+    type: TRANSFORM_OPS.SKEW,
+    x,
+    y
+  }
+}
+
 export {
   COMMAND_NAMES,
+  drawGroup,
   drawEllipse,
   drawRect,
   drawLine,
@@ -234,5 +306,10 @@ export {
   moveToPathSegment,
   linePathSegment,
   bezierCurvePathSegment,
-  quadraticCurvePathSegment
+  quadraticCurvePathSegment,
+  TRANSFORM_OPS,
+  translate,
+  rotate,
+  scale,
+  skew
 }
