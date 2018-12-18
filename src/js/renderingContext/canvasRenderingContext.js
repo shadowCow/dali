@@ -25,11 +25,11 @@ function init(containerId, canvasId) {
 function drawPrimitives(primitives) {
   primitives.forEach(p => {
     // console.log('drawing primitive', p);
-    _drawPrimitive(p);
+    drawPrimitive(p);
   });
 }
 
-function _drawPrimitive(p) {
+function drawPrimitive(p) {
   switch (p.name) {
     case COMMAND_NAMES.DRAW_TEXT:
       drawText(p.params);
@@ -75,10 +75,10 @@ function drawText(textData) {
 function drawEllipse(ellipseData) {
   ctx.beginPath();
   ctx.ellipse(
-    ellipseData.centerX,
-    ellipseData.centerY,
-    ellipseData.radiusX,
-    ellipseData.radiusY,
+    ellipseData.cx,
+    ellipseData.cy,
+    ellipseData.rx,
+    ellipseData.ry,
     0,
     0,
     2 * Math.PI
@@ -153,10 +153,6 @@ function drawLine(lineData) {
 
   ctx.stroke();
   ctx.closePath();
-}
-
-function drawPolyline(polylineData) {
-
 }
 
 function drawPolygon(polygonData) {
@@ -242,7 +238,7 @@ function drawGroup(
     ctx.transform(a,b,c,d,e,f);
   }
   
-  group.params.primitives.forEach(p => _drawPrimitive(p));
+  group.params.primitives.forEach(p => drawPrimitive(p));
 
   ctx.setTransform(1,0,0,1,0,0);
 }
@@ -250,10 +246,10 @@ function drawGroup(
 export default {
   init,
   drawPrimitives,
+  drawText,
   drawEllipse,
   drawRect,
   drawLine,
-  drawPolyline,
   drawPolygon,
   drawPath,
   drawGroup

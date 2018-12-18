@@ -17,7 +17,7 @@ import {drawWave} from './js/commands/compositeCommands/wave.js'
 
 const canvasContainerId = "canvas-container";
 const canvasId = "drawing-canvas";
-const renderingContextType = RENDERING_CONTEXT_TYPES.CANVAS;
+const renderingContextType = RENDERING_CONTEXT_TYPES.SVG;
 
 const renderingContext = RenderingContextLoader.load(renderingContextType);
 renderingContext.init(canvasContainerId, canvasId);

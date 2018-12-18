@@ -38,20 +38,20 @@ function drawText(
 
 function drawEllipse(
   id,
-  centerX,
-  centerY,
-  radiusX,
-  radiusY,
+  cx,
+  cy,
+  rx,
+  ry,
   fill,
   stroke,
   strokeWidth
 ) {
   let params = {
     id: id,
-    centerX: centerX,
-    centerY: centerY,
-    radiusX: radiusX,
-    radiusY: radiusY
+    cx: cx,
+    cy: cy,
+    rx: rx,
+    ry: ry
   }
   if (fill) { params.fill = fill }
   if (stroke) { params.stroke = stroke }

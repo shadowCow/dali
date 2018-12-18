@@ -1,9 +1,10 @@
 # TODO
 
-  - draw text
+  - switch to passing data, styles, transforms in to primitive shape commands
   - finish transforms
-  - polish groups?
+  - switch to TypeScript
   - add more composites
   - add drawing language
-  - fill in the rest of the svgRenderingContext
   - add animations
+  - polish groups?
+  
