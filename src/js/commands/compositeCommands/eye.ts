@@ -15,23 +15,26 @@ function drawEye(
 }
 
 function drawIris(eyeId, centerX, centerY, radius, color) {
-  return drawEllipse(eyeId + "-iris", centerX, centerY, radius, radius, color)
+  return drawEllipse(
+    eyeId + "-iris",
+    {cx: centerX, cy: centerY, rx: radius, ry: radius},
+    {fill: color}
+  )
 }
 
 function drawPupil(eyeId, centerX, centerY, radius) {
-  return drawEllipse(eyeId + "-pupil", centerX, centerY, radius, radius, "black")
+  return drawEllipse(
+    eyeId + "-pupil",
+    {cx: centerX, cy: centerY, rx: radius, ry: radius},
+    {fill:"black"}
+  )
 }
 
 function drawEyeOutline(eyeId, centerX, centerY, irisRadius) {
   return drawEllipse(
     eyeId + "-eyeOutline",
-    centerX,
-    centerY,
-    irisRadius*2,
-    irisRadius*1.25,
-    "white",
-    "black",
-    3
+    {cx: centerX, cy: centerY, rx: irisRadius*2, ry: irisRadius*1.25},
+    {fill:"white",stroke:"black",strokeWidth:3}
   )
 }
 

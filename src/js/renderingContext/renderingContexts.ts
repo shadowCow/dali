@@ -1,17 +1,17 @@
 import canvasRenderingContext from './canvasRenderingContext.js';
 import svgRenderingContext from './svgRenderingContext.js';
 
-const RENDERING_CONTEXT_TYPES = Object.freeze({
-  CANVAS: 'canvas',
-  SVG: 'svg'
-});
+enum RenderingContextTypes {
+  Canvas = "Canvas",
+  Svg = "Svg"
+}
 
 const RenderingContextLoader = Object.freeze({
-  load: function(type) {
+  load: function(type: string) {
     switch (type) {
-      case RENDERING_CONTEXT_TYPES.CANVAS:
+      case RenderingContextTypes.Canvas:
         return canvasRenderingContext;
-      case RENDERING_CONTEXT_TYPES.SVG:
+      case RenderingContextTypes.Svg:
         return svgRenderingContext;
       default:
         throw `Unknown rendering context type: ${type}`;
@@ -20,6 +20,6 @@ const RenderingContextLoader = Object.freeze({
 });
 
 export {
-  RENDERING_CONTEXT_TYPES,
+  RenderingContextTypes,
   RenderingContextLoader,
 }

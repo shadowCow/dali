@@ -1,10 +1,19 @@
-import {COMMAND_NAMES, SEGMENT_TYPES} from '../commands/primitiveShapeCommands.js';
+import {
+  COMMAND_NAMES,
+  SEGMENT_TYPES,
+  PrimitiveShapeParams,
+  Styles,
+  Transform,
+  TransformOp,
+  TransformOps
+} from '../commands/primitiveShapeCommands.js';
+import Command from '../commands/command.js';
 
 const svgNs = "http://www.w3.org/2000/svg";
 
 let canvas;
 
-function init(containerId, canvasId) {
+function init(containerId: string, canvasId: string): void {
   let maybeAlreadyCanvas = document.getElementById(canvasId);
 
   if (!maybeAlreadyCanvas) {
@@ -24,7 +33,10 @@ function init(containerId, canvasId) {
 }
 
 
-function drawPrimitives(primitives, parent = canvas) {
+function drawPrimitives(
+  primitives: Array<Command<PrimitiveShapeParams>>,
+  parent = canvas
+): void {
   primitives.forEach(p => {
     // console.log('drawing primitive', p);
     drawPrimitive(p, parent);
@@ -45,9 +57,6 @@ function drawPrimitive(p, parent = canvas) {
     case COMMAND_NAMES.DRAW_LINE:
       drawLine(p.params, parent);
       break;
-    case COMMAND_NAMES.DRAW_POLYLINE:
-      drawPolyline(p.params, parent);
-      break;
     case COMMAND_NAMES.DRAW_POLYGON:
       drawPolygon(p.params, parent);
       break;
@@ -67,9 +76,9 @@ function drawText(textData, parent = canvas) {
     parent
   )
 
-  textElement.style.font = textData.font;
+  textElement.style.font = textData.drawParams.font;
 
-  const textNode = document.createTextNode(textData.text);
+  const textNode = document.createTextNode(textData.drawParams.text);
   textElement.appendChild(textNode);
 }
 
@@ -101,7 +110,7 @@ function drawLine(lineData, parent = canvas) {
 }
 
 function drawPolygon(polygonData, parent = canvas) {
-  const pointsAsSvgString = polygonData.points.map(p => {
+  const pointsAsSvgString = polygonData.drawParams.points.map(p => {
     return `${p.x},${p.y}`
   }).reduce((acc, item, index) => {
     if (index !== 0) {
@@ -113,7 +122,9 @@ function drawPolygon(polygonData, parent = canvas) {
 
   const polygonForSvg = {
     ...polygonData,
-    points: pointsAsSvgString
+    drawParams: {
+      points: pointsAsSvgString
+    }
   }
 
   _createAndAdd(
@@ -125,17 +136,18 @@ function drawPolygon(polygonData, parent = canvas) {
 }
 
 function drawPath(pathData, parent = canvas) {
-  const pathStart = `M${pathData.startX} ${pathData.startY},`
-  const segmentsAsSvgString = pathData.segments.map(s => {
+  const pathStart = `M${pathData.drawParams.startX} ${pathData.drawParams.startY},`
+  const segmentsAsSvgString = pathData.drawParams.segments.map(s => {
     return _pathSegmentToSvgString(s);
   }).reduce((acc, item) => {
     return acc + " " + item
   }, pathStart);
-  console.log(segmentsAsSvgString)
 
   const pathForSvg = {
     ...pathData,
-    d: segmentsAsSvgString
+    drawParams: {
+      d: segmentsAsSvgString
+    }
   }
 
   _createAndAdd(
@@ -161,51 +173,130 @@ function _pathSegmentToSvgString(pathSegment) {
   }
 }
 
-function drawGroup(groupData, parent = canvas) {
+function drawGroup(
+  groupData: Command<PrimitiveShapeParams>,
+  parent = canvas
+): void {
   const groupEl = _createAndAdd(
     "g",
-    groupData,
+    groupData.params,
     [],
     parent
   );
 
-  _addStyles(groupEl, groupData);
+  _addStyles(groupEl, groupData.params.styles);
 
-  groupData.params.primitives.forEach(p => drawPrimitive(p, groupEl));
+  groupData.params.drawParams.primitives.forEach(p => drawPrimitive(p, groupEl));
 }
 
-function _createAndAdd(elementTag, data, attributes, parent = canvas) {
+function _createAndAdd(
+  elementTag: string,
+  data: PrimitiveShapeParams,
+  attributes: Array<string>,
+  parent = canvas
+) {
   const element = document.createElementNS(svgNs, elementTag);
-  _setAttributes(element, data, attributes);
-  _addStyles(element, data);
+  _setAttributes(element, data.drawParams, attributes);
+  _addStyles(element, data.styles);
+  _addTransform(element, data.transform);
 
   parent.appendChild(element);
 
   return element;
 }
 
-function _setAttributes(element, data, attributes) {
+function _setAttributes(
+  element,
+  data: object,
+  attributes: Array<string>
+): void {
   attributes.forEach(a => {
     element.setAttribute(a, data[a])
   });
 }
 
-function _addStyles(element, shapeData) {
-  if (shapeData.stroke) {
-    element.style.stroke = shapeData.stroke;
-    element.style.strokeWidth = shapeData.strokeWidth;
-  }
-  if (shapeData.fill) {
-    element.style.fill = shapeData.fill;
-  } else {
-    element.style.fill = "none"
+function _addStyles(
+  element,
+  styles?: Styles,
+): void {
+  if (styles) {
+    if (styles.stroke) {
+      element.style.stroke = styles.stroke;
+      element.style.strokeWidth = styles.strokeWidth;
+    }
+    if (styles.fill) {
+      element.style.fill = styles.fill;
+    } else {
+      element.style.fill = "none"
+    }
   }
 }
 
-function _addTransform(element, transform) {
+function _addTransform(
+  element,
+  transform?: Transform
+): void {
   if (transform) {
-    element.setAttribute("transform", transform);
+    let transformAsSvgString: string = transform.transformOps.reduce((acc: string, item: TransformOp, index) => {
+      if (index !== 0) {
+        return acc + " " + _transformOpAsSvgString(item)
+      } else {
+        return acc + _transformOpAsSvgString(item) 
+      }
+    }, "")
+    element.setAttribute("transform", transformAsSvgString);
   }
+}
+
+function _transformOpAsSvgString(
+  transformOp: TransformOp
+): string {
+  switch (transformOp.type) {
+    case TransformOps.ROTATE:
+      return _rotateAsSvgString(transformOp)
+    case TransformOps.SCALE:
+      return _scaleAsSvgString(transformOp)
+    case TransformOps.SKEW:
+      return _skewAsSvgString(transformOp)
+    case TransformOps.TRANSLATE:
+      return _translateAsSvgString(transformOp)
+  }
+}
+
+function _rotateAsSvgString(
+  rotate: TransformOp
+): string {
+  return `rotate(${rotate.a} ${rotate.x} ${rotate.y})`
+}
+
+function _scaleAsSvgString(
+  scale: TransformOp
+): string {
+  return `scale(${scale.x} ${scale.y})`
+}
+
+function _skewAsSvgString(
+  skew: TransformOp
+): string {
+  let skewString: string = "";
+  if (skew.x) {
+    skewString = `skewX(${skew.x})`
+  }
+  if (skew.y) {
+    let maybeSpace = skewString.length > 0
+     ? " "
+     : "";
+
+    skewString = skewString + maybeSpace + `skewY(${skew.y})`
+  }
+
+  return skewString;
+}
+
+function _translateAsSvgString(
+  translate: TransformOp
+): string {
+  return `translate(${translate.x} ${translate.y})`
 }
 
 export default {

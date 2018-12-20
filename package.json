@@ -4,21 +4,26 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "typescript": "^3.2.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
     "browser-sync": "^2.26.3",
     "chai": "^4.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "npm-run-all": "^4.1.5"
   },
   "scripts": {
-    "start": "cd src && browser-sync start --server --port 3000 --files \"js/**/*.js\" \"index.js\" \"*.css\" \"*.html\" "
+    "clean": "rm -rf public/js/*",
+    "start": "npm-run-all clean --parallel watch:build watch:browser-sync",
+    "watch:build": "tsc --watch",
+    "watch:browser-sync": "cd public && browser-sync start --server --port 3000 --files \"js/**/*.js\" \"index.js\" \"*.css\" \"*.html\" "
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shadowCow/dali.git"
   },
-  "author": "shadowCow <shadowcow84@gmail.com> (www.tryonsolutions.com)",
+  "author": "shadowCow <shadowcow84@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/shadowCow/dali/issues"
