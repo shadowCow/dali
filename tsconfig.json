@@ -5,10 +5,11 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "outDir": "public/js",
-    "sourceMap": true
+    "sourceMap": true,
+    "strict": true
   },
   "include": [
-    "src/js/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"
