@@ -86,21 +86,3 @@ if (painter) {
 }
 
 
-// function init(containerId: string, canvasId: string): void {
-//   let maybeAlreadyCanvas = document.getElementById(canvasId);
-
-//   if (!maybeAlreadyCanvas) {
-//     let container = document.getElementById(containerId);
-
-//     canvas = document.createElementNS(svgNs, 'svg');
-//     canvas.id = canvasId;
-//     canvas.setAttribute("width", "100%");
-//     canvas.setAttribute("height", "100%");
-//     // canvas.setAttribute("viewBox", "0 0 1000 600");
-//     canvas.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
-
-//     container.appendChild(canvas);
-//   } else {
-//     canvas = maybeAlreadyCanvas;
-//   }
-// }

@@ -117,7 +117,7 @@ export type Polyline = {
   points: Array<Point2D>;
 }
 
-function polyline(
+export function polyline(
   ...points: Array<Point2D>
 ): Polyline {
   return {
