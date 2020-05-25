@@ -21,11 +21,8 @@ const baseConfig = {
         ]
     },
     resolve: {
-        modules: [
-            'node_modules',
-            path.resolve(__dirname, 'src')
-        ],
-        extensions: ['.ts']
+        modules: ['src', 'node_modules'],
+        extensions: ['.ts', '.js']
     },
     devtool: 'source-map',
     devServer: {
