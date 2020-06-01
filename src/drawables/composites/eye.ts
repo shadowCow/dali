@@ -1,4 +1,6 @@
-import { compositeDrawable, Styles, Transform, CompositeDrawable, Ellipse, ellipse, primitiveDrawable, fill, PrimitiveDrawable, strokeAndFill } from "../primitives/index"
+import { CompositeDrawable, compositeDrawable, PrimitiveDrawable, primitiveDrawable } from "../primitives/drawable"
+import { ellipse } from "../primitives/primitiveShapes"
+import { fill, strokeAndFill } from "../primitives/styles"
 
 
 export function eyePair(

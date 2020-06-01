@@ -1,5 +1,10 @@
-import { Painter, createCanvasAndPainter } from "./painter/index";
-import { ellipse, primitiveDrawable, strokeAndFill, rect, line, stroke, polygon, fill, path, lineTo, bezierCurveTo, eyePair, waves, text } from "./drawables/index";
+import { Painter } from "./painter/Painter";
+import { createCanvasAndPainter } from "./painter/CanvasPainter";
+import { primitiveDrawable } from "./drawables/primitives/drawable";
+import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text } from "./drawables/primitives/primitiveShapes";
+import { strokeAndFill, stroke, fill } from "./drawables/primitives/styles";
+import { eyePair } from "./drawables/composites/eye";
+import { waves } from "./drawables/composites/wave";
 
 
 const canvasContainerId = "canvas-container";

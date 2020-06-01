@@ -1,4 +1,7 @@
-import { quadraticCurveTo, primitiveDrawable, path, Styles, Transform, PrimitiveDrawable } from "../primitives/index";
+import { Styles } from "../primitives/styles";
+import { Transform } from "../primitives/transforms";
+import { PrimitiveDrawable, primitiveDrawable } from "../primitives/drawable";
+import { quadraticCurveTo, path } from "../primitives/primitiveShapes";
 
 export function waves(
   id: string,

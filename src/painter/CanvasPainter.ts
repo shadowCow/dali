@@ -1,6 +1,9 @@
 import { Painter } from './Painter';
-import { Drawable, PrimitiveDrawable, CompositeDrawable, Text, Styles, MatchStylesHandler, Ellipse, Rect, Line, Polygon, matchStyles, Path, PathSegment, Transform, Polyline } from '../drawables/index';
 import { assertNever } from '../util/typeGuards';
+import { Drawable, CompositeDrawable, PrimitiveDrawable } from '../drawables/primitives/drawable';
+import { Styles, MatchStylesHandler, matchStyles } from '../drawables/primitives/styles';
+import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text } from '../drawables/primitives/primitiveShapes';
+import { Transform } from '../drawables/primitives/transforms';
 
 export function createCanvasAndPainter(
   document: Document,

@@ -1,6 +1,6 @@
 import { Painter } from "./Painter";
-import { Drawable, CompositeDrawable, PrimitiveDrawable, Styles, Text, Primitive, PathSegment, Path } from "../drawables/index";
 import { assertNever } from "../util/typeGuards";
+import { Drawable } from "../drawables/primitives/drawable";
 
 const svgNs: string = "http://www.w3.org/2000/svg";
 
