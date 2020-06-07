@@ -1,5 +1,5 @@
 import { Primitive } from "./primitives/primitiveShapes";
-import { Styles, defaultStyles } from "./primitives/styles";
+import { Styles, defaultStyles, fill } from "./primitives/styles";
 import { Transform } from "./primitives/transforms";
 import { AnimatedPrimitives, AnimatedStyles, AnimatedTransforms } from "./animation";
 
@@ -48,7 +48,7 @@ export function compositeDrawable(
         typeTag: 'composite_drawable',
         id,
         drawables,
-        styles: {typeTag: 'fill', color: 'blue'},
+        styles: fill(),
         transforms: transforms || [],
     }
 }

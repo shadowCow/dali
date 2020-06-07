@@ -1,6 +1,6 @@
 import { primitiveDrawable, Drawable } from "../../drawables/drawable";
 import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect } from "../../drawables/primitives/primitiveShapes";
-import { strokeAndFill, stroke, fill, Fill } from "../../drawables/primitives/styles";
+import { strokeAndFill, stroke, fill, Fill, Colors } from "../../drawables/primitives/styles";
 import { defaultAnimationDuration, defaultInterpolator, defaultAnimatedStyles } from "../../drawables/animation";
 
 export const exampleData: Drawable[] = [
@@ -14,7 +14,7 @@ export const exampleData: Drawable[] = [
         },
         styles: {
             typeTag: 'fill',
-            styles: fill('blue'),
+            styles: fill(),
             animations: [],
         },
         transforms: [],
@@ -44,8 +44,14 @@ export const exampleData: Drawable[] = [
         },
         styles: {
             typeTag: 'fill',
-            styles: fill('green'),
-            animations: [],
+            styles: fill(Colors.Green),
+            animations: [{
+                duration: defaultAnimationDuration(),
+                interpolator: defaultInterpolator(),
+                transitions: {
+                    color: Colors.Red,
+                }
+            }],
         },
         transforms: [],
     },

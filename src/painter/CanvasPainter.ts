@@ -1,7 +1,7 @@
 import { Painter } from './Painter';
 import { assertNever } from '../util/typeGuards';
 import { Drawable, CompositeDrawable, PrimitiveDrawable } from '../drawables/drawable';
-import { Styles, MatchStylesHandler, matchStyles } from '../drawables/primitives/styles';
+import { Styles, MatchStylesHandler, matchStyles, cssColorString } from '../drawables/primitives/styles';
 import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text } from '../drawables/primitives/primitiveShapes';
 import { Transform } from '../drawables/primitives/transforms';
 
@@ -415,18 +415,18 @@ function styleAndDrawToCanvas(
   if (styles) {
     switch (styles.typeTag) {
       case 'stroke':
-        ctx.strokeStyle = styles.color;
+        ctx.strokeStyle = cssColorString(styles.color);
         ctx.lineWidth = styles.width;
         handler.stroke(styles);
         break;
       case 'fill':
-        ctx.fillStyle = styles.color;
+        ctx.fillStyle = cssColorString(styles.color);
         handler.fill(styles);
         break;
       case 'stroke_and_fill':
-        ctx.strokeStyle = styles.stroke.color;
+        ctx.strokeStyle = cssColorString(styles.stroke.color);
         ctx.lineWidth = styles.stroke.width;
-        ctx.fillStyle = styles.fill.color;
+        ctx.fillStyle = cssColorString(styles.fill.color);
         handler.strokeAndFill(styles);
         break;
       default: assertNever(styles);

@@ -11,12 +11,12 @@ export function defaultStyles(): Styles {
 
 export type Stroke = {
     typeTag: 'stroke',
-    color: string,
+    color: Color,
     width: number
 }
 
 export function stroke(
-    color: string = 'black',
+    color: Color = Colors.Black,
     width: number = 1
 ): Stroke {
     return {
@@ -28,11 +28,11 @@ export function stroke(
 
 export type Fill = {
     typeTag: 'fill',
-    color: string
+    color: Color,
 }
 
 export function fill(
-    color: string = 'blue',
+    color: Color = Colors.Blue,
 ): Fill {
     return {
         typeTag: 'fill',
@@ -47,9 +47,9 @@ export type StrokeAndFill = {
 }
 
 export function strokeAndFill(
-    strokeColor: string = 'black',
+    strokeColor: Color = Colors.Black,
     strokeWidth: number = 1,
-    fillColor: string = 'blue',
+    fillColor: Color = Colors.Blue,
 ): StrokeAndFill {
     return {
         typeTag: 'stroke_and_fill',
@@ -57,6 +57,43 @@ export function strokeAndFill(
         fill: fill(fillColor)
     }
 }
+
+export type Color = {
+    typeTag: 'color',
+    r: number,
+    g: number,
+    b: number,
+}
+
+export function color(
+    r: number = 0,
+    g: number = 0,
+    b: number = 0,
+): Color {
+    return {
+        typeTag: 'color',
+        r,
+        g,
+        b
+    };
+}
+
+export function cssColorString(
+    color: Color,
+): string {
+    return `rgb(${color.r}, ${color.g}, ${color.b})`;
+}
+
+export type ColorConstants = Readonly<{
+    [k: string]: Readonly<Color>;
+}>;
+
+export const Colors: ColorConstants = {
+    Black: color(),
+    Red: color(255, 0, 0),
+    Green: color(0, 255, 0),
+    Blue: color(0, 0, 255),
+};
 
 export function matchStyles(
     styles: Styles,

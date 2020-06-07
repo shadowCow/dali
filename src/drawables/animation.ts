@@ -162,10 +162,106 @@ function updateStyles(
 ): void {
     switch (styles.typeTag) {
         case 'stroke':
+            styles.animations.forEach(animation => {
+                applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
+            });
             break;
         case 'fill':
+            styles.animations.forEach(animation => {
+                applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
+            });    
             break;
         case 'stroke_and_fill':
+            styles.animations.forEach(animation => {
+                applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
+            });
+            break;
+        default:
+            assertNever(styles);
+    }
+}
+
+function applyAnimationToStyles<S extends Styles>(
+    timestampMs: number,
+    dt: number,
+    styles: S,
+    animation: Animation<S>,
+): void {
+    switch (animation.duration.typeTag) {
+        case 'one_time_duration':
+            switch (animation.interpolator.typeTag) {
+                case 'linear_interpolator':
+                    const changeFraction = getFractionDtToRemainingTime(
+                        timestampMs,
+                        dt,
+                        animation.duration.endMs,
+                    );
+
+                    applyFractionalChanges(
+                        changeFraction,
+                        styles,
+                        animation.transitions,
+                    );
+                    applyColorAnimations(
+                        changeFraction,
+                        styles,
+                        animation.transitions,
+                    );
+                    break;
+                case 'quadratic_interpolator':
+                    break;
+                default:
+                    assertNever(animation.interpolator);
+            }
+            break;
+        case 'cyclic_duration':
+            break;
+        default:
+            assertNever(animation.duration);
+    }
+}
+
+function applyColorAnimations<S extends Styles>(
+    changeFraction: number,
+    styles: Styles,
+    transitions: PropertyTransitions<S>,
+): void {
+    switch (styles.typeTag) {
+        case 'stroke':
+            if ('color' in transitions) {
+                applyFractionalChanges(
+                    changeFraction,
+                    styles.color,
+                    transitions['color'],
+                )
+            }
+            break;
+        case 'fill':
+            if ('color' in transitions) {
+                console.log('color before', styles.color);
+                applyFractionalChanges(
+                    changeFraction,
+                    styles.color,
+                    transitions['color'],
+                )
+                console.log('color after', styles.color);
+            }
+            break;
+        case 'stroke_and_fill':
+            if ('stroke' in transitions) {
+                applyFractionalChanges(
+                    changeFraction,
+                    styles.stroke.color,
+                    transitions['stroke']['color'],
+                )
+            }
+            if ('fill' in transitions) {
+                applyFractionalChanges(
+                    changeFraction,
+                    styles.fill.color,
+                    transitions['fill']['color'],
+                )
+            }
             break;
         default:
             assertNever(styles);

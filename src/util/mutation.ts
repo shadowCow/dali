@@ -11,7 +11,7 @@ export function applyFractionalChanges<T extends any>(
     partial: Partial<T>,
 ): void {
     Object.entries(partial).forEach(([key, value]) => {
-        if (key && value && typeof value === 'number') {
+        if (key && typeof value === 'number') {
             const totalTargetChange = value - t[key];
             t[key] = t[key] + (fraction * totalTargetChange);
         }
