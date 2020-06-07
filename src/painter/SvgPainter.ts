@@ -21,6 +21,10 @@ export class SvgPainter implements Painter {
     //   default: assertNever(drawable)
     // }
   }
+
+  clear(): void {
+    throw new Error('Method not implemented');
+  }
 }
 
 // function drawComposite(

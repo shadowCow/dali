@@ -94,6 +94,15 @@ export class CanvasPainter implements Painter {
       default: assertNever(drawable)
     }
   }
+
+  clear(): void {
+    this.ctx.clearRect(
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height,
+    );
+  }
 }
 
 function drawComposite(
@@ -119,25 +128,25 @@ function drawPrimitive(
 ): void {
   switch (drawable.primitive.typeTag) {
     case 'text':
-      drawText(ctx, drawable.primitive, drawable.styles);
+      drawText(ctx, drawable.primitive.primitive, drawable.styles.styles);
       break;
     case 'line':
-      drawLine(ctx, drawable.primitive, drawable.styles);
+      drawLine(ctx, drawable.primitive.primitive, drawable.styles.styles);
       break;
     case 'rect':
-      drawRect(ctx, drawable.primitive, drawable.styles);
+      drawRect(ctx, drawable.primitive.primitive, drawable.styles.styles);
       break;
     case 'ellipse':
-      drawEllipse(ctx, drawable.primitive, drawable.styles);
+      drawEllipse(ctx, drawable.primitive.primitive, drawable.styles.styles);
       break;
     case 'path':
-      drawPath(ctx, drawable.primitive, drawable.styles);
+      drawPath(ctx, drawable.primitive.primitive, drawable.styles.styles);
       break;
     case 'polyline':
-      drawPolyline(ctx, drawable.primitive, drawable.styles);
+      drawPolyline(ctx, drawable.primitive.primitive, drawable.styles.styles);
       break;
     case 'polygon':
-      drawPolygon(ctx, drawable.primitive, drawable.styles);
+      drawPolygon(ctx, drawable.primitive.primitive, drawable.styles.styles);
       break;
     default: assertNever(drawable.primitive);
   }
