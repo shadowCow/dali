@@ -238,13 +238,11 @@ function applyColorAnimations<S extends Styles>(
             break;
         case 'fill':
             if ('color' in transitions) {
-                console.log('color before', styles.color);
                 applyFractionalChanges(
                     changeFraction,
                     styles.color,
                     transitions['color'],
                 )
-                console.log('color after', styles.color);
             }
             break;
         case 'stroke_and_fill':
