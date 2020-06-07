@@ -70,37 +70,37 @@ function updatePrimitive(
     switch (primitive.typeTag) {
         case 'text':
             primitive.animations.forEach(animation => {
-                applyChanges(primitive.primitive, animation.transitions);
+                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
             });
             break;
         case 'rect':
             primitive.animations.forEach(animation => {
-                applyAnimationToRect(timestampMs, dt, primitive.primitive, animation);
+                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
             });
             break;
         case 'ellipse':
             primitive.animations.forEach(animation => {
-                applyChanges(primitive.primitive, animation.transitions);
+                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
             });
             break;
         case 'line':
             primitive.animations.forEach(animation => {
-                applyChanges(primitive.primitive, animation.transitions);
+                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
             });
             break;
         case 'polyline':
             primitive.animations.forEach(animation => {
-                applyChanges(primitive.primitive, animation.transitions);
+                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
             });
             break;
         case 'polygon':
             primitive.animations.forEach(animation => {
-                applyChanges(primitive.primitive, animation.transitions);
+                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
             });
             break;
         case 'path':
             primitive.animations.forEach(animation => {
-                applyChanges(primitive.primitive, animation.transitions);
+                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
             });
             break;
         default:
@@ -108,11 +108,11 @@ function updatePrimitive(
     }
 }
 
-function applyAnimationToRect(
+function applyAnimationToPrimitive<P extends Primitive>(
     timestampMs: number,
     dt: number,
-    rect: Rect,
-    animation: Animation<Rect>,
+    primitive: P,
+    animation: Animation<P>,
 ): void {
     switch (animation.duration.typeTag) {
         case 'one_time_duration':
@@ -126,7 +126,7 @@ function applyAnimationToRect(
 
                     applyFractionalChanges(
                         changeFraction,
-                        rect,
+                        primitive,
                         animation.transitions,
                     )
                     break;

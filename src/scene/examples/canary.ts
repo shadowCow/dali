@@ -17,6 +17,36 @@ export const exampleData: Drawable[] = [
             animations: [],
         },
         transforms: [],
+    },
+    {
+        id: '2',
+        typeTag: 'primitive_drawable',
+        primitive: {
+            typeTag: 'ellipse',
+            primitive: ellipse(300, 200, 50, 50),
+            animations: [
+                {
+                    duration: {
+                        typeTag: 'one_time_duration',
+                        startMs: 0,
+                        endMs: 10000,
+                    },
+                    interpolator: {
+                        typeTag: 'linear_interpolator',
+                    },
+                    transitions: {
+                        rx: 20,
+                        ry: 100,
+                    }
+                }
+            ]
+        },
+        styles: {
+            typeTag: 'fill',
+            styles: fill('green'),
+            animations: [],
+        },
+        transforms: [],
     }
 ];
 
