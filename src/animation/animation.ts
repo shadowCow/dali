@@ -1,14 +1,44 @@
 import { Translate, Rotate, Scale, Skew } from "../drawables/primitives/transforms";
 import { Stroke, Fill, StrokeAndFill } from "../drawables/primitives/styles";
 import { Ellipse, Polyline, Polygon, Rect, Line, Path } from "../drawables/primitives/primitiveShapes";
+import { Scene } from "../scene/Scene";
+import { Painter } from "../painter/Painter";
 
-export function animationLoop(timestampMs: number): void {
+export function animate(
+    scene: Scene,
+    animations: Animations,
+    painter: Painter,
+): void {
+    function animationCallback(timestampMs: number): void {
+        applyAnimations(timestampMs, animations, scene);
+        drawScene(scene, painter);
 
+        requestAnimationFrame(animationCallback);
+    }
+
+    requestAnimationFrame(animationCallback);
 }
 
-export type Animations = {
-    [id: string]: AnimationTimeline;
+function applyAnimations(
+    timestampMs: number,
+    animations: Animations,
+    scene: Scene,
+): void {
+    // animations.forEach(animation => {
+    //     applyAnimation
+    // })
 }
+
+function drawScene(
+    scene: Scene,
+    painter: Painter,
+): void {
+    scene.drawables.forEach(drawable => {
+        painter.draw(drawable);
+    });
+}
+
+export type Animations = AnimationTimeline[];
 
 export type AnimationTimeline = {
     typeTag: 'animation_timeline';
