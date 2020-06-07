@@ -274,17 +274,64 @@ function updateTransforms(
     transforms.forEach(transform => {
         switch (transform.typeTag) {
             case 'rotate':
+                transform.animations.forEach(animation => {
+                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+                });
                 break;
             case 'scale':
+                transform.animations.forEach(animation => {
+                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+                });
                 break;
             case 'skew':
+                transform.animations.forEach(animation => {
+                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+                });
                 break;
             case 'translate':
+                transform.animations.forEach(animation => {
+                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+                });
                 break;
             default:
                 assertNever(transform);
         }
     });
+}
+
+function applyAnimationToTransform<T extends Transform>(
+    timestampMs: number,
+    dt: number,
+    transform: T,
+    animation: Animation<T>,
+): void {
+    switch (animation.duration.typeTag) {
+        case 'one_time_duration':
+            switch (animation.interpolator.typeTag) {
+                case 'linear_interpolator':
+                    const changeFraction = getFractionDtToRemainingTime(
+                        timestampMs,
+                        dt,
+                        animation.duration.endMs,
+                    );
+
+                    applyFractionalChanges(
+                        changeFraction,
+                        transform,
+                        animation.transitions,
+                    );
+                    break;
+                case 'quadratic_interpolator':
+                    break;
+                default:
+                    assertNever(animation.interpolator);
+            }
+            break;
+        case 'cyclic_duration':
+            break;
+        default:
+            assertNever(animation.duration);
+    }
 }
 
 function drawScene(

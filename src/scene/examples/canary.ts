@@ -60,7 +60,7 @@ export const exampleData: Drawable[] = [
         typeTag: 'primitive_drawable',
         primitive: {
             typeTag: 'line',
-            primitive: line(600, 600, 550, 550),
+            primitive: line(500, 500, 450, 450),
             animations: [
                 {
                     duration: defaultAnimationDuration(),
@@ -73,7 +73,22 @@ export const exampleData: Drawable[] = [
             ]
         },
         styles: defaultAnimatedStyles(),
-        transforms: [],
+        transforms: [{
+            typeTag: 'rotate',
+            transform: {
+                typeTag: 'rotate',
+                a: 0,
+                x: 475,
+                y: 475,
+            },
+            animations: [{
+                duration: defaultAnimationDuration(),
+                interpolator: defaultInterpolator(),
+                transitions: {
+                    a: 2 * Math.PI,
+                }
+            }],
+        }],
     }
 ];
 

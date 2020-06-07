@@ -126,6 +126,10 @@ function drawPrimitive(
   drawable: PrimitiveDrawable,
   ctx: CanvasRenderingContext2D
 ): void {
+  drawable.transforms.forEach(transform => {
+    applyTransform(ctx, transform.transform);
+  });
+
   switch (drawable.primitive.typeTag) {
     case 'text':
       drawText(ctx, drawable.primitive.primitive, drawable.styles.styles);
@@ -150,6 +154,8 @@ function drawPrimitive(
       break;
     default: assertNever(drawable.primitive);
   }
+
+  resetTransform(ctx);
 }
 
 function drawText(
@@ -387,7 +393,11 @@ function applyTransform(
 ): void {
   switch (transform.typeTag) {
     case 'rotate':
+      // ctx rotation is around 0,0
+      // so we need to translate before rotating
+      ctx.translate(transform.x, transform.y);
       ctx.rotate(transform.a);
+      ctx.translate(-transform.x, -transform.y);
       break;
     case 'scale':
       ctx.scale(transform.x, transform.y);
