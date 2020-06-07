@@ -12,8 +12,8 @@ export type Translate = {
 }
 
 export function translate(
-    x: number,
-    y: number,
+    x: number = 0,
+    y: number = 0,
 ): Translate {
     return {
         typeTag: 'translate',
@@ -30,9 +30,9 @@ export type Rotate = {
 }
 
 export function rotate(
-    a: number,
-    x: number,
-    y: number
+    a: number = 0,
+    x: number = 0,
+    y: number = 0,
 ): Rotate {
     return {
         typeTag: 'rotate',
@@ -49,8 +49,8 @@ export type Scale = {
 }
 
 export function scale(
-    x: number,
-    y: number
+    x: number = 1,
+    y: number = 1
 ): Scale {
     return {
         typeTag: 'scale',
@@ -66,8 +66,8 @@ export type Skew = {
 }
 
 export function skew(
-    x: number,
-    y: number
+    x: number = 0,
+    y: number = 0,
 ): Skew {
     return {
         typeTag: 'skew',

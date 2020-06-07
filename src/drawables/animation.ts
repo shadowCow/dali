@@ -1,5 +1,5 @@
 import { Translate, Rotate, Scale, Skew, Transform } from "./primitives/transforms";
-import { Stroke, Fill, StrokeAndFill, Styles } from "./primitives/styles";
+import { Stroke, Fill, StrokeAndFill, Styles, stroke } from "./primitives/styles";
 import { Text, Ellipse, Polyline, Polygon, Rect, Line, Path, Primitive } from "./primitives/primitiveShapes";
 import { Scene } from "../scene/Scene";
 import { Painter } from "../painter/Painter";
@@ -213,10 +213,22 @@ export type AnimationDuration =
     OneTimeDuration |
     CyclicDuration;
 
+export function defaultAnimationDuration(): AnimationDuration {
+    return oneTimeDuration();
+}
+
 export type OneTimeDuration = {
     typeTag: 'one_time_duration';
     startMs: number;
     endMs: number;
+}
+
+export function oneTimeDuration(): OneTimeDuration {
+    return {
+        typeTag: 'one_time_duration',
+        startMs: 0,
+        endMs: 2000,
+    }
 }
 
 export type CyclicDuration = {
@@ -228,6 +240,10 @@ export type CyclicDuration = {
 export type Interpolator =
     LinearInterpolator |
     QuadraticInterpolator;
+
+export function defaultInterpolator(): LinearInterpolator {
+    return {typeTag: 'linear_interpolator'};
+}
 
 export type LinearInterpolator = {
     typeTag: 'linear_interpolator';
@@ -267,6 +283,14 @@ export type AnimatedStyles =
 export type AnimatedStroke = StylesAnimation<Stroke>;
 export type AnimatedFill = StylesAnimation<Fill>;
 export type AnimatedStrokeAndFill = StylesAnimation<StrokeAndFill>;
+
+export function defaultAnimatedStyles(): AnimatedStyles {
+    return {
+        typeTag: 'stroke',
+        styles: stroke(),
+        animations: [],
+    }
+}
 
 export type AnimatedPrimitives =
     AnimatedText |

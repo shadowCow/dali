@@ -1,76 +1,76 @@
 
 export type Primitive =
-    Text |
-    Ellipse |
-    Rect |
-    Line |
-    Polyline |
-    Polygon |
-    Path;
+  Text |
+  Ellipse |
+  Rect |
+  Line |
+  Polyline |
+  Polygon |
+  Path;
 
 export type Text = {
-    typeTag: 'text',
-    x: number,
-    y: number,
-    text: string,
-    font: string
+  typeTag: 'text',
+  x: number,
+  y: number,
+  text: string,
+  font: string
 }
 
 export function text(
-    x: number,
-    y: number,
-    text: string,
-    font: string
+  x: number,
+  y: number,
+  text: string,
+  font: string = '50px serif',
 ): Text {
   return {
-      typeTag: 'text',
-      x,
-      y,
-      text,
-      font
+    typeTag: 'text',
+    x,
+    y,
+    text,
+    font
   }
 }
 
 export type Ellipse = {
-    typeTag: 'ellipse',
-    cx: number,
-    cy: number,
-    rx: number,
-    ry: number
+  typeTag: 'ellipse',
+  cx: number,
+  cy: number,
+  rx: number,
+  ry: number
 }
 
 export function ellipse(
-    cx: number,
-    cy: number,
-    rx: number,
-    ry: number
+  cx: number,
+  cy: number,
+  rx: number,
+  ry: number
 ): Ellipse {
-    return {
-        typeTag: 'ellipse',
-        cx,
-        cy,
-        rx,
-        ry
-    }
+  return {
+    typeTag: 'ellipse',
+    cx,
+    cy,
+    rx,
+    ry
+  }
 }
 
 export type Rect = {
-    typeTag: 'rect',
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    rx?: number,
-    ry?: number
+  typeTag: 'rect',
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  rx?: number,
+  ry?: number
 }
 
 export function rect(
   x: number,
-    y: number,
-    width: number,
-    height: number,
-    rx?: number,
-    ry?: number
+  y: number,
+  width: number,
+  height: number,
+  rx?: number,
+  ry?: number
 ): Rect {
   return {
     typeTag: 'rect',

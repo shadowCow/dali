@@ -5,6 +5,10 @@ export type Styles =
     Fill |
     StrokeAndFill;
 
+export function defaultStyles(): Styles {
+    return stroke();
+}
+
 export type Stroke = {
     typeTag: 'stroke',
     color: string,
@@ -12,8 +16,8 @@ export type Stroke = {
 }
 
 export function stroke(
-    color: string,
-    width: number
+    color: string = 'black',
+    width: number = 1
 ): Stroke {
     return {
         typeTag: 'stroke',
@@ -28,7 +32,7 @@ export type Fill = {
 }
 
 export function fill(
-    color: string
+    color: string = 'blue',
 ): Fill {
     return {
         typeTag: 'fill',
@@ -43,9 +47,9 @@ export type StrokeAndFill = {
 }
 
 export function strokeAndFill(
-    strokeColor: string,
-    strokeWidth: number,
-    fillColor: string
+    strokeColor: string = 'black',
+    strokeWidth: number = 1,
+    fillColor: string = 'blue',
 ): StrokeAndFill {
     return {
         typeTag: 'stroke_and_fill',

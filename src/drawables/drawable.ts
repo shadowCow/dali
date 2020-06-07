@@ -1,5 +1,5 @@
 import { Primitive } from "./primitives/primitiveShapes";
-import { Styles } from "./primitives/styles";
+import { Styles, defaultStyles } from "./primitives/styles";
 import { Transform } from "./primitives/transforms";
 import { AnimatedPrimitives, AnimatedStyles, AnimatedTransforms } from "./animation";
 
