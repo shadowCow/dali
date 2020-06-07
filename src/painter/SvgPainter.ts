@@ -1,6 +1,6 @@
 import { Painter } from "./Painter";
 import { assertNever } from "../util/typeGuards";
-import { Drawable } from "../drawables/primitives/drawable";
+import { Drawable } from "../drawables/drawable";
 
 const svgNs: string = "http://www.w3.org/2000/svg";
 

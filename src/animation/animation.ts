@@ -3,6 +3,8 @@ import { Stroke, Fill, StrokeAndFill } from "../drawables/primitives/styles";
 import { Ellipse, Polyline, Polygon, Rect, Line, Path } from "../drawables/primitives/primitiveShapes";
 import { Scene } from "../scene/Scene";
 import { Painter } from "../painter/Painter";
+import { Drawable } from "../drawables/drawable";
+import { assertNever } from "../util/typeGuards";
 
 export function animate(
     scene: Scene,
@@ -24,9 +26,24 @@ function applyAnimations(
     animations: Animations,
     scene: Scene,
 ): void {
-    // animations.forEach(animation => {
-    //     applyAnimation
-    // })
+    animations.forEach(animation => {
+        const maybeDrawable = scene.drawables.get(animation.targetId)
+        if (maybeDrawable) {
+            applyAnimation(
+                timestampMs,
+                animation,
+                maybeDrawable,
+            );
+        }
+    })
+}
+
+function applyAnimation(
+    timestampMs: number,
+    animation: AnimationTimeline,
+    drawable: Drawable,
+): void {
+    
 }
 
 function drawScene(

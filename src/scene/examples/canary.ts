@@ -1,4 +1,4 @@
-import { primitiveDrawable } from "../../drawables/primitives/drawable";
+import { primitiveDrawable } from "../../drawables/drawable";
 import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text } from "../../drawables/primitives/primitiveShapes";
 import { strokeAndFill, stroke, fill } from "../../drawables/primitives/styles";
 import { eyePair } from "../../drawables/composites/eye";

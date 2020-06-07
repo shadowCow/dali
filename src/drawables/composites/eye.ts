@@ -1,4 +1,4 @@
-import { CompositeDrawable, compositeDrawable, PrimitiveDrawable, primitiveDrawable } from "../primitives/drawable"
+import { CompositeDrawable, compositeDrawable, PrimitiveDrawable, primitiveDrawable } from "../drawable"
 import { ellipse } from "../primitives/primitiveShapes"
 import { fill, strokeAndFill } from "../primitives/styles"
 

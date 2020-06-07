@@ -1,4 +1,4 @@
-import { Drawable } from "../drawables/primitives/drawable";
+import { Drawable } from "../drawables/drawable";
 
 export interface Painter {
     draw(drawable: Drawable): void;

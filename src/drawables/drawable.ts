@@ -1,6 +1,6 @@
-import { Primitive } from "./primitiveShapes";
-import { Styles } from "./styles";
-import { Transform } from "./transforms";
+import { Primitive } from "./primitives/primitiveShapes";
+import { Styles } from "./primitives/styles";
+import { Transform } from "./primitives/transforms";
 
 export type Drawable =
     PrimitiveDrawable |
