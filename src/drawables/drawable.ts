@@ -48,7 +48,7 @@ export function compositeDrawable(
         typeTag: 'composite_drawable',
         id,
         drawables,
-        styles: fill(),
+        styles: styles || fill(),
         transforms: transforms || [],
     }
 }

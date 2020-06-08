@@ -32,7 +32,8 @@ function run(
 
   const timestamp = 0;
   const d = scene.drawables.get('1');
-  console.log('has d', d);
+
+  // example adding an animation on the fly
   if (d) {
     switch (d.typeTag) {
       case 'primitive_drawable':
