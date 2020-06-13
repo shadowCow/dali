@@ -17,18 +17,18 @@ export type Text = {
 }
 
 export function text(
-  x: number,
-  y: number,
-  text: string,
-  font: string = '50px serif',
+    x: number,
+    y: number,
+    text: string,
+    font: string = '50px serif',
 ): Text {
-  return {
-    typeTag: 'text',
-    x,
-    y,
-    text,
-    font
-  }
+    return {
+        typeTag: 'text',
+        x,
+        y,
+        text,
+        font,
+    };
 }
 
 export type Ellipse = {
@@ -40,18 +40,18 @@ export type Ellipse = {
 }
 
 export function ellipse(
-  cx: number,
-  cy: number,
-  rx: number,
-  ry: number
+    cx: number,
+    cy: number,
+    rx: number,
+    ry: number
 ): Ellipse {
-  return {
-    typeTag: 'ellipse',
-    cx,
-    cy,
-    rx,
-    ry
-  }
+    return {
+        typeTag: 'ellipse',
+        cx,
+        cy,
+        rx,
+        ry,
+    };
 }
 
 export type Rect = {
@@ -65,22 +65,22 @@ export type Rect = {
 }
 
 export function rect(
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  rx?: number,
-  ry?: number
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    rx?: number,
+    ry?: number
 ): Rect {
-  return {
-    typeTag: 'rect',
-    x,
-    y,
-    width,
-    height,
-    rx,
-    ry
-  }
+    return {
+        typeTag: 'rect',
+        x,
+        y,
+        width,
+        height,
+        rx,
+        ry,
+    };
 }
 
 export type Line = {
@@ -92,18 +92,18 @@ export type Line = {
 }
 
 export function line(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
 ): Line {
-  return {
-    typeTag: 'line',
-    x1,
-    y1,
-    x2,
-    y2
-  }
+    return {
+        typeTag: 'line',
+        x1,
+        y1,
+        x2,
+        y2,
+    };
 }
 
 export type Point2D = {
@@ -118,12 +118,12 @@ export type Polyline = {
 }
 
 export function polyline(
-  ...points: Array<Point2D>
+    ...points: Array<Point2D>
 ): Polyline {
-  return {
-    typeTag: 'polyline',
-    points
-  }
+    return {
+        typeTag: 'polyline',
+        points,
+    };
 }
 
 export type Polygon = {
@@ -132,12 +132,12 @@ export type Polygon = {
 }
 
 export function polygon(
-  ...points: Array<Point2D>
+    ...points: Array<Point2D>
 ): Polygon {
-  return {
-    typeTag: 'polygon',
-    points
-  }
+    return {
+        typeTag: 'polygon',
+        points,
+    };
 }
 
 export type Path = {
@@ -148,16 +148,16 @@ export type Path = {
 }
 
 export function path(
-  startX: number,
-  startY: number,
-  segments: Array<PathSegment>
+    startX: number,
+    startY: number,
+    segments: Array<PathSegment>
 ): Path {
-  return {
-    typeTag: 'path',
-    startX,
-    startY,
-    segments
-  }
+    return {
+        typeTag: 'path',
+        startX,
+        startY,
+        segments,
+    };
 }
 
 export type PathSegment =
@@ -173,14 +173,14 @@ export type MoveTo = {
 }
 
 export function moveTo(
-  x: number,
-  y: number
+    x: number,
+    y: number
 ): MoveTo {
-  return {
-    typeTag: 'move_to',
-    x,
-    y
-  }
+    return {
+        typeTag: 'move_to',
+        x,
+        y,
+    };
 }
 
 export type LineTo = {
@@ -190,14 +190,14 @@ export type LineTo = {
 }
 
 export function lineTo(
-  x: number,
-  y: number
+    x: number,
+    y: number
 ): LineTo {
-  return {
-    typeTag: 'line_to',
-    x,
-    y
-  }
+    return {
+        typeTag: 'line_to',
+        x,
+        y,
+    };
 }
 
 export type BezierCurveTo = {
@@ -211,22 +211,22 @@ export type BezierCurveTo = {
 }
 
 export function bezierCurveTo(
-  cp1x: number,
-  cp1y: number,
-  cp2x: number,
-  cp2y: number,
-  toX: number,
-  toY: number
+    cp1x: number,
+    cp1y: number,
+    cp2x: number,
+    cp2y: number,
+    toX: number,
+    toY: number
 ): BezierCurveTo {
-  return {
-    typeTag: 'bezier_curve_to',
-    cp1x,
-    cp1y,
-    cp2x,
-    cp2y,
-    toX,
-    toY
-  }
+    return {
+        typeTag: 'bezier_curve_to',
+        cp1x,
+        cp1y,
+        cp2x,
+        cp2y,
+        toX,
+        toY,
+    };
 }
 
 export type QuadraticCurveTo = {
@@ -238,16 +238,16 @@ export type QuadraticCurveTo = {
 }
 
 export function quadraticCurveTo(
-  cpx: number,
-  cpy: number,
-  toX: number,
-  toY: number
+    cpx: number,
+    cpy: number,
+    toX: number,
+    toY: number
 ): QuadraticCurveTo {
-  return {
-    typeTag: 'quadratic_curve_to',
-    cpx,
-    cpy,
-    toX,
-    toY
-  }
+    return {
+        typeTag: 'quadratic_curve_to',
+        cpx,
+        cpy,
+        toX,
+        toY,
+    };
 }
