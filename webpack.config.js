@@ -1,7 +1,6 @@
 const path = require('path');
 
 const baseConfig = {
-    entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'dali.js',
@@ -31,5 +30,12 @@ const baseConfig = {
 }
 
 module.exports = function(env, args) {
+    if (env && env.entryPoint) {
+        if (env.entryPoint === 'ken') {
+            baseConfig.entry = './src/boot/boot.ken.ts';
+        } else {
+            baseConfig.entry = './src/boot/boot.example.ts';
+        }
+    }
     return baseConfig;
 }

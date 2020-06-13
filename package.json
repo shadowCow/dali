@@ -19,7 +19,8 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --env.entryPoint=example",
+    "start:ken": "webpack-dev-server --env.entryPoint=ken",
     "build": "webpack --progress --colors",
     "build:watch": "npm run build -- --watch",
     "test": "npm run test:unit",
