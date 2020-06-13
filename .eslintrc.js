@@ -1,33 +1,30 @@
 module.exports = {
     env: {
         browser: true,
-        es6: true
+        es6: true,
     },
+    parser: '@typescript-eslint/parser',
     parserOptions: {
         ecmaVersion: 6,
-        sourceType: 'module'
+        sourceType: 'module',
     },
-    extends: [
-        'eslint:recommended',
-        'plugin:@typescript-eslint/recommended'
-    ],
     rules: {
         indent: [
             'error',
-            4
+            4,
         ],
         semi: 'error',
         eqeqeq: [
             'error',
-            'always'
+            'always',
         ],
         quotes: [
             'error',
-            'single'
+            'single',
         ],
         'comma-dangle': [
             'error',
-            'always-multiline'
-        ]
-    }
-}
+            'always-multiline',
+        ],
+    },
+};

@@ -62,7 +62,7 @@ function getCanvas(
     const maybeAlreadyCanvas = document.getElementById(canvasId);
   
     if (maybeAlreadyCanvas && maybeAlreadyCanvas.tagName === 'canvas') {
-        return <HTMLCanvasElement>maybeAlreadyCanvas;
+        return maybeAlreadyCanvas as HTMLCanvasElement;
     } else {
         const canvas = document.createElement('canvas');
         canvas.id = canvasId;
