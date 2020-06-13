@@ -1,17 +1,17 @@
-import { Translate, Rotate, Scale, Skew, Transform } from "./primitives/transforms";
-import { Stroke, Fill, StrokeAndFill, Styles, stroke } from "./primitives/styles";
-import { Text, Ellipse, Polyline, Polygon, Rect, Line, Path, Primitive } from "./primitives/primitiveShapes";
-import { Scene } from "../scene/Scene";
-import { Painter } from "../painter/Painter";
-import { Drawable, PrimitiveDrawable, CompositeDrawable } from "./drawable";
-import { assertNever } from "../util/typeGuards";
-import { applyChanges, applyFractionalChanges } from "../util/mutation";
+import { Translate, Rotate, Scale, Skew, Transform } from './primitives/transforms';
+import { Stroke, Fill, StrokeAndFill, Styles, stroke } from './primitives/styles';
+import { Text, Ellipse, Polyline, Polygon, Rect, Line, Path, Primitive } from './primitives/primitiveShapes';
+import { Scene } from '../scene/Scene';
+import { Painter } from '../painter/Painter';
+import { Drawable, PrimitiveDrawable, CompositeDrawable } from './drawable';
+import { assertNever } from '../util/typeGuards';
+import { applyChanges, applyFractionalChanges } from '../util/mutation';
 
 export function animate(
     scene: Scene,
     painter: Painter,
 ): void {
-    let previousTimestampMs: number = 0;
+    let previousTimestampMs = 0;
     function animationCallback(timestampMs: number): void {
         const dt = timestampMs - previousTimestampMs;
 
@@ -33,16 +33,16 @@ function updateScene(
 ): void {
     scene.drawables.forEach(drawable => {
         switch (drawable.typeTag) {
-            case 'composite_drawable':
-                updateCompositeDrawable(timestampMs, drawable);
-                break;
-            case 'primitive_drawable':
-                updatePrimitiveDrawable(timestampMs, dt, drawable);
-                break;
-            default:
-                assertNever(drawable);
+        case 'composite_drawable':
+            updateCompositeDrawable(timestampMs, drawable);
+            break;
+        case 'primitive_drawable':
+            updatePrimitiveDrawable(timestampMs, dt, drawable);
+            break;
+        default:
+            assertNever(drawable);
         }
-    })
+    });
 }
 
 function updateCompositeDrawable(
@@ -68,43 +68,43 @@ function updatePrimitive(
     primitive: AnimatedPrimitives,
 ): void {
     switch (primitive.typeTag) {
-        case 'text':
-            primitive.animations.forEach(animation => {
-                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
-            });
-            break;
-        case 'rect':
-            primitive.animations.forEach(animation => {
-                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
-            });
-            break;
-        case 'ellipse':
-            primitive.animations.forEach(animation => {
-                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
-            });
-            break;
-        case 'line':
-            primitive.animations.forEach(animation => {
-                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
-            });
-            break;
-        case 'polyline':
-            primitive.animations.forEach(animation => {
-                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
-            });
-            break;
-        case 'polygon':
-            primitive.animations.forEach(animation => {
-                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
-            });
-            break;
-        case 'path':
-            primitive.animations.forEach(animation => {
-                applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
-            });
-            break;
-        default:
-            assertNever(primitive);
+    case 'text':
+        primitive.animations.forEach(animation => {
+            applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
+        });
+        break;
+    case 'rect':
+        primitive.animations.forEach(animation => {
+            applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
+        });
+        break;
+    case 'ellipse':
+        primitive.animations.forEach(animation => {
+            applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
+        });
+        break;
+    case 'line':
+        primitive.animations.forEach(animation => {
+            applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
+        });
+        break;
+    case 'polyline':
+        primitive.animations.forEach(animation => {
+            applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
+        });
+        break;
+    case 'polygon':
+        primitive.animations.forEach(animation => {
+            applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
+        });
+        break;
+    case 'path':
+        primitive.animations.forEach(animation => {
+            applyAnimationToPrimitive(timestampMs, dt, primitive.primitive, animation);
+        });
+        break;
+    default:
+        assertNever(primitive);
     }
 }
 
@@ -115,31 +115,31 @@ function applyAnimationToPrimitive<P extends Primitive>(
     animation: Animation<P>,
 ): void {
     switch (animation.duration.typeTag) {
-        case 'one_time_duration':
-            switch (animation.interpolator.typeTag) {
-                case 'linear_interpolator':
-                    const changeFraction = getFractionDtToRemainingTime(
-                        timestampMs,
-                        dt,
-                        animation.duration.endMs,
-                    );
+    case 'one_time_duration':
+        switch (animation.interpolator.typeTag) {
+        case 'linear_interpolator':
+            const changeFraction = getFractionDtToRemainingTime(
+                timestampMs,
+                dt,
+                animation.duration.endMs,
+            );
 
-                    applyFractionalChanges(
-                        changeFraction,
-                        primitive,
-                        animation.transitions,
-                    )
-                    break;
-                case 'quadratic_interpolator':
-                    break;
-                default:
-                    assertNever(animation.interpolator);
-            }
+            applyFractionalChanges(
+                changeFraction,
+                primitive,
+                animation.transitions,
+            );
             break;
-        case 'cyclic_duration':
+        case 'quadratic_interpolator':
             break;
         default:
-            assertNever(animation.duration);
+            assertNever(animation.interpolator);
+        }
+        break;
+    case 'cyclic_duration':
+        break;
+    default:
+        assertNever(animation.duration);
     }
 }
 
@@ -161,23 +161,23 @@ function updateStyles(
     styles: AnimatedStyles,
 ): void {
     switch (styles.typeTag) {
-        case 'stroke':
-            styles.animations.forEach(animation => {
-                applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
-            });
-            break;
-        case 'fill':
-            styles.animations.forEach(animation => {
-                applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
-            });    
-            break;
-        case 'stroke_and_fill':
-            styles.animations.forEach(animation => {
-                applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
-            });
-            break;
-        default:
-            assertNever(styles);
+    case 'stroke':
+        styles.animations.forEach(animation => {
+            applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
+        });
+        break;
+    case 'fill':
+        styles.animations.forEach(animation => {
+            applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
+        });    
+        break;
+    case 'stroke_and_fill':
+        styles.animations.forEach(animation => {
+            applyAnimationToStyles(timestampMs, dt, styles.styles, animation);
+        });
+        break;
+    default:
+        assertNever(styles);
     }
 }
 
@@ -188,36 +188,36 @@ function applyAnimationToStyles<S extends Styles>(
     animation: Animation<S>,
 ): void {
     switch (animation.duration.typeTag) {
-        case 'one_time_duration':
-            switch (animation.interpolator.typeTag) {
-                case 'linear_interpolator':
-                    const changeFraction = getFractionDtToRemainingTime(
-                        timestampMs,
-                        dt,
-                        animation.duration.endMs,
-                    );
+    case 'one_time_duration':
+        switch (animation.interpolator.typeTag) {
+        case 'linear_interpolator':
+            const changeFraction = getFractionDtToRemainingTime(
+                timestampMs,
+                dt,
+                animation.duration.endMs,
+            );
 
-                    applyFractionalChanges(
-                        changeFraction,
-                        styles,
-                        animation.transitions,
-                    );
-                    applyColorAnimations(
-                        changeFraction,
-                        styles,
-                        animation.transitions,
-                    );
-                    break;
-                case 'quadratic_interpolator':
-                    break;
-                default:
-                    assertNever(animation.interpolator);
-            }
+            applyFractionalChanges(
+                changeFraction,
+                styles,
+                animation.transitions,
+            );
+            applyColorAnimations(
+                changeFraction,
+                styles,
+                animation.transitions,
+            );
             break;
-        case 'cyclic_duration':
+        case 'quadratic_interpolator':
             break;
         default:
-            assertNever(animation.duration);
+            assertNever(animation.interpolator);
+        }
+        break;
+    case 'cyclic_duration':
+        break;
+    default:
+        assertNever(animation.duration);
     }
 }
 
@@ -227,42 +227,42 @@ function applyColorAnimations<S extends Styles>(
     transitions: PropertyTransitions<S>,
 ): void {
     switch (styles.typeTag) {
-        case 'stroke':
-            if ('color' in transitions) {
-                applyFractionalChanges(
-                    changeFraction,
-                    styles.color,
-                    transitions['color'],
-                )
-            }
-            break;
-        case 'fill':
-            if ('color' in transitions) {
-                applyFractionalChanges(
-                    changeFraction,
-                    styles.color,
-                    transitions['color'],
-                )
-            }
-            break;
-        case 'stroke_and_fill':
-            if ('stroke' in transitions) {
-                applyFractionalChanges(
-                    changeFraction,
-                    styles.stroke.color,
-                    transitions['stroke']['color'],
-                )
-            }
-            if ('fill' in transitions) {
-                applyFractionalChanges(
-                    changeFraction,
-                    styles.fill.color,
-                    transitions['fill']['color'],
-                )
-            }
-            break;
-        default:
-            assertNever(styles);
+    case 'stroke':
+        if ('color' in transitions) {
+            applyFractionalChanges(
+                changeFraction,
+                styles.color,
+                transitions['color'],
+            );
+        }
+        break;
+    case 'fill':
+        if ('color' in transitions) {
+            applyFractionalChanges(
+                changeFraction,
+                styles.color,
+                transitions['color'],
+            );
+        }
+        break;
+    case 'stroke_and_fill':
+        if ('stroke' in transitions) {
+            applyFractionalChanges(
+                changeFraction,
+                styles.stroke.color,
+                transitions['stroke']['color'],
+            );
+        }
+        if ('fill' in transitions) {
+            applyFractionalChanges(
+                changeFraction,
+                styles.fill.color,
+                transitions['fill']['color'],
+            );
+        }
+        break;
+    default:
+        assertNever(styles);
     }
 }
 
@@ -273,28 +273,28 @@ function updateTransforms(
 ): void {
     transforms.forEach(transform => {
         switch (transform.typeTag) {
-            case 'rotate':
-                transform.animations.forEach(animation => {
-                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
-                });
-                break;
-            case 'scale':
-                transform.animations.forEach(animation => {
-                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
-                });
-                break;
-            case 'skew':
-                transform.animations.forEach(animation => {
-                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
-                });
-                break;
-            case 'translate':
-                transform.animations.forEach(animation => {
-                    applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
-                });
-                break;
-            default:
-                assertNever(transform);
+        case 'rotate':
+            transform.animations.forEach(animation => {
+                applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+            });
+            break;
+        case 'scale':
+            transform.animations.forEach(animation => {
+                applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+            });
+            break;
+        case 'skew':
+            transform.animations.forEach(animation => {
+                applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+            });
+            break;
+        case 'translate':
+            transform.animations.forEach(animation => {
+                applyAnimationToTransform(timestampMs, dt, transform.transform, animation);
+            });
+            break;
+        default:
+            assertNever(transform);
         }
     });
 }
@@ -306,31 +306,31 @@ function applyAnimationToTransform<T extends Transform>(
     animation: Animation<T>,
 ): void {
     switch (animation.duration.typeTag) {
-        case 'one_time_duration':
-            switch (animation.interpolator.typeTag) {
-                case 'linear_interpolator':
-                    const changeFraction = getFractionDtToRemainingTime(
-                        timestampMs,
-                        dt,
-                        animation.duration.endMs,
-                    );
+    case 'one_time_duration':
+        switch (animation.interpolator.typeTag) {
+        case 'linear_interpolator':
+            const changeFraction = getFractionDtToRemainingTime(
+                timestampMs,
+                dt,
+                animation.duration.endMs,
+            );
 
-                    applyFractionalChanges(
-                        changeFraction,
-                        transform,
-                        animation.transitions,
-                    );
-                    break;
-                case 'quadratic_interpolator':
-                    break;
-                default:
-                    assertNever(animation.interpolator);
-            }
+            applyFractionalChanges(
+                changeFraction,
+                transform,
+                animation.transitions,
+            );
             break;
-        case 'cyclic_duration':
+        case 'quadratic_interpolator':
             break;
         default:
-            assertNever(animation.duration);
+            assertNever(animation.interpolator);
+        }
+        break;
+    case 'cyclic_duration':
+        break;
+    default:
+        assertNever(animation.duration);
     }
 }
 
@@ -369,7 +369,7 @@ export function oneTimeDuration(): OneTimeDuration {
         typeTag: 'one_time_duration',
         startMs: 0,
         endMs: 2000,
-    }
+    };
 }
 
 export type CyclicDuration = {
@@ -430,7 +430,7 @@ export function defaultAnimatedStyles(): AnimatedStyles {
         typeTag: 'stroke',
         styles: stroke(),
         animations: [],
-    }
+    };
 }
 
 export type AnimatedPrimitives =

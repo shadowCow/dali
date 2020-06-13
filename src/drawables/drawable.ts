@@ -1,18 +1,18 @@
-import { Primitive } from "./primitives/primitiveShapes";
-import { Styles, defaultStyles, fill } from "./primitives/styles";
-import { Transform } from "./primitives/transforms";
-import { AnimatedPrimitives, AnimatedStyles, AnimatedTransforms } from "./animation";
+import { Primitive } from './primitives/primitiveShapes';
+import { Styles, defaultStyles, fill } from './primitives/styles';
+import { Transform } from './primitives/transforms';
+import { AnimatedPrimitives, AnimatedStyles, AnimatedTransforms } from './animation';
 
 export type Drawable =
     PrimitiveDrawable |
     CompositeDrawable;
 
 export type PrimitiveDrawable = {
-    typeTag: 'primitive_drawable',
-    id: string,
-    primitive: AnimatedPrimitives,
-    styles: AnimatedStyles,
-    transforms: Array<AnimatedTransforms>,
+    typeTag: 'primitive_drawable';
+    id: string;
+    primitive: AnimatedPrimitives;
+    styles: AnimatedStyles;
+    transforms: Array<AnimatedTransforms>;
 }
     
 export function primitiveDrawable(
@@ -27,15 +27,15 @@ export function primitiveDrawable(
         primitive,
         styles,
         transforms: transforms || [],
-    }
+    };
 }
 
 export type CompositeDrawable = {
-    typeTag: 'composite_drawable',
-    id: string,
-    drawables: Array<Drawable>,
-    styles: Styles,
-    transforms: Array<Transform>
+    typeTag: 'composite_drawable';
+    id: string;
+    drawables: Array<Drawable>;
+    styles: Styles;
+    transforms: Array<Transform>;
 }
 
 export function compositeDrawable(
@@ -50,5 +50,5 @@ export function compositeDrawable(
         drawables,
         styles: styles || fill(),
         transforms: transforms || [],
-    }
+    };
 }

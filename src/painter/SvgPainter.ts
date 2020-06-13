@@ -1,16 +1,16 @@
-import { Painter } from "./Painter";
-import { assertNever } from "../util/typeGuards";
-import { Drawable } from "../drawables/drawable";
+import { Painter } from './Painter';
+import { assertNever } from '../util/typeGuards';
+import { Drawable } from '../drawables/drawable';
 
-const svgNs: string = "http://www.w3.org/2000/svg";
+const svgNs = 'http://www.w3.org/2000/svg';
 
 export class SvgPainter implements Painter {
-  constructor(
+    constructor(
     private readonly canvas: SVGElement
-  ) {}
+    ) {}
 
-  draw(drawable: Drawable): void {
-    throw new Error('Method not implemented');
+    draw(drawable: Drawable): void {
+        throw new Error('Method not implemented');
     // switch (drawable.typeTag) {
     //   case 'composite_drawable':
     //     drawComposite(drawable, this.canvas);
@@ -20,11 +20,11 @@ export class SvgPainter implements Painter {
     //     break;
     //   default: assertNever(drawable)
     // }
-  }
+    }
 
-  clear(): void {
-    throw new Error('Method not implemented');
-  }
+    clear(): void {
+        throw new Error('Method not implemented');
+    }
 }
 
 // function drawComposite(

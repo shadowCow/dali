@@ -1,4 +1,4 @@
-import { Drawable } from "../drawables/drawable";
+import { Drawable } from '../drawables/drawable';
 
 export interface Scene {
     readonly drawables: Map<string, Drawable>;
