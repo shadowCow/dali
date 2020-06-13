@@ -1,7 +1,9 @@
-import { primitiveDrawable, Drawable } from "../../drawables/drawable";
-import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect } from "../../drawables/primitives/primitiveShapes";
-import { strokeAndFill, stroke, fill, Fill, Colors } from "../../drawables/primitives/styles";
-import { defaultAnimationDuration, defaultInterpolator, defaultAnimatedStyles } from "../../drawables/animation";
+import { primitiveDrawable, Drawable } from '../../drawables/drawable';
+import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect } from '../../drawables/primitives/primitiveShapes';
+import { strokeAndFill, stroke, fill, Fill, Colors } from '../../drawables/primitives/styles';
+import { defaultAnimationDuration, defaultInterpolator, defaultAnimatedStyles } from '../../drawables/animation';
+import { eyePair } from '../../drawables/composites/eye';
+import { waves } from '../../drawables/composites/wave';
 
 export const exampleData: Drawable[] = [
     {
@@ -38,19 +40,19 @@ export const exampleData: Drawable[] = [
                     transitions: {
                         rx: 20,
                         ry: 100,
-                    }
-                }
-            ]
+                    },
+                },
+            ],
         },
         styles: {
             typeTag: 'fill',
-            styles: fill(Colors.Green),
+            styles: fill(Colors.Green()),
             animations: [{
                 duration: defaultAnimationDuration(),
                 interpolator: defaultInterpolator(),
                 transitions: {
-                    color: Colors.Red,
-                }
+                    color: Colors.Red(),
+                },
             }],
         },
         transforms: [],
@@ -68,9 +70,9 @@ export const exampleData: Drawable[] = [
                     transitions: {
                         x2: 100,
                         y2: 100,
-                    }
-                }
-            ]
+                    },
+                },
+            ],
         },
         styles: defaultAnimatedStyles(),
         transforms: [{
@@ -86,74 +88,10 @@ export const exampleData: Drawable[] = [
                 interpolator: defaultInterpolator(),
                 transitions: {
                     a: 2 * Math.PI,
-                }
+                },
             }],
         }],
-    }
+    },
+    eyePair('4', 600, 200, 50, 50, Colors.Blue()),
+    waves('5', 50, 400, 40, 40, 20, {typeTag:'stroke', styles: stroke(Colors.Green(), 2), animations: []}),
 ];
-
-// export const exampleData = [
-//     primitiveDrawable(
-//         '1',
-//         ellipse(
-//             50, 50, 25, 40
-//         ),
-//         strokeAndFill('black', 3, 'blue')
-//     ),
-//     primitiveDrawable(
-//         '2',
-//         rect(
-//             300, 300, 100, 50, 0, 0
-//         ),
-//         strokeAndFill('yellow', 1, 'red')
-//     ),
-//     primitiveDrawable(
-//         '3',
-//         line(150, 150, 200, 100),
-//         stroke('green', 2)
-//     ),
-//     primitiveDrawable(
-//         '4',
-//         polygon({ x: 400, y: 50 }, { x: 450, y: 80 }, { x: 560, y: 60 }),
-//         fill('green')
-//     ),
-//     primitiveDrawable(
-//         '5',
-//         path(
-//             800,
-//             300,
-//             [
-//                 lineTo(700, 350),
-//                 bezierCurveTo(650, 25, 900, 500, 750, 50)
-//             ]
-//         ),
-//         strokeAndFill('black', 5, 'gray')
-//     ),
-//     primitiveDrawable(
-//         '6',
-//         rect(500, 200, 100, 100, 15, 15),
-//         fill('orange')
-//     ),
-//     eyePair(
-//         '7',
-//         400,
-//         200,
-//         50,
-//         25,
-//         'blue'
-//     ),
-//     waves(
-//         '8',
-//         100,
-//         400,
-//         50,
-//         50,
-//         20,
-//         stroke('blue', 3)
-//     ),
-//     primitiveDrawable(
-//         't1',
-//         text(250, 50, 'hello', '50px serif'),
-//         fill('purple')
-//     )
-// ];

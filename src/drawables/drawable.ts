@@ -34,8 +34,8 @@ export type CompositeDrawable = {
     typeTag: 'composite_drawable';
     id: string;
     drawables: Array<Drawable>;
-    styles: Styles;
-    transforms: Array<Transform>;
+    styles?: Styles;
+    transforms?: Array<Transform>;
 }
 
 export function compositeDrawable(
@@ -48,7 +48,7 @@ export function compositeDrawable(
         typeTag: 'composite_drawable',
         id,
         drawables,
-        styles: styles || fill(),
+        styles,
         transforms: transforms || [],
     };
 }

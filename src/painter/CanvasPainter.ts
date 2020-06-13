@@ -109,6 +109,11 @@ function drawComposite(
     drawable: CompositeDrawable,
     ctx: CanvasRenderingContext2D
 ): void {
+    ctx.save();
+    
+    styleCanvas(ctx, drawable.styles);
+    applyTransforms(ctx, drawable.transforms);
+    
     drawable.drawables.forEach(d => {
         switch (d.typeTag) {
         case 'composite_drawable':
@@ -120,12 +125,16 @@ function drawComposite(
         default: assertNever(d);
         }
     });
+
+    ctx.restore();
 }
 
 function drawPrimitive(
     drawable: PrimitiveDrawable,
     ctx: CanvasRenderingContext2D
 ): void {
+    ctx.save();
+    
     drawable.transforms.forEach(transform => {
         applyTransform(ctx, transform.transform);
     });
@@ -155,7 +164,7 @@ function drawPrimitive(
     default: assertNever(drawable.primitive);
     }
 
-    resetTransform(ctx);
+    ctx.restore();
 }
 
 function drawText(
@@ -384,6 +393,15 @@ function drawPathSegment(
         break;
     default:
         assertNever(segment);
+    }
+}
+
+function applyTransforms(
+    ctx: CanvasRenderingContext2D,
+    transforms?: Transform[],
+): void {
+    if (transforms) {
+        transforms.forEach(t => applyTransform(ctx, t));
     }
 }
 

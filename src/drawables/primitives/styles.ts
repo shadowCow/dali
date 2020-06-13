@@ -1,4 +1,4 @@
-import { assertNever } from "../../util/typeGuards";
+import { assertNever } from '../../util/typeGuards';
 
 export type Styles =
     Stroke |
@@ -16,14 +16,14 @@ export type Stroke = {
 }
 
 export function stroke(
-    color: Color = Colors.Black,
+    color: Color = Colors.Black(),
     width: number = 1
 ): Stroke {
     return {
         typeTag: 'stroke',
         color,
-        width
-    }
+        width,
+    };
 }
 
 export type Fill = {
@@ -32,12 +32,12 @@ export type Fill = {
 }
 
 export function fill(
-    color: Color = Colors.Blue,
+    color: Color = Colors.Blue(),
 ): Fill {
     return {
         typeTag: 'fill',
-        color
-    }
+        color,
+    };
 }
 
 export type StrokeAndFill = {
@@ -47,15 +47,15 @@ export type StrokeAndFill = {
 }
 
 export function strokeAndFill(
-    strokeColor: Color = Colors.Black,
+    strokeColor: Color = Colors.Black(),
     strokeWidth: number = 1,
-    fillColor: Color = Colors.Blue,
+    fillColor: Color = Colors.Blue(),
 ): StrokeAndFill {
     return {
         typeTag: 'stroke_and_fill',
         stroke: stroke(strokeColor, strokeWidth),
-        fill: fill(fillColor)
-    }
+        fill: fill(fillColor),
+    };
 }
 
 export type Color = {
@@ -74,7 +74,7 @@ export function color(
         typeTag: 'color',
         r,
         g,
-        b
+        b,
     };
 }
 
@@ -84,15 +84,20 @@ export function cssColorString(
     return `rgb(${color.r}, ${color.g}, ${color.b})`;
 }
 
-export type ColorConstants = Readonly<{
-    [k: string]: Readonly<Color>;
-}>;
+export type ColorConstants = {
+    Black: () => Color;
+    Red: () => Color;
+    Green: () => Color;
+    Blue: () => Color;
+    White: () => Color;
+}
 
 export const Colors: ColorConstants = {
-    Black: color(),
-    Red: color(255, 0, 0),
-    Green: color(0, 255, 0),
-    Blue: color(0, 0, 255),
+    Black: () => color(),
+    Red: () => color(255, 0, 0),
+    Green: () => color(0, 255, 0),
+    Blue: () => color(0, 0, 255),
+    White: () => color(255, 255, 255),
 };
 
 export function matchStyles(
@@ -100,17 +105,17 @@ export function matchStyles(
     handler: MatchStylesHandler
 ): void {
     switch (styles.typeTag) {
-        case 'stroke':
-            handler.stroke(styles);
-            break;
-        case 'fill':
-            handler.fill(styles);
-            break;
-        case 'stroke_and_fill':
-            handler.strokeAndFill(styles);
-            break;
-        default:
-            assertNever(styles);
+    case 'stroke':
+        handler.stroke(styles);
+        break;
+    case 'fill':
+        handler.fill(styles);
+        break;
+    case 'stroke_and_fill':
+        handler.strokeAndFill(styles);
+        break;
+    default:
+        assertNever(styles);
     }
 }
 
