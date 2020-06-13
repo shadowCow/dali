@@ -34,15 +34,15 @@ export type CompositeDrawable = {
     typeTag: 'composite_drawable';
     id: string;
     drawables: Array<Drawable>;
-    styles?: Styles;
-    transforms?: Array<Transform>;
+    styles?: AnimatedStyles;
+    transforms?: AnimatedTransforms[];
 }
 
 export function compositeDrawable(
     id: string,
     drawables: Array<Drawable>,
-    styles?: Styles,
-    transforms?: Array<Transform>
+    styles?: AnimatedStyles,
+    transforms?: AnimatedTransforms[],
 ): CompositeDrawable {
     return {
         typeTag: 'composite_drawable',

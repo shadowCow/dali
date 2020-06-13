@@ -111,8 +111,8 @@ function drawComposite(
 ): void {
     ctx.save();
     
-    styleCanvas(ctx, drawable.styles);
-    applyTransforms(ctx, drawable.transforms);
+    styleCanvas(ctx, drawable.styles?.styles);
+    applyTransforms(ctx, drawable.transforms?.map(t => t.transform));
     
     drawable.drawables.forEach(d => {
         switch (d.typeTag) {
@@ -134,7 +134,7 @@ function drawPrimitive(
     ctx: CanvasRenderingContext2D
 ): void {
     ctx.save();
-    
+
     drawable.transforms.forEach(transform => {
         applyTransform(ctx, transform.transform);
     });

@@ -34,7 +34,26 @@ function updateScene(
     scene.drawables.forEach(drawable => {
         switch (drawable.typeTag) {
         case 'composite_drawable':
-            updateCompositeDrawable(timestampMs, drawable);
+            updateCompositeDrawable(timestampMs, dt, drawable);
+            break;
+        case 'primitive_drawable':
+            updatePrimitiveDrawable(timestampMs, dt, drawable);
+            break;
+        default:
+            assertNever(drawable);
+        }
+    });
+}
+
+function updateDrawables(
+    timestampMs: number,
+    dt: number,
+    drawables: Drawable[]
+): void {
+    drawables.forEach(drawable => {
+        switch (drawable.typeTag) {
+        case 'composite_drawable':
+            updateCompositeDrawable(timestampMs, dt, drawable);
             break;
         case 'primitive_drawable':
             updatePrimitiveDrawable(timestampMs, dt, drawable);
@@ -47,9 +66,16 @@ function updateScene(
 
 function updateCompositeDrawable(
     timestampMs: number,
-    composite_drawable: CompositeDrawable,
+    dt: number,
+    compositeDrawable: CompositeDrawable,
 ): void {
-    
+    if (compositeDrawable.styles) {
+        updateStyles(timestampMs, dt, compositeDrawable.styles);
+    }
+    if (compositeDrawable.transforms) {
+        updateTransforms(timestampMs, dt, compositeDrawable.transforms);
+    }
+    updateDrawables(timestampMs, dt, compositeDrawable.drawables);
 }
 
 function updatePrimitiveDrawable(
