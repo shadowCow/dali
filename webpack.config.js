@@ -6,36 +6,38 @@ const baseConfig = {
         filename: 'dali.js',
         library: 'dali',
         libraryTarget: 'umd',
-        globalObject: 'this'
+        globalObject: 'this',
     },
     module: {
         rules: [
             {
                 test: /\.ts$/,
                 include: [
-                    path.resolve(__dirname, 'src')
+                    path.resolve(__dirname, 'src'),
                 ],
-                loader: 'ts-loader'
-            }
-        ]
+                loader: 'ts-loader',
+            },
+        ],
     },
     resolve: {
         modules: ['src', 'node_modules'],
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
     },
     devtool: 'source-map',
     devServer: {
-        contentBase: path.join(__dirname, 'public')
-    }
-}
+        contentBase: path.join(__dirname, 'public'),
+    },
+};
 
 module.exports = function(env, args) {
     if (env && env.entryPoint) {
         if (env.entryPoint === 'ken') {
             baseConfig.entry = './src/boot/boot.ken.ts';
+        } else if (env.entryPoint === 'pop') {
+            baseConfig.entry = './src/boot/boot.pop.ts';
         } else {
             baseConfig.entry = './src/boot/boot.example.ts';
         }
     }
     return baseConfig;
-}
+};
