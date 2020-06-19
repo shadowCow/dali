@@ -1,6 +1,6 @@
 import { AnimatedStyles, defaultAnimatedStyles } from '../drawables/animation';
 import { Drawable } from '../drawables/drawable';
-import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text } from '../drawables/primitives/primitiveShapes';
+import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text, square, circle } from '../drawables/primitives/primitiveShapes';
 import { Color, color, Colors, stroke, strokeAndFill } from '../drawables/primitives/styles';
 import { run } from '../index';
 import { createCanvasAndPainter } from '../painter/CanvasPainter';
@@ -97,6 +97,28 @@ if (!painter) {
         },
         {
             typeTag: 'primitive_drawable',
+            id: '2-rectangle-rounded',
+            primitive: {
+                typeTag: 'rect',
+                primitive: rect(col2 + 110, rowH * 2 - 2 - 30, 100, 40, 30, 10),
+                animations: [],
+            },
+            styles: noFillStyle,
+            transforms: [],
+        },
+        {
+            typeTag: 'primitive_drawable',
+            id: '2-rectangle-square',
+            primitive: {
+                typeTag: 'rect',
+                primitive: square(col2 + 110 + 110, rowH * 2 - 2 - 30, 40),
+                animations: [],
+            },
+            styles: noFillStyle,
+            transforms: [],
+        },
+        {
+            typeTag: 'primitive_drawable',
             id: '3-ellipse_label',
             primitive: {
                 typeTag: 'text',
@@ -111,7 +133,7 @@ if (!painter) {
             id: '3-ellipse-circle',
             primitive: {
                 typeTag: 'ellipse',
-                primitive: ellipse(col2 + 15, rowH * 3 - 15, 15, 15),
+                primitive: circle(col2 + 15, rowH * 3 - 15, 15),
                 animations: [],
             },
             styles: fillStyle(Colors.White()),

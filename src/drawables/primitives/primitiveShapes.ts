@@ -54,6 +54,14 @@ export function ellipse(
     };
 }
 
+export function circle(
+    cx: number,
+    cy: number,
+    r: number
+): Ellipse {
+    return ellipse(cx, cy, r, r)
+}
+
 export type Rect = {
   typeTag: 'rect',
   x: number,
@@ -81,6 +89,16 @@ export function rect(
         rx,
         ry,
     };
+}
+
+export function square(
+    x: number,
+    y: number,
+    length: number,
+    rx?: number,
+    ry?: number
+): Rect {
+    return rect(x, y, length, length, rx, ry);
 }
 
 export type Line = {
