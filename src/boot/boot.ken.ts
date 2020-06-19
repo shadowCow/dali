@@ -1,7 +1,7 @@
 import { AnimatedStyles, defaultAnimatedStyles } from '../drawables/animation';
 import { Drawable } from '../drawables/drawable';
 import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text } from '../drawables/primitives/primitiveShapes';
-import { Color, Colors, stroke, strokeAndFill } from '../drawables/primitives/styles';
+import { Color, color, Colors, stroke, strokeAndFill } from '../drawables/primitives/styles';
 import { run } from '../index';
 import { createCanvasAndPainter } from '../painter/CanvasPainter';
 import { Painter } from '../painter/Painter';
@@ -17,13 +17,6 @@ const painter: Painter | null = createCanvasAndPainter(
   canvasId
 );
 
-function fillStyle(color: Color): AnimatedStyles {
-  return {
-    typeTag: 'stroke_and_fill',
-    styles: strokeAndFill(Colors.Black(), 3, color),
-    animations: [],
-  };
-}
 
 if (!painter) {
   throw new Error('Unable to create canvas');
@@ -38,13 +31,32 @@ if (!painter) {
     styles: stroke(Colors.Black(), 3),
     animations: [],
   };
+  const fillStyle = function (color: Color): AnimatedStyles {
+    return {
+      typeTag: 'stroke_and_fill',
+      styles: strokeAndFill(Colors.Black(), 3, color),
+      animations: [],
+    };
+  }
+
   const drawables: Drawable[] = [
+    {
+      typeTag: 'primitive_drawable',
+      id: '0-rectangle',
+      primitive: {
+        typeTag: 'rect',
+        primitive: rect(3, 3, 500, rowH * 6 + 20),
+        animations: [],
+      },
+      styles: fillStyle(color(230, 230, 230)),
+      transforms: [],
+    },
     {
       typeTag: 'primitive_drawable',
       id: '1-line_label',
       primitive: {
         typeTag: 'text',
-        primitive: text(3, rowH, 'line'),
+        primitive: text(10, rowH, 'line'),
         animations: [],
       },
       styles: defaultAnimatedStyles(),
@@ -55,7 +67,7 @@ if (!painter) {
       id: '1-line',
       primitive: {
         typeTag: 'line',
-        primitive: line(col2, 15, col2 + 30, 30),
+        primitive: line(col2, 15, col2 + 100, 45),
         animations: [],
       },
       styles: noFillStyle,
@@ -66,7 +78,7 @@ if (!painter) {
       id: '2-rectangle_label',
       primitive: {
         typeTag: 'text',
-        primitive: text(3, rowH * 2, 'rectangle'),
+        primitive: text(10, rowH * 2, 'rectangle'),
         animations: [],
       },
       styles: defaultAnimatedStyles(),
@@ -88,7 +100,7 @@ if (!painter) {
       id: '3-ellipse_label',
       primitive: {
         typeTag: 'text',
-        primitive: text(3, rowH * 3, 'ellipse'),
+        primitive: text(10, rowH * 3, 'ellipse'),
         animations: [],
       },
       styles: defaultAnimatedStyles(),
@@ -102,7 +114,7 @@ if (!painter) {
         primitive: ellipse(col2 + 15, rowH * 3 - 15, 15, 15),
         animations: [],
       },
-      styles: noFillStyle,
+      styles: fillStyle(Colors.White()),
       transforms: [],
     },
     {
@@ -121,7 +133,7 @@ if (!painter) {
       id: '4-polyline_line_label',
       primitive: {
         typeTag: 'text',
-        primitive: text(3, rowH * 4, 'polyline'),
+        primitive: text(10, rowH * 4, 'polyline'),
         animations: [],
       },
       styles: defaultAnimatedStyles(),
@@ -151,7 +163,7 @@ if (!painter) {
       id: '5-polygon_label',
       primitive: {
         typeTag: 'text',
-        primitive: text(3, rowH * 5, 'polygon'),
+        primitive: text(10, rowH * 5, 'polygon'),
         animations: [],
       },
       styles: defaultAnimatedStyles(),
@@ -181,7 +193,7 @@ if (!painter) {
       id: '6-path_label',
       primitive: {
         typeTag: 'text',
-        primitive: text(3, rowH * 6, 'path'),
+        primitive: text(10, rowH * 6, 'path'),
         animations: [],
       },
       styles: defaultAnimatedStyles(),
@@ -196,8 +208,8 @@ if (!painter) {
           col2,
           rowH * 6,
           [
-            lineTo(col2 + 20, rowH * 6),
-            moveTo(col2 + 40, rowH * 6),
+            lineTo(col2 + 40, rowH * 6),
+            moveTo(col2 + 60, rowH * 6 - 20),
             lineTo(col2 + 60, rowH * 6),
             bezierCurveTo(
               col2 + 80, rowH * 6 + 20,
@@ -209,6 +221,7 @@ if (!painter) {
               col2 + 180, rowH * 6 + 40,
               col2 + 200, rowH * 6 - 40
             ),
+            lineTo(col2 + 260, rowH * 6),
           ]
         ),
         animations: [],
@@ -216,7 +229,6 @@ if (!painter) {
       styles: fillStyle(Colors.Blue()),
       transforms: [],
     },
-    // Path;
   ];
 
   drawables.forEach(d => scene.add(d));
