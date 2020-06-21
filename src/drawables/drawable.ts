@@ -1,54 +1,52 @@
-import { Primitive } from './primitives/primitiveShapes';
-import { Styles, defaultStyles, fill } from './primitives/styles';
-import { Transform } from './primitives/transforms';
-import { AnimatedPrimitives, AnimatedStyles, AnimatedTransforms } from './animation';
+import { AnimatedPrimitive, AnimatedStyles, AnimatedTransform } from './animation/Animation';
+import * as Animation from './animation/Animation';
 
 export type Drawable =
     PrimitiveDrawable |
     CompositeDrawable;
 
 export type PrimitiveDrawable = {
-    typeTag: 'primitive_drawable';
+    kind: 'primitive_drawable';
     id: string;
-    primitive: AnimatedPrimitives;
-    styles: AnimatedStyles;
-    transforms: Array<AnimatedTransforms>;
+    transform: AnimatedTransform;
+    primitive: AnimatedPrimitive;
+    styles?: AnimatedStyles;
 }
     
 export function primitiveDrawable(
     id: string,
-    primitive: AnimatedPrimitives,
-    styles: AnimatedStyles,
-    transforms?: Array<AnimatedTransforms>
+    primitive: AnimatedPrimitive,
+    transform?: AnimatedTransform,
+    styles?: AnimatedStyles,
 ): PrimitiveDrawable {
     return {
-        typeTag: 'primitive_drawable',
+        kind: 'primitive_drawable',
         id,
+        transform: transform || Animation.createAnimatedTransform(),
         primitive,
         styles,
-        transforms: transforms || [],
     };
 }
 
 export type CompositeDrawable = {
-    typeTag: 'composite_drawable';
+    kind: 'composite_drawable';
     id: string;
+    transform: AnimatedTransform;
     drawables: Array<Drawable>;
     styles?: AnimatedStyles;
-    transforms?: AnimatedTransforms[];
 }
 
 export function compositeDrawable(
     id: string,
     drawables: Array<Drawable>,
+    transform?: AnimatedTransform,
     styles?: AnimatedStyles,
-    transforms?: AnimatedTransforms[],
 ): CompositeDrawable {
     return {
-        typeTag: 'composite_drawable',
+        kind: 'composite_drawable',
         id,
+        transform: transform || Animation.createAnimatedTransform(),
         drawables,
         styles,
-        transforms: transforms || [],
     };
 }

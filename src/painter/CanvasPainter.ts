@@ -1,9 +1,14 @@
 import { Painter } from './Painter';
 import { assertNever } from '../util/typeGuards';
 import { Drawable, CompositeDrawable, PrimitiveDrawable } from '../drawables/drawable';
-import { Styles, MatchStylesHandler, matchStyles, cssColorString } from '../drawables/primitives/styles';
+import { Styles, MatchStylesHandler, matchStyles } from '../drawables/styles/Styles';
 import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text } from '../drawables/primitives/primitiveShapes';
-import { Transform } from '../drawables/primitives/transforms';
+import * as Transform from '../drawables/transform/Transform';
+import * as Translate from '../drawables/transform/Translate';
+import * as Rotate from '../drawables/transform/Rotate';
+import * as Scale from '../drawables/transform/Scale';
+import * as Skew from '../drawables/transform/Skew';
+import { cssColorString } from '../drawables/styles/Color';
 
 export function createCanvasAndPainter(
     document: Document,
@@ -84,14 +89,15 @@ export class CanvasPainter implements Painter {
     ) {}
 
     draw(drawable: Drawable): void {
-        switch (drawable.typeTag) {
-        case 'composite_drawable':
-            drawComposite(drawable, this.ctx);
-            break;
-        case 'primitive_drawable':
-            drawPrimitive(drawable, this.ctx);
-            break;
-        default: assertNever(drawable);
+        switch (drawable.kind) {
+            case 'composite_drawable':
+                drawComposite(drawable, this.ctx);
+                break;
+            case 'primitive_drawable':
+                drawPrimitive(drawable, this.ctx);
+                break;
+            default:
+                assertNever(drawable);
         }
     }
 
@@ -112,17 +118,18 @@ function drawComposite(
     ctx.save();
     
     styleCanvas(ctx, drawable.styles?.styles);
-    applyTransforms(ctx, drawable.transforms?.map(t => t.transform));
+    applyTransform(ctx, drawable.transform.transform);
     
     drawable.drawables.forEach(d => {
-        switch (d.typeTag) {
-        case 'composite_drawable':
-            drawComposite(d, ctx);
-            break;
-        case 'primitive_drawable':
-            drawPrimitive(d, ctx);
-            break;
-        default: assertNever(d);
+        switch (d.kind) {
+            case 'composite_drawable':
+                drawComposite(d, ctx);
+                break;
+            case 'primitive_drawable':
+                drawPrimitive(d, ctx);
+                break;
+            default:
+                assertNever(d);
         }
     });
 
@@ -135,33 +142,32 @@ function drawPrimitive(
 ): void {
     ctx.save();
 
-    drawable.transforms.forEach(transform => {
-        applyTransform(ctx, transform.transform);
-    });
+    applyTransform(ctx, drawable.transform.transform);
 
-    switch (drawable.primitive.typeTag) {
-    case 'text':
-        drawText(ctx, drawable.primitive.primitive, drawable.styles.styles);
-        break;
-    case 'line':
-        drawLine(ctx, drawable.primitive.primitive, drawable.styles.styles);
-        break;
-    case 'rect':
-        drawRect(ctx, drawable.primitive.primitive, drawable.styles.styles);
-        break;
-    case 'ellipse':
-        drawEllipse(ctx, drawable.primitive.primitive, drawable.styles.styles);
-        break;
-    case 'path':
-        drawPath(ctx, drawable.primitive.primitive, drawable.styles.styles);
-        break;
-    case 'polyline':
-        drawPolyline(ctx, drawable.primitive.primitive, drawable.styles.styles);
-        break;
-    case 'polygon':
-        drawPolygon(ctx, drawable.primitive.primitive, drawable.styles.styles);
-        break;
-    default: assertNever(drawable.primitive);
+    switch (drawable.primitive.kind) {
+        case 'text':
+            drawText(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            break;
+        case 'line':
+            drawLine(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            break;
+        case 'rect':
+            drawRect(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            break;
+        case 'ellipse':
+            drawEllipse(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            break;
+        case 'path':
+            drawPath(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            break;
+        case 'polyline':
+            drawPolyline(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            break;
+        case 'polygon':
+            drawPolygon(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            break;
+        default:
+            assertNever(drawable.primitive);
     }
 
     ctx.restore();
@@ -308,7 +314,15 @@ function drawPolyline(
     }
     ctx.lineTo(points[points.length-1].x, points[points.length-1].y);
 
-    ctx.stroke();
+    drawToCanvas({
+        stroke: s => ctx.stroke(),
+        fill: f => ctx.fill(),
+        strokeAndFill: sf => {
+            ctx.fill();
+            ctx.stroke();
+        },
+    }, styles);
+
     ctx.closePath();
 }
 
@@ -366,67 +380,76 @@ function drawPathSegment(
     ctx: CanvasRenderingContext2D,
     segment: PathSegment
 ): void {
-    switch (segment.typeTag) {
-    case 'move_to':
-        ctx.moveTo(segment.x, segment.y);
-        break;
-    case 'line_to':
-        ctx.lineTo(segment.x, segment.y);
-        break;
-    case 'bezier_curve_to':
-        ctx.bezierCurveTo(
-            segment.cp1x,
-            segment.cp1y,
-            segment.cp2x,
-            segment.cp2y,
-            segment.toX,
-            segment.toY
-        );
-        break;
-    case 'quadratic_curve_to':
-        ctx.quadraticCurveTo(
-            segment.cpx,
-            segment.cpy,
-            segment.toX,
-            segment.toY
-        );
-        break;
-    default:
-        assertNever(segment);
-    }
-}
-
-function applyTransforms(
-    ctx: CanvasRenderingContext2D,
-    transforms?: Transform[],
-): void {
-    if (transforms) {
-        transforms.forEach(t => applyTransform(ctx, t));
+    switch (segment.kind) {
+        case 'move_to':
+            ctx.moveTo(segment.x, segment.y);
+            break;
+        case 'line_to':
+            ctx.lineTo(segment.x, segment.y);
+            break;
+        case 'bezier_curve_to':
+            ctx.bezierCurveTo(
+                segment.cp1x,
+                segment.cp1y,
+                segment.cp2x,
+                segment.cp2y,
+                segment.toX,
+                segment.toY
+            );
+            break;
+        case 'quadratic_curve_to':
+            ctx.quadraticCurveTo(
+                segment.cpx,
+                segment.cpy,
+                segment.toX,
+                segment.toY
+            );
+            break;
+        default:
+            assertNever(segment);
     }
 }
 
 function applyTransform(
     ctx: CanvasRenderingContext2D,
-    transform: Transform,
+    transform: Transform.State,
 ): void {
-    switch (transform.typeTag) {
-    case 'rotate':
-        // ctx rotation is around 0,0
-        // so we need to translate before rotating
-        ctx.translate(transform.x, transform.y);
-        ctx.rotate(transform.a);
-        ctx.translate(-transform.x, -transform.y);
-        break;
-    case 'scale':
-        ctx.scale(transform.x, transform.y);
-        break;
-    case 'skew':
-        ctx.transform(1, transform.y, transform.x, 1, 0, 0);
-        break;
-    case 'translate':
-        ctx.translate(transform.x, transform.y);
-        break;
-    }
+    applyTranslate(ctx, transform.translate);
+    applyRotate(ctx, transform.rotate);
+    applyScale(ctx, transform.scale);
+    applySkew(ctx, transform.skew);
+}
+
+function applyTranslate(
+    ctx: CanvasRenderingContext2D,
+    translate: Translate.State,
+): void {
+    ctx.translate(translate.x, translate.y);
+}
+
+function applyRotate(
+    ctx: CanvasRenderingContext2D,
+    rotate: Rotate.State,
+): void {
+    // ctx rotation is around 0,0
+    // so we need to translate before rotating
+    ctx.translate(rotate.x, rotate.y);
+    ctx.rotate(rotate.a);
+    ctx.translate(-rotate.x, -rotate.y);
+}
+
+function applyScale(
+    ctx: CanvasRenderingContext2D,
+    scale: Scale.State,
+): void {
+    ctx.scale(scale.x, scale.y);
+}
+
+function applySkew(
+    ctx: CanvasRenderingContext2D,
+    skew: Skew.State,
+): void {
+    ctx.transform(1, skew.y, skew.x, 1, 0, 0);
 }
 
 function resetTransform(
@@ -441,23 +464,24 @@ function styleAndDrawToCanvas(
     styles?: Styles
 ): void {
     if (styles) {
-        switch (styles.typeTag) {
-        case 'stroke':
-            ctx.strokeStyle = cssColorString(styles.color);
-            ctx.lineWidth = styles.width;
-            handler.stroke(styles);
-            break;
-        case 'fill':
-            ctx.fillStyle = cssColorString(styles.color);
-            handler.fill(styles);
-            break;
-        case 'stroke_and_fill':
-            ctx.strokeStyle = cssColorString(styles.stroke.color);
-            ctx.lineWidth = styles.stroke.width;
-            ctx.fillStyle = cssColorString(styles.fill.color);
-            handler.strokeAndFill(styles);
-            break;
-        default: assertNever(styles);
+        switch (styles.kind) {
+            case 'stroke':
+                ctx.strokeStyle = cssColorString(styles.color);
+                ctx.lineWidth = styles.width;
+                handler.stroke(styles);
+                break;
+            case 'fill':
+                ctx.fillStyle = cssColorString(styles.color);
+                handler.fill(styles);
+                break;
+            case 'stroke_and_fill':
+                ctx.strokeStyle = cssColorString(styles.stroke.color);
+                ctx.lineWidth = styles.stroke.width;
+                ctx.fillStyle = cssColorString(styles.fill.color);
+                handler.strokeAndFill(styles);
+                break;
+            default:
+                assertNever(styles);
         }
     }
 }

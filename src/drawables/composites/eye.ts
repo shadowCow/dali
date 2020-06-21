@@ -1,7 +1,9 @@
 import { CompositeDrawable, compositeDrawable, PrimitiveDrawable, primitiveDrawable } from '../drawable';
 import { ellipse } from '../primitives/primitiveShapes';
-import { fill, strokeAndFill, Color, Colors } from '../primitives/styles';
-
+import { fill, strokeAndFill } from '../styles/Styles';
+import * as Transform from '../transform/Transform';
+import { Color, Colors } from '../styles/Color';
+import { createAnimatedTransform } from '../animation/Animation';
 
 export function eyePair(
     id: string,
@@ -67,19 +69,18 @@ function iris(
     return primitiveDrawable(
         eyeId + '-iris',
         {
-            typeTag: 'ellipse',
+            kind: 'ellipse',
             primitive: ellipse(
                 cx,
                 cy,
                 radius,
                 radius
             ),
-            animations: [],
         },
+        createAnimatedTransform(),
         {
-            typeTag: 'fill',
+            kind: 'fill',
             styles: fill(color),
-            animations: [],
         },
     );
 }
@@ -93,19 +94,18 @@ function pupil(
     return primitiveDrawable(
         eyeId + '-pupil',
         {
-            typeTag: 'ellipse',
+            kind: 'ellipse',
             primitive: ellipse(
                 cx,
                 cy,
                 r,
                 r
             ),
-            animations: [],
         },
+        createAnimatedTransform(),
         {
-            typeTag: 'fill',
+            kind: 'fill',
             styles: fill(Colors.Black()),
-            animations: [],
         },
     );
 }
@@ -119,23 +119,22 @@ function eyeOutline(
     return primitiveDrawable(
         eyeId + '-eyeOutline',
         {
-            typeTag: 'ellipse',
+            kind: 'ellipse',
             primitive: ellipse(
                 cx,
                 cy,
                 irisRadius*2,
                 irisRadius*2,
             ),
-            animations: [],
         },
+        createAnimatedTransform(),
         {
-            typeTag: 'stroke_and_fill',
+            kind: 'stroke_and_fill',
             styles: strokeAndFill(
                 Colors.Black(),
                 3,
                 Colors.White(),
             ),
-            animations: [],
         },
     );
 }

@@ -1,8 +1,8 @@
 import { Painter } from '../painter/Painter';
 import { createCanvasAndPainter } from '../painter/CanvasPainter';
 import { run } from '../index';
-import { SceneImpl } from '../scene/Scene';
 import { Drawable } from '../drawables/drawable';
+import * as Scene from '../scene/Scene';
 
 const canvasContainerId = 'canvas-container';
 const canvasId = 'drawing-canvas';
@@ -16,12 +16,12 @@ const painter: Painter | null = createCanvasAndPainter(
 if (!painter) {
     throw new Error('Unable to create canvas');
 } else {
-    const scene = new SceneImpl();
+    const scene = Scene.create();
     
     // populate this with whatever you want
     const drawables: Drawable[] = [];
 
-    drawables.forEach(d => scene.add(d));
+    drawables.forEach(d => Scene.transition(scene, Scene.addDrawable(d)));
   
     run(painter, scene);
 }

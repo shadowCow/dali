@@ -1,3 +1,4 @@
+import { Vec2 } from '../transform/Vec';
 
 export type Primitive =
   Text |
@@ -9,10 +10,10 @@ export type Primitive =
   Path;
 
 export type Text = {
-  typeTag: 'text',
+  kind: 'text',
   x: number,
   y: number,
-  text: string,
+  text: string
   font: string
 }
 
@@ -23,7 +24,7 @@ export function text(
     font: string = '50px serif',
 ): Text {
     return {
-        typeTag: 'text',
+        kind: 'text',
         x,
         y,
         text,
@@ -32,7 +33,7 @@ export function text(
 }
 
 export type Ellipse = {
-  typeTag: 'ellipse',
+  kind: 'ellipse',
   cx: number,
   cy: number,
   rx: number,
@@ -46,7 +47,7 @@ export function ellipse(
     ry: number
 ): Ellipse {
     return {
-        typeTag: 'ellipse',
+        kind: 'ellipse',
         cx,
         cy,
         rx,
@@ -55,7 +56,7 @@ export function ellipse(
 }
 
 export type Rect = {
-  typeTag: 'rect',
+  kind: 'rect',
   x: number,
   y: number,
   width: number,
@@ -73,7 +74,7 @@ export function rect(
     ry?: number
 ): Rect {
     return {
-        typeTag: 'rect',
+        kind: 'rect',
         x,
         y,
         width,
@@ -84,7 +85,7 @@ export function rect(
 }
 
 export type Line = {
-  typeTag: 'line',
+  kind: 'line',
   x1: number;
   y1: number;
   x2: number;
@@ -98,7 +99,7 @@ export function line(
     y2: number,
 ): Line {
     return {
-        typeTag: 'line',
+        kind: 'line',
         x1,
         y1,
         x2,
@@ -106,42 +107,36 @@ export function line(
     };
 }
 
-export type Point2D = {
-  x: number,
-  y: number
-}
-
-
 export type Polyline = {
-  typeTag: 'polyline',
-  points: Array<Point2D>;
+  kind: 'polyline',
+  points: Array<Vec2>;
 }
 
 export function polyline(
-    ...points: Array<Point2D>
+    ...points: Array<Vec2>
 ): Polyline {
     return {
-        typeTag: 'polyline',
+        kind: 'polyline',
         points,
     };
 }
 
 export type Polygon = {
-  typeTag: 'polygon',
-  points: Array<Point2D>;
+  kind: 'polygon',
+  points: Array<Vec2>;
 }
 
 export function polygon(
-    ...points: Array<Point2D>
+    ...points: Array<Vec2>
 ): Polygon {
     return {
-        typeTag: 'polygon',
+        kind: 'polygon',
         points,
     };
 }
 
 export type Path = {
-  typeTag: 'path',
+  kind: 'path',
   startX: number,
   startY: number,
   segments: Array<PathSegment>
@@ -153,7 +148,7 @@ export function path(
     segments: Array<PathSegment>
 ): Path {
     return {
-        typeTag: 'path',
+        kind: 'path',
         startX,
         startY,
         segments,
@@ -167,7 +162,7 @@ export type PathSegment =
   QuadraticCurveTo;
 
 export type MoveTo = {
-  typeTag: 'move_to',
+  kind: 'move_to',
   x: number,
   y: number
 }
@@ -177,14 +172,14 @@ export function moveTo(
     y: number
 ): MoveTo {
     return {
-        typeTag: 'move_to',
+        kind: 'move_to',
         x,
         y,
     };
 }
 
 export type LineTo = {
-  typeTag: 'line_to',
+  kind: 'line_to',
   x: number,
   y: number
 }
@@ -194,14 +189,14 @@ export function lineTo(
     y: number
 ): LineTo {
     return {
-        typeTag: 'line_to',
+        kind: 'line_to',
         x,
         y,
     };
 }
 
 export type BezierCurveTo = {
-  typeTag: 'bezier_curve_to',
+  kind: 'bezier_curve_to',
   cp1x: number,
   cp1y: number,
   cp2x: number,
@@ -219,7 +214,7 @@ export function bezierCurveTo(
     toY: number
 ): BezierCurveTo {
     return {
-        typeTag: 'bezier_curve_to',
+        kind: 'bezier_curve_to',
         cp1x,
         cp1y,
         cp2x,
@@ -230,7 +225,7 @@ export function bezierCurveTo(
 }
 
 export type QuadraticCurveTo = {
-  typeTag: 'quadratic_curve_to',
+  kind: 'quadratic_curve_to',
   cpx: number,
   cpy: number,
   toX: number,
@@ -244,7 +239,7 @@ export function quadraticCurveTo(
     toY: number
 ): QuadraticCurveTo {
     return {
-        typeTag: 'quadratic_curve_to',
+        kind: 'quadratic_curve_to',
         cpx,
         cpy,
         toX,

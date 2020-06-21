@@ -2,12 +2,12 @@ module.exports = {
     preset: 'ts-jest',
     rootDir: '..',
     testMatch: [
-        '**/*.test.ts'
+        '<rootDir>/src/**/*.test.ts',
     ],
     testPathIgnorePatterns: [
         'node_modules',
         'dist',
-        'public'
+        'public',
     ],
     collectCoverageFrom: [
         '<rootDir>/src/**/*.ts',
@@ -18,7 +18,7 @@ module.exports = {
             branches: 100,
             function: 100,
             lines: 100,
-            statements: 100
-        }
-    }
-}
+            statements: 100,
+        },
+    },
+};
