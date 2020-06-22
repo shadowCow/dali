@@ -2,7 +2,7 @@ import { Painter } from './Painter';
 import { assertNever } from '../util/typeGuards';
 import { Drawable, CompositeDrawable, PrimitiveDrawable } from '../drawables/drawable';
 import { Styles, MatchStylesHandler, matchStyles } from '../drawables/styles/Styles';
-import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text } from '../drawables/primitives/primitiveShapes';
+import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text, Image } from '../drawables/primitives/primitiveShapes';
 import * as Transform from '../drawables/transform/Transform';
 import * as Translate from '../drawables/transform/Translate';
 import * as Rotate from '../drawables/transform/Rotate';
@@ -117,7 +117,7 @@ function drawComposite(
 ): void {
     ctx.save();
     
-    styleCanvas(ctx, drawable.styles?.styles);
+    styleCanvas(ctx, getStyles(drawable));
     applyTransform(ctx, drawable.transform.transform);
     
     drawable.drawables.forEach(d => {
@@ -146,31 +146,44 @@ function drawPrimitive(
 
     switch (drawable.primitive.kind) {
         case 'text':
-            drawText(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            drawText(ctx, drawable.primitive.primitive, getStyles(drawable));
             break;
         case 'line':
-            drawLine(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            drawLine(ctx, drawable.primitive.primitive, getStyles(drawable));
             break;
         case 'rect':
-            drawRect(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            drawRect(ctx, drawable.primitive.primitive, getStyles(drawable));
             break;
         case 'ellipse':
-            drawEllipse(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            drawEllipse(ctx, drawable.primitive.primitive, getStyles(drawable));
             break;
         case 'path':
-            drawPath(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            drawPath(ctx, drawable.primitive.primitive, getStyles(drawable));
             break;
         case 'polyline':
-            drawPolyline(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            drawPolyline(ctx, drawable.primitive.primitive, getStyles(drawable));
             break;
         case 'polygon':
-            drawPolygon(ctx, drawable.primitive.primitive, drawable.styles?.styles);
+            drawPolygon(ctx, drawable.primitive.primitive, getStyles(drawable));
+            break;
+        case 'image':
+            drawImage(ctx, drawable.primitive.primitive);
             break;
         default:
             assertNever(drawable.primitive);
     }
 
     ctx.restore();
+}
+
+function getStyles(
+    drawable: Drawable
+): Styles | undefined {
+    if (drawable.styles) {
+        return drawable.styles.styles;
+    } else {
+        return undefined;
+    }
 }
 
 function drawText(
@@ -408,6 +421,13 @@ function drawPathSegment(
         default:
             assertNever(segment);
     }
+}
+
+function drawImage(
+    ctx: CanvasRenderingContext2D,
+    image: Image,
+): void {
+    ctx.drawImage(image.image, 0, 0);
 }
 
 function applyTransform(

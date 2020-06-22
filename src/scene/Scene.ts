@@ -234,6 +234,9 @@ function updatePrimitive(
                     dt,
                 );
                 break;
+            case 'image':
+                // nothing to animate
+                break;
             default:
                 assertNever(primitive);
         }

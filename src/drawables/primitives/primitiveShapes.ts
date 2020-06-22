@@ -7,7 +7,8 @@ export type Primitive =
   Line |
   Polyline |
   Polygon |
-  Path;
+  Path |
+  Image;
 
 export type Text = {
   kind: 'text',
@@ -244,5 +245,19 @@ export function quadraticCurveTo(
         cpy,
         toX,
         toY,
+    };
+}
+
+export type Image = {
+    kind: 'image',
+    image: HTMLImageElement
+}
+
+export function image(
+    image: HTMLImageElement,
+): Image {
+    return {
+        kind: 'image',
+        image,
     };
 }
