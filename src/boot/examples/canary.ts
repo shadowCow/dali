@@ -1,5 +1,5 @@
 import { primitiveDrawable, Drawable } from '../../drawables/drawable';
-import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect } from '../../drawables/primitives/primitiveShapes';
+import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect, equilateralPolygon } from '../../drawables/primitives/primitiveShapes';
 import { strokeAndFill, stroke, fill, Fill } from '../../drawables/styles/Styles';
 import { eyePair } from '../../drawables/composites/eye';
 import { waves } from '../../drawables/composites/wave';
@@ -96,5 +96,14 @@ export function exampleData(
         },
         eyePair('4', 600, 200, 50, 50, Colors.Blue()),
         waves('5', 50, 400, 40, 40, 20, {kind:'stroke', styles: stroke(Colors.Green(), 2)}, createAnimatedTransform()),
+        primitiveDrawable(
+            'p8',
+            {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    600, 400, 5, 20
+                ),
+            },
+        ),
     ];
 }

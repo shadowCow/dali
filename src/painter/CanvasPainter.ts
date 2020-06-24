@@ -2,7 +2,7 @@ import { Painter } from './Painter';
 import { assertNever } from '../util/typeGuards';
 import { Drawable, CompositeDrawable, PrimitiveDrawable } from '../drawables/drawable';
 import { Styles, MatchStylesHandler, matchStyles } from '../drawables/styles/Styles';
-import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text, Image } from '../drawables/primitives/primitiveShapes';
+import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text, Image, EquilateralPolygon } from '../drawables/primitives/primitiveShapes';
 import * as Transform from '../drawables/transform/Transform';
 import * as Translate from '../drawables/transform/Translate';
 import * as Rotate from '../drawables/transform/Rotate';
@@ -165,6 +165,9 @@ function drawPrimitive(
             break;
         case 'polygon':
             drawPolygon(ctx, drawable.primitive.primitive, getStyles(drawable));
+            break;
+        case 'equilateral_polygon':
+            drawEquilateralPolygon(ctx, drawable.primitive.primitive, getStyles(drawable));
             break;
         case 'image':
             drawImage(ctx, drawable.primitive.primitive);
@@ -364,6 +367,54 @@ function drawPolygon(
     }, styles);
 
     ctx.closePath();
+}
+
+function drawEquilateralPolygon(
+    ctx: CanvasRenderingContext2D,
+    equilateralPolygon: EquilateralPolygon,
+    styles?: Styles
+): void {
+    styleCanvas(ctx, styles);
+
+    const angle = equilateralPolygonInteriorAngle(equilateralPolygon.n);
+    const firstPoint = {
+        x: equilateralPolygon.cx,
+        y: equilateralPolygon.cy + equilateralPolygon.radius,
+    };
+    
+    ctx.beginPath();
+    ctx.moveTo(firstPoint.x, firstPoint.y);
+    for (let i = 1; i < equilateralPolygon.n - 1; i++) {
+        ctx.save();
+        applyRotate(
+            ctx,
+            {
+                a: i * angle,
+                x: equilateralPolygon.cx,
+                y: equilateralPolygon.cy,
+            },
+        );
+        ctx.lineTo(firstPoint.x, firstPoint.y);
+        ctx.restore();
+    }
+    ctx.lineTo(firstPoint.x, firstPoint.y);
+
+    drawToCanvas({
+        stroke: s => ctx.stroke(),
+        fill: f => ctx.fill(),
+        strokeAndFill: sf => {
+            ctx.fill();
+            ctx.stroke();
+        },
+    }, styles);
+
+    ctx.closePath();
+}
+
+function equilateralPolygonInteriorAngle(
+    n: number,
+): number {
+    return ((n - 2) * Math.PI) / 2;
 }
 
 function drawPath(

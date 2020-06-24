@@ -1,7 +1,7 @@
 import * as Duration from './Duration';
 import * as Interpolator from './Interpolator';
 import { Styles, Stroke, Fill, StrokeAndFill, stroke } from '../styles/Styles';
-import { Primitive, Text, Rect, Ellipse, Line, Polyline, Polygon, Path, Image } from '../primitives/primitiveShapes';
+import { Primitive, Text, Rect, Ellipse, Line, Polyline, Polygon, Path, Image, EquilateralPolygon } from '../primitives/primitiveShapes';
 import * as Transform from '../transform/Transform';
 import { assertNever } from '../../util/typeGuards';
 
@@ -99,6 +99,7 @@ export type AnimatedPrimitive =
     AnimatedLine |
     AnimatedPolyline |
     AnimatedPolygon |
+    AnimatedEquilateralPolygon |
     AnimatedPath |
     AnimatedImage;
 
@@ -108,6 +109,7 @@ export type AnimatedEllipse = PrimitiveAnimation<Ellipse>;
 export type AnimatedLine = PrimitiveAnimation<Line>;
 export type AnimatedPolyline = PrimitiveAnimation<Polyline>;
 export type AnimatedPolygon = PrimitiveAnimation<Polygon>;
+export type AnimatedEquilateralPolygon = PrimitiveAnimation<EquilateralPolygon>;
 export type AnimatedPath = PrimitiveAnimation<Path>;
 export type AnimatedImage = PrimitiveAnimation<Image>;
 

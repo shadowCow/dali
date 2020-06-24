@@ -7,6 +7,7 @@ export type Primitive =
   Line |
   Polyline |
   Polygon |
+  EquilateralPolygon |
   Path |
   Image;
 
@@ -133,6 +134,29 @@ export function polygon(
     return {
         kind: 'polygon',
         points,
+    };
+}
+
+export type EquilateralPolygon = {
+    kind: 'equilateral_polygon',
+    cx: number,
+    cy: number,
+    n: number,
+    radius: number,
+}
+
+export function equilateralPolygon(
+    cx: number,
+    cy: number,
+    n: number,
+    radius: number,
+): EquilateralPolygon {
+    return {
+        kind: 'equilateral_polygon',
+        cx,
+        cy,
+        n,
+        radius,
     };
 }
 

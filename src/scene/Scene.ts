@@ -226,6 +226,13 @@ function updatePrimitive(
                     dt,
                 );
                 break;
+            case 'equilateral_polygon':
+                interpolateTransition(
+                    primitive.animation,
+                    primitive.primitive,
+                    timestampMs,
+                    dt,
+                );
             case 'path':
                 interpolateTransition(
                     primitive.animation,
