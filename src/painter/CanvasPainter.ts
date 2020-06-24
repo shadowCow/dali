@@ -376,22 +376,23 @@ function drawEquilateralPolygon(
 ): void {
     styleCanvas(ctx, styles);
 
+    ctx.translate(equilateralPolygon.cx, equilateralPolygon.cy);
     const angle = equilateralPolygonInteriorAngle(equilateralPolygon.n);
     const firstPoint = {
-        x: equilateralPolygon.cx,
-        y: equilateralPolygon.cy + equilateralPolygon.radius,
+        x: 0,
+        y: (-1) * equilateralPolygon.radius,
     };
-    
+
     ctx.beginPath();
     ctx.moveTo(firstPoint.x, firstPoint.y);
-    for (let i = 1; i < equilateralPolygon.n - 1; i++) {
+    for (let i = 1; i < equilateralPolygon.n; i++) {
         ctx.save();
         applyRotate(
             ctx,
             {
                 a: i * angle,
-                x: equilateralPolygon.cx,
-                y: equilateralPolygon.cy,
+                x: 0,
+                y: 0,
             },
         );
         ctx.lineTo(firstPoint.x, firstPoint.y);
@@ -414,7 +415,7 @@ function drawEquilateralPolygon(
 function equilateralPolygonInteriorAngle(
     n: number,
 ): number {
-    return ((n - 2) * Math.PI) / 2;
+    return (2*Math.PI) / n;
 }
 
 function drawPath(

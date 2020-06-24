@@ -104,6 +104,11 @@ export function exampleData(
                     600, 400, 5, 20
                 ),
             },
+            createAnimatedTransform(),
+            {
+                kind: 'fill',
+                styles: fill(),
+            },
         ),
     ];
 }
