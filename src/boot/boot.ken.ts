@@ -1,5 +1,5 @@
 import { Drawable } from '../drawables/drawable';
-import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text } from '../drawables/primitives/primitiveShapes';
+import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text, equilateralPolygon } from '../drawables/primitives/primitiveShapes';
 import { stroke, strokeAndFill } from '../drawables/styles/Styles';
 import { run } from '../index';
 import { createCanvasAndPainter } from '../painter/CanvasPainter';
@@ -45,7 +45,7 @@ if (!painter) {
             transform: createAnimatedTransform(),
             primitive: {
                 kind: 'rect',
-                primitive: rect(3, 3, 500, rowH * 6 + 20),
+                primitive: rect(3, 3, 500, rowH * 8 + 20),
             },
             styles: fillStyle(color(230, 230, 230)),
         },
@@ -214,7 +214,113 @@ if (!painter) {
             },
             styles: fillStyle(Colors.Blue()),
         },
-    ];
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_label',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'text',
+                primitive: text(10, rowH * 7, 'eq n gon'),
+            },
+            styles: createAnimatedStyles(),
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_3',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 0 + 15, rowH * 7, 3, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_4',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 50 + 15, rowH * 7, 4, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_5',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 100 + 15, rowH * 7, 5, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_6',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 150 + 15, rowH * 7, 6, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_7',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 0 + 15, rowH * 8, 7, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_8',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 50 + 15, rowH * 8, 8, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_9',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 100 + 15, rowH * 8, 9, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+        {
+            kind: 'primitive_drawable',
+            id: '7-equilateral_polygon_10',
+            transform: createAnimatedTransform(),
+            primitive: {
+                kind: 'equilateral_polygon',
+                primitive: equilateralPolygon(
+                    col2 + 150 + 15, rowH * 8, 10, 20
+                ),
+            },
+            styles: noFillStyle,
+        },
+];
 
     drawables.forEach(d => Scene.transition(scene, Scene.addDrawable(d)));
 
