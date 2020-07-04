@@ -1,19 +1,22 @@
-import { primitiveDrawable, Drawable, DrawableTypes, at, withStyles } from '../../drawables/drawable';
-import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect, equilateralPolygon, PrimitiveTypes } from '../../drawables/primitives/primitiveShapes';
+import { primitiveDrawable, Drawable, DrawableTypes, at, withStyles, animatedDrawable, createAnimation } from '../../drawables/drawable';
+import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect, equilateralPolygon, PrimitiveTypes, EllipseParams } from '../../drawables/primitives/primitiveShapes';
 import { strokeAndFill, stroke, fill, Fill } from '../../drawables/styles/Styles';
 import { eyePair, eyePairParams } from '../../drawables/composites/eye';
 import { waves, wavesParams } from '../../drawables/composites/wave';
 import * as Duration from '../../drawables/transition/Duration';
 import * as Interpolator from '../../drawables/transition/Interpolator';
 import * as Transform from '../../drawables/transform/Transform';
+import * as Rotate from '../../drawables/transform/Rotate';
 import { Colors } from '../../drawables/styles/Color';
 import { ImageCache } from '../../drawables/ImageCache';
 import { through, pipe } from '../../util/pipe';
+import * as Scene from '../../scene/Scene';
+import * as SceneLayer from '../../scene/SceneLayer';
 
-export function exampleData(
+export function exampleScene(
     imageCache: ImageCache,
-): Drawable[] {
-    return [
+): Scene.State<Drawable> {
+    const layerThreeDrawables = [
         primitiveDrawable(
             '1',
             rect(50, 200),
@@ -38,6 +41,34 @@ export function exampleData(
             }),
             fill(),
         ),
+    ];
+
+    const layerTwoDrawables: Drawable[] = [
+        animatedDrawable(
+            'a1',
+            createAnimation<EllipseParams>(
+                (e: EllipseParams) => {
+                    return primitiveDrawable('a1', ellipse(e.rx, e.ry), Transform.create(), fill());
+                },
+                (t, dt, pI, pT, pS) => {
+                    const deltaAngle = (dt / 2000) * (2 * Math.PI);
+                    return [
+                        pI,
+                        Transform.transition(pT, Rotate.deltaRotation(deltaAngle, 0, 0)),
+                        pS,
+                    ];
+                },
+                { rx: 20, ry: 20 },
+                Transform.create({
+                    translate: {x: 300, y: 300},
+                    rotate: {a: 0, x: 150, y: 0},
+                }),
+                fill(),
+            ),
+        ),
+    ];
+
+    const layerOneDrawables = [
         pipe(
             eyePair('4', eyePairParams(50, 50, Colors.Blue())),
             through(
@@ -52,4 +83,12 @@ export function exampleData(
             ),
         ),
     ];
+
+    return Scene.animatedScene({
+        layers: [
+            SceneLayer.animatedLayer('3', SceneLayer.toState(layerThreeDrawables)),
+            SceneLayer.animatedLayer('2', SceneLayer.toState(layerTwoDrawables)),
+            SceneLayer.animatedLayer('1', SceneLayer.toState(layerOneDrawables)),
+        ],
+    });
 }

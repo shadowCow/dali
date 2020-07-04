@@ -1,7 +1,7 @@
 import { Painter } from '../painter/Painter';
 import { createCanvasAndPainter } from '../painter/CanvasPainter';
 import { run } from '../index';
-import { exampleData } from './examples/canary';
+import { exampleScene } from './examples/canary';
 import * as Scene from '../scene/Scene';
 import * as SceneLayer from '../scene/SceneLayer';
 import { loadImages } from '../drawables/ImageCache';
@@ -24,15 +24,7 @@ if (!painter) {
     loadImages([ 
         '3d_box.png',
     ]).then(imageCache => {
-        const examples = exampleData(imageCache);
-        const scene = Scene.animatedScene({
-            layers: [
-                SceneLayer.animatedLayer(
-                    '1',
-                    SceneLayer.toState(examples),
-                ),
-            ],
-        });
+        const scene = exampleScene(imageCache);
 
         run(painter, scene);
     });

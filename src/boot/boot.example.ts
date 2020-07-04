@@ -1,12 +1,8 @@
 import { Painter } from '../painter/Painter';
 import { createCanvasAndPainter } from '../painter/CanvasPainter';
 import { run } from '../index';
-import { exampleData } from './examples/canary';
-import * as Scene from '../scene/Scene';
-import * as SceneLayer from '../scene/SceneLayer';
+import { exampleScene } from './examples/canary';
 import { loadImages } from '../drawables/ImageCache';
-import { primitiveDrawable } from '../drawables/drawable';
-import { image } from '../drawables/primitives/primitiveShapes';
 
 const canvasContainerId = 'canvas-container';
 const canvasId = 'drawing-canvas';
@@ -24,15 +20,7 @@ if (!painter) {
     loadImages([ 
         '3d_box.png',
     ]).then(imageCache => {
-        const examples = exampleData(imageCache);
-        const scene = Scene.animatedScene({
-            layers: [
-                SceneLayer.animatedLayer(
-                    '1',
-                    SceneLayer.toState(examples),
-                ),
-            ],
-        });
+        const scene = exampleScene(imageCache);
 
         run(painter, scene);
     });
