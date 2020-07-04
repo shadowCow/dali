@@ -1,9 +1,10 @@
 import { Painter } from './painter/Painter';
 import * as Scene from './scene/Scene';
+import { Drawable, StaticDrawable } from './drawables/drawable';
 
-export function run(
+export function run<D extends Drawable>(
     painter: Painter,
-    scene: Scene.State,
+    scene: Scene.State<D>,
 ) {
     animate(
         scene,
@@ -11,16 +12,16 @@ export function run(
     );
 }
 
-function animate(
-    scene: Scene.State,
+function animate<D extends Drawable>(
+    scene: Scene.State<D>,
     painter: Painter,
 ): void {
     let previousTimestampMs = 0;
     function animationCallback(timestampMs: number): void {
         const dt = timestampMs - previousTimestampMs;
 
-        Scene.transition(scene, Scene.update(timestampMs, dt));
-        drawScene(scene, painter);
+        const renderedScene = Scene.render(scene, timestampMs, dt);
+        drawScene(renderedScene, painter);
 
         previousTimestampMs = timestampMs;
 
@@ -31,11 +32,13 @@ function animate(
 }
 
 function drawScene(
-    scene: Scene.State,
+    scene: Scene.State<StaticDrawable>,
     painter: Painter,
 ): void {
     painter.clear();
-    Object.values(scene.drawables).forEach(drawable => {
-        painter.draw(drawable);
+    scene.layers.forEach(layer => {
+        layer.drawOrder.forEach(id => {
+            painter.draw(layer.drawables[id]);
+        });
     });
 }

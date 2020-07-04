@@ -1,6 +1,6 @@
 import { Painter } from './Painter';
 import { assertNever } from '../util/typeGuards';
-import { Drawable } from '../drawables/drawable';
+import { StaticDrawable } from '../drawables/drawable';
 
 const svgNs = 'http://www.w3.org/2000/svg';
 
@@ -9,7 +9,7 @@ export class SvgPainter implements Painter {
     private readonly canvas: SVGElement
     ) {}
 
-    draw(drawable: Drawable): void {
+    draw(drawable: StaticDrawable): void {
         throw new Error('Method not implemented');
     // switch (drawable.typeTag) {
     //   case 'composite_drawable':

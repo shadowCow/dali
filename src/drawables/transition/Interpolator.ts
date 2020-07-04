@@ -1,5 +1,5 @@
 import { assertNever } from '../../util/typeGuards';
-import { RecursivePartial } from './Animation';
+import { RecursivePartial } from './Transition';
 
 export enum InterpolatorTypes {
     LINEAR = 'LINEAR',

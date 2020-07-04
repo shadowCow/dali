@@ -1,7 +1,7 @@
 import { Styles } from '../styles/Styles';
+import * as Transform from '../transform/Transform';
 import { PrimitiveDrawable, primitiveDrawable } from '../drawable';
 import { quadraticCurveTo, path } from '../primitives/primitiveShapes';
-import { AnimatedStyles, AnimatedTransform } from '../animation/Animation';
 
 export function waves(
     id: string,
@@ -10,8 +10,8 @@ export function waves(
     waveLength: number,
     amplitude: number,
     cycleCount: number,
-    styles: AnimatedStyles,
-    transform: AnimatedTransform,
+    styles: Styles,
+    transform: Transform.State,
 ): PrimitiveDrawable {
 
     let segments = [
@@ -34,14 +34,11 @@ export function waves(
 
     return primitiveDrawable(
         id,
-        {
-            kind: 'path',
-            primitive: path(
-                x,
-                y,
-                segments
-            ),
-        },
+        path(
+            x,
+            y,
+            segments
+        ),
         transform,
         styles,
     );

@@ -1,6 +1,6 @@
-import { Drawable } from '../drawables/drawable';
+import { StaticDrawable } from '../drawables/drawable';
 
 export interface Painter {
-    draw(drawable: Drawable): void;
+    draw(drawable: StaticDrawable): void;
     clear(): void;
 }

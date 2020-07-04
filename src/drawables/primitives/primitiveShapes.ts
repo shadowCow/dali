@@ -1,32 +1,49 @@
 import { Vec2 } from '../transform/Vec';
 
+export enum PrimitiveTypes {
+    TEXT = 'TEXT',
+    ELLIPSE = 'ELLIPSE',
+    RECT = 'RECT',
+    LINE = 'LINE',
+    POLYLINE = 'POLYLINE',
+    POLYGON = 'POLYGON',
+    EQUILATERAL_POLYGON = 'EQUILATERAL_POLYGON',
+    PATH = 'PATH',
+    IMAGE = 'IMAGE',
+}
+
 export type Primitive =
-  Text |
-  Ellipse |
-  Rect |
-  Line |
-  Polyline |
-  Polygon |
-  EquilateralPolygon |
-  Path |
-  Image;
+    Text |
+    Ellipse |
+    Rect |
+    Line |
+    Polyline |
+    Polygon |
+    EquilateralPolygon |
+    Path |
+    Image;
 
 export type Text = {
-  kind: 'text',
-  x: number,
-  y: number,
-  text: string
-  font: string
+    kind: typeof PrimitiveTypes.TEXT,
+    x: number,
+    y: number,
+    text: string,
+    font?: Font,
+}
+
+export type Font = {
+    size: number,
+    family: string,
 }
 
 export function text(
     x: number,
     y: number,
     text: string,
-    font: string = '50px serif',
+    font?: Font,
 ): Text {
     return {
-        kind: 'text',
+        kind: PrimitiveTypes.TEXT,
         x,
         y,
         text,
@@ -34,8 +51,14 @@ export function text(
     };
 }
 
+export function fontString(
+    font: Font,
+): string {
+    return `${font.size}px ${font.family}`;
+}
+
 export type Ellipse = {
-  kind: 'ellipse',
+  kind: typeof PrimitiveTypes.ELLIPSE,
   cx: number,
   cy: number,
   rx: number,
@@ -49,7 +72,7 @@ export function ellipse(
     ry: number
 ): Ellipse {
     return {
-        kind: 'ellipse',
+        kind: PrimitiveTypes.ELLIPSE,
         cx,
         cy,
         rx,
@@ -58,7 +81,7 @@ export function ellipse(
 }
 
 export type Rect = {
-  kind: 'rect',
+  kind: typeof PrimitiveTypes.RECT,
   x: number,
   y: number,
   width: number,
@@ -76,7 +99,7 @@ export function rect(
     ry?: number
 ): Rect {
     return {
-        kind: 'rect',
+        kind: PrimitiveTypes.RECT,
         x,
         y,
         width,
@@ -87,7 +110,7 @@ export function rect(
 }
 
 export type Line = {
-  kind: 'line',
+  kind: typeof PrimitiveTypes.LINE,
   x1: number;
   y1: number;
   x2: number;
@@ -101,7 +124,7 @@ export function line(
     y2: number,
 ): Line {
     return {
-        kind: 'line',
+        kind: PrimitiveTypes.LINE,
         x1,
         y1,
         x2,
@@ -110,7 +133,7 @@ export function line(
 }
 
 export type Polyline = {
-  kind: 'polyline',
+  kind: typeof PrimitiveTypes.POLYLINE,
   points: Array<Vec2>;
 }
 
@@ -118,13 +141,13 @@ export function polyline(
     ...points: Array<Vec2>
 ): Polyline {
     return {
-        kind: 'polyline',
+        kind: PrimitiveTypes.POLYLINE,
         points,
     };
 }
 
 export type Polygon = {
-  kind: 'polygon',
+  kind: typeof PrimitiveTypes.POLYGON,
   points: Array<Vec2>;
 }
 
@@ -132,13 +155,13 @@ export function polygon(
     ...points: Array<Vec2>
 ): Polygon {
     return {
-        kind: 'polygon',
+        kind: PrimitiveTypes.POLYGON,
         points,
     };
 }
 
 export type EquilateralPolygon = {
-    kind: 'equilateral_polygon',
+    kind: typeof PrimitiveTypes.EQUILATERAL_POLYGON,
     cx: number,
     cy: number,
     n: number,
@@ -152,7 +175,7 @@ export function equilateralPolygon(
     radius: number,
 ): EquilateralPolygon {
     return {
-        kind: 'equilateral_polygon',
+        kind: PrimitiveTypes.EQUILATERAL_POLYGON,
         cx,
         cy,
         n,
@@ -161,7 +184,7 @@ export function equilateralPolygon(
 }
 
 export type Path = {
-  kind: 'path',
+  kind: typeof PrimitiveTypes.PATH,
   startX: number,
   startY: number,
   segments: Array<PathSegment>
@@ -173,11 +196,18 @@ export function path(
     segments: Array<PathSegment>
 ): Path {
     return {
-        kind: 'path',
+        kind: PrimitiveTypes.PATH,
         startX,
         startY,
         segments,
     };
+}
+
+export enum PathSegmentTypes {
+    MOVE_TO = 'MOVE_TO',
+    LINE_TO = 'LINE_TO',
+    BEZIER_CURVE_TO = 'BEZIER_CURVE_TO',
+    QUADRATIC_CURVE_TO = 'QUADRATIC_CURVE_TO',
 }
 
 export type PathSegment =
@@ -187,7 +217,7 @@ export type PathSegment =
   QuadraticCurveTo;
 
 export type MoveTo = {
-  kind: 'move_to',
+  kind: typeof PathSegmentTypes.MOVE_TO,
   x: number,
   y: number
 }
@@ -197,14 +227,14 @@ export function moveTo(
     y: number
 ): MoveTo {
     return {
-        kind: 'move_to',
+        kind: PathSegmentTypes.MOVE_TO,
         x,
         y,
     };
 }
 
 export type LineTo = {
-  kind: 'line_to',
+  kind: typeof PathSegmentTypes.LINE_TO,
   x: number,
   y: number
 }
@@ -214,14 +244,14 @@ export function lineTo(
     y: number
 ): LineTo {
     return {
-        kind: 'line_to',
+        kind: PathSegmentTypes.LINE_TO,
         x,
         y,
     };
 }
 
 export type BezierCurveTo = {
-  kind: 'bezier_curve_to',
+  kind: typeof PathSegmentTypes.BEZIER_CURVE_TO,
   cp1x: number,
   cp1y: number,
   cp2x: number,
@@ -239,7 +269,7 @@ export function bezierCurveTo(
     toY: number
 ): BezierCurveTo {
     return {
-        kind: 'bezier_curve_to',
+        kind: PathSegmentTypes.BEZIER_CURVE_TO,
         cp1x,
         cp1y,
         cp2x,
@@ -250,7 +280,7 @@ export function bezierCurveTo(
 }
 
 export type QuadraticCurveTo = {
-  kind: 'quadratic_curve_to',
+  kind: typeof PathSegmentTypes.QUADRATIC_CURVE_TO,
   cpx: number,
   cpy: number,
   toX: number,
@@ -264,7 +294,7 @@ export function quadraticCurveTo(
     toY: number
 ): QuadraticCurveTo {
     return {
-        kind: 'quadratic_curve_to',
+        kind: PathSegmentTypes.QUADRATIC_CURVE_TO,
         cpx,
         cpy,
         toX,
@@ -273,7 +303,7 @@ export function quadraticCurveTo(
 }
 
 export type Image = {
-    kind: 'image',
+    kind: typeof PrimitiveTypes.IMAGE,
     image: HTMLImageElement
 }
 
@@ -281,7 +311,7 @@ export function image(
     image: HTMLImageElement,
 ): Image {
     return {
-        kind: 'image',
+        kind: PrimitiveTypes.IMAGE,
         image,
     };
 }

@@ -3,7 +3,6 @@ import { ellipse } from '../primitives/primitiveShapes';
 import { fill, strokeAndFill } from '../styles/Styles';
 import * as Transform from '../transform/Transform';
 import { Color, Colors } from '../styles/Color';
-import { createAnimatedTransform } from '../animation/Animation';
 
 export function eyePair(
     id: string,
@@ -68,20 +67,14 @@ function iris(
 ): PrimitiveDrawable {
     return primitiveDrawable(
         eyeId + '-iris',
-        {
-            kind: 'ellipse',
-            primitive: ellipse(
-                cx,
-                cy,
-                radius,
-                radius
-            ),
-        },
-        createAnimatedTransform(),
-        {
-            kind: 'fill',
-            styles: fill(color),
-        },
+        ellipse(
+            cx,
+            cy,
+            radius,
+            radius
+        ),
+        Transform.create(),
+        fill(color),
     );
 }
 
@@ -93,20 +86,14 @@ function pupil(
 ): PrimitiveDrawable {
     return primitiveDrawable(
         eyeId + '-pupil',
-        {
-            kind: 'ellipse',
-            primitive: ellipse(
-                cx,
-                cy,
-                r,
-                r
-            ),
-        },
-        createAnimatedTransform(),
-        {
-            kind: 'fill',
-            styles: fill(Colors.Black()),
-        },
+        ellipse(
+            cx,
+            cy,
+            r,
+            r
+        ),
+        Transform.create(),
+        fill(Colors.Black()),
     );
 }
 
@@ -118,23 +105,17 @@ function eyeOutline(
 ): PrimitiveDrawable {
     return primitiveDrawable(
         eyeId + '-eyeOutline',
-        {
-            kind: 'ellipse',
-            primitive: ellipse(
-                cx,
-                cy,
-                irisRadius*2,
-                irisRadius*2,
-            ),
-        },
-        createAnimatedTransform(),
-        {
-            kind: 'stroke_and_fill',
-            styles: strokeAndFill(
-                Colors.Black(),
-                3,
-                Colors.White(),
-            ),
-        },
+        ellipse(
+            cx,
+            cy,
+            irisRadius*2,
+            irisRadius*2,
+        ),
+        Transform.create(),
+        strokeAndFill(
+            Colors.Black(),
+            3,
+            Colors.White(),
+        ),
     );
 }

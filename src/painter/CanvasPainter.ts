@@ -1,8 +1,8 @@
 import { Painter } from './Painter';
 import { assertNever } from '../util/typeGuards';
-import { Drawable, CompositeDrawable, PrimitiveDrawable } from '../drawables/drawable';
+import { CompositeDrawable, PrimitiveDrawable, DrawableTypes, StaticDrawable } from '../drawables/drawable';
 import { Styles, MatchStylesHandler, matchStyles } from '../drawables/styles/Styles';
-import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text, Image, EquilateralPolygon } from '../drawables/primitives/primitiveShapes';
+import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text, Image, fontString, PrimitiveTypes, PathSegmentTypes, EquilateralPolygon } from '../drawables/primitives/primitiveShapes';
 import * as Transform from '../drawables/transform/Transform';
 import * as Translate from '../drawables/transform/Translate';
 import * as Rotate from '../drawables/transform/Rotate';
@@ -88,12 +88,12 @@ export class CanvasPainter implements Painter {
     private readonly ctx: CanvasRenderingContext2D
     ) {}
 
-    draw(drawable: Drawable): void {
+    draw(drawable: StaticDrawable): void {
         switch (drawable.kind) {
-            case 'composite_drawable':
+            case DrawableTypes.COMPOSITE_DRAWABLE:
                 drawComposite(drawable, this.ctx);
                 break;
-            case 'primitive_drawable':
+            case DrawableTypes.PRIMITIVE_DRAWABLE:
                 drawPrimitive(drawable, this.ctx);
                 break;
             default:
@@ -117,15 +117,15 @@ function drawComposite(
 ): void {
     ctx.save();
     
-    styleCanvas(ctx, getStyles(drawable));
-    applyTransform(ctx, drawable.transform.transform);
+    styleCanvas(ctx, drawable.styles);
+    applyTransform(ctx, drawable.transform);
     
     drawable.drawables.forEach(d => {
         switch (d.kind) {
-            case 'composite_drawable':
+            case DrawableTypes.COMPOSITE_DRAWABLE:
                 drawComposite(d, ctx);
                 break;
-            case 'primitive_drawable':
+            case DrawableTypes.PRIMITIVE_DRAWABLE:
                 drawPrimitive(d, ctx);
                 break;
             default:
@@ -142,35 +142,35 @@ function drawPrimitive(
 ): void {
     ctx.save();
 
-    applyTransform(ctx, drawable.transform.transform);
+    applyTransform(ctx, drawable.transform);
 
     switch (drawable.primitive.kind) {
-        case 'text':
-            drawText(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.TEXT:
+            drawText(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'line':
-            drawLine(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.LINE:
+            drawLine(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'rect':
-            drawRect(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.RECT:
+            drawRect(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'ellipse':
-            drawEllipse(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.ELLIPSE:
+            drawEllipse(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'path':
-            drawPath(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.PATH:
+            drawPath(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'polyline':
-            drawPolyline(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.POLYLINE:
+            drawPolyline(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'polygon':
-            drawPolygon(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.POLYGON:
+            drawPolygon(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'equilateral_polygon':
-            drawEquilateralPolygon(ctx, drawable.primitive.primitive, getStyles(drawable));
+        case PrimitiveTypes.EQUILATERAL_POLYGON:
+            drawEquilateralPolygon(ctx, drawable.primitive, drawable.styles);
             break;
-        case 'image':
-            drawImage(ctx, drawable.primitive.primitive);
+        case PrimitiveTypes.IMAGE:
+            drawImage(ctx, drawable.primitive);
             break;
         default:
             assertNever(drawable.primitive);
@@ -179,23 +179,13 @@ function drawPrimitive(
     ctx.restore();
 }
 
-function getStyles(
-    drawable: Drawable
-): Styles | undefined {
-    if (drawable.styles) {
-        return drawable.styles.styles;
-    } else {
-        return undefined;
-    }
-}
-
 function drawText(
     ctx: CanvasRenderingContext2D,
     text: Text,
     styles?: Styles
 ): void {
     if (text.font) {
-        ctx.font = text.font;
+        ctx.font = fontString(text.font);
     }
 
     styleAndDrawToCanvas(ctx, {
@@ -446,13 +436,13 @@ function drawPathSegment(
     segment: PathSegment
 ): void {
     switch (segment.kind) {
-        case 'move_to':
+        case PathSegmentTypes.MOVE_TO:
             ctx.moveTo(segment.x, segment.y);
             break;
-        case 'line_to':
+        case PathSegmentTypes.LINE_TO:
             ctx.lineTo(segment.x, segment.y);
             break;
-        case 'bezier_curve_to':
+        case PathSegmentTypes.BEZIER_CURVE_TO:
             ctx.bezierCurveTo(
                 segment.cp1x,
                 segment.cp1y,
@@ -462,7 +452,7 @@ function drawPathSegment(
                 segment.toY
             );
             break;
-        case 'quadratic_curve_to':
+        case PathSegmentTypes.QUADRATIC_CURVE_TO:
             ctx.quadraticCurveTo(
                 segment.cpx,
                 segment.cpy,
