@@ -1,6 +1,11 @@
 import * as Transform from './transform/Transform';
+import * as Rotate from './transform/Rotate';
+import * as Translate from './transform/Translate';
+import * as Scale from './transform/Scale';
+import * as Skew from './transform/Skew';
 import { Primitive } from './primitives/primitiveShapes';
 import { Styles } from './styles/Styles';
+import { pipe, through } from '../util/pipe';
 
 export enum DrawableTypes {
     PRIMITIVE_DRAWABLE = 'PRIMITIVE_DRAWABLE',
@@ -79,6 +84,31 @@ export function animatedDrawable(
     };
 }
 
+export type AnimationFn = (
+    t: number,
+    dt: number,
+) => StaticDrawable;
+
+export function createAnimation<P>(
+    generator: DrawableGenerator<P>,
+    animator: Animator<P>,
+    initialItem: P,
+    initialTransform: Transform.State,
+    initialStyles: Styles,
+): AnimationFn {
+    let item = initialItem;
+    let transform = initialTransform;
+    let styles = initialStyles;
+    return (t, dt) => {
+        [item, transform, styles] = animator(t,dt,item,transform,styles);
+
+        return pipe(generator(item), through(
+            withTransform(transform),
+            withStyles(styles),
+        ));
+    };
+}
+
 export type DrawableGenerator<P> = (
     p: P,
 ) => StaticDrawable;
@@ -86,25 +116,86 @@ export type DrawableGenerator<P> = (
 export type Animator<P> = (
     t: number,
     dt: number,
-    previous: P,
-) => P;
+    previousItem: P,
+    previousTransform: Transform.State,
+    previousStyles: Styles,
+) => [P, Transform.State, Styles];
 
-export type AnimationFn = (
-    t: number,
-    dt: number,
-) => StaticDrawable;
+export function withStyles(
+    styles: Styles
+): (d: StaticDrawable) => StaticDrawable {
+    return (d) => {
+        return {
+            ...d,
+            styles,
+        };
+    };
+}
 
-export function createAnimation<P>(
-    initial: P,
-    generator: DrawableGenerator<P>,
-    animator: (t: number, dt: number, p: P) => P,
-): AnimationFn {
-    let p = initial;
-    return (t, dt) => {
-        let next = animator(t, dt, p);
-        p = next;
+export function withTransform(
+    transform: Transform.State,
+): (d: StaticDrawable) => StaticDrawable {
+    return (d) => {
+        return {
+            ...d,
+            transform,
+        };
+    };
+}
 
-        return generator(p);
+export function at(
+    translate: Translate.State,
+): (d: StaticDrawable) => StaticDrawable {
+    return (d) => {
+        return {
+            ...d,
+            transform: {
+                ...d.transform,
+                translate,
+            },
+        };
+    };
+}
+
+export function rotated(
+    rotate: Rotate.State,
+): (d: StaticDrawable) => StaticDrawable {
+    return (d) => {
+        return {
+            ...d,
+            transform: {
+                ...d.transform,
+                rotate,
+            },
+        };
+    };
+}
+
+export function scaled(
+    scale: Scale.State,
+): (d: StaticDrawable) => StaticDrawable {
+    return (d) => {
+        return {
+            ...d,
+            transform: {
+                ...d.transform,
+                scale,
+            },
+        };
+    };
+}
+
+export function skewed(
+    skew: Skew.State,
+): (d: StaticDrawable) => StaticDrawable {
+    return (d) => {
+        return {
+            ...d,
+            transform: {
+                ...d.transform,
+                skew,
+            },
+        };
     };
 }
 

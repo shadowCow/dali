@@ -184,24 +184,24 @@ function drawText(
     text: Text,
     styles?: Styles
 ): void {
-    if (text.font) {
-        ctx.font = fontString(text.font);
+    if (text.params.font) {
+        ctx.font = fontString(text.params.font);
     }
 
     styleAndDrawToCanvas(ctx, {
         stroke: s => ctx.strokeText(
-            text.text,
-            text.x,
-            text.y
+            text.params.text,
+            0,
+            0,
         ),
         fill: f => ctx.fillText(
-            text.text,
-            text.x,
-            text.y
+            text.params.text,
+            0,
+            0,
         ),
         strokeAndFill: sf => {
-            ctx.fillText(text.text, text.x, text.y);
-            ctx.strokeText(text.text, text.x, text.y);
+            ctx.fillText(text.params.text, 0, 0);
+            ctx.strokeText(text.params.text, 0, 0);
         },
     }, styles);
 }
@@ -215,10 +215,10 @@ function drawEllipse(
 
     ctx.beginPath();
     ctx.ellipse(
-        ellipse.cx,
-        ellipse.cy,
-        ellipse.rx,
-        ellipse.ry,
+        0,
+        0,
+        ellipse.params.rx,
+        ellipse.params.ry,
         0,
         0,
         2 * Math.PI
@@ -241,15 +241,15 @@ function drawRect(
     rect: Rect,
     styles?: Styles
 ): void {
-    if (rect.rx && rect.rx > 0 || rect.ry && rect.ry > 0) {
+    if (rect.params.rx && rect.params.rx > 0 || rect.params.ry && rect.params.ry > 0) {
         drawRoundRect(ctx, rect, styles);
     } else {
         styleAndDrawToCanvas(ctx, {
-            stroke: s => ctx.strokeRect(rect.x, rect.y, rect.width, rect.height),
-            fill: f => ctx.fillRect(rect.x, rect.y, rect.width, rect.height),
+            stroke: s => ctx.strokeRect(0, 0, rect.params.w, rect.params.h),
+            fill: f => ctx.fillRect(0, 0, rect.params.w, rect.params.h),
             strokeAndFill: sf => {
-                ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
-                ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                ctx.fillRect(0, 0, rect.params.w, rect.params.h);
+                ctx.strokeRect(0, 0, rect.params.w, rect.params.h);
             },
         }, styles);
     }
@@ -260,9 +260,12 @@ function drawRoundRect(
     rect: Rect,
     styles?: Styles
 ): void {
-    const {x, y, width, height} = rect;
-    const rx = rect.rx ? rect.rx : 0;
-    const ry = rect.ry ? rect.ry : 0;
+    const x = 0;
+    const y = 0;
+    const width = rect.params.w;
+    const height = rect.params.h;
+    const rx = rect.params.rx ? rect.params.rx : 0;
+    const ry = rect.params.ry ? rect.params.ry : 0;
 
     styleCanvas(ctx, styles);
 
@@ -297,8 +300,8 @@ function drawLine(
     styleCanvas(ctx, styles);
   
     ctx.beginPath();
-    ctx.moveTo(line.x1, line.y1);
-    ctx.lineTo(line.x2, line.y2);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(line.params.toX, line.params.toY);
 
     ctx.stroke();
     ctx.closePath();
@@ -311,7 +314,7 @@ function drawPolyline(
 ): void {
     styleCanvas(ctx, styles);
 
-    const { points } = polyline;
+    const { points } = polyline.params;
 
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
@@ -339,7 +342,7 @@ function drawPolygon(
 ) {
     styleCanvas(ctx, styles);
 
-    const points = polygon.points;
+    const points = polygon.params.points;
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     for (let i = 1; i < points.length-1; i++) {
@@ -366,16 +369,16 @@ function drawEquilateralPolygon(
 ): void {
     styleCanvas(ctx, styles);
 
-    ctx.translate(equilateralPolygon.cx, equilateralPolygon.cy);
-    const angle = equilateralPolygonInteriorAngle(equilateralPolygon.n);
+    const { n, radius } = equilateralPolygon.params;
+    const angle = (2*Math.PI) / n;
     const firstPoint = {
         x: 0,
-        y: (-1) * equilateralPolygon.radius,
+        y: -1 * radius,
     };
 
     ctx.beginPath();
     ctx.moveTo(firstPoint.x, firstPoint.y);
-    for (let i = 1; i < equilateralPolygon.n; i++) {
+    for (let i = 1; i < n; i++) {
         ctx.save();
         applyRotate(
             ctx,
@@ -402,12 +405,6 @@ function drawEquilateralPolygon(
     ctx.closePath();
 }
 
-function equilateralPolygonInteriorAngle(
-    n: number,
-): number {
-    return (2*Math.PI) / n;
-}
-
 function drawPath(
     ctx: CanvasRenderingContext2D,
     path: Path,
@@ -416,8 +413,8 @@ function drawPath(
     styleCanvas(ctx, styles);
   
     ctx.beginPath();
-    ctx.moveTo(path.startX, path.startY);
-    path.segments.forEach(s => drawPathSegment(ctx, s));
+    ctx.moveTo(0, 0);
+    path.params.segments.forEach(s => drawPathSegment(ctx, s));
 
     drawToCanvas({
         stroke: s => ctx.stroke(),
@@ -469,7 +466,7 @@ function drawImage(
     ctx: CanvasRenderingContext2D,
     image: Image,
 ): void {
-    ctx.drawImage(image.image, 0, 0);
+    ctx.drawImage(image.params.image, 0, 0);
 }
 
 function applyTransform(

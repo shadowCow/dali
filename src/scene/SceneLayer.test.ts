@@ -1,6 +1,7 @@
 import * as SceneLayer from './SceneLayer';
 import { primitiveDrawable, StaticDrawable } from '../drawables/drawable';
 import { rect } from '../drawables/primitives/primitiveShapes';
+import * as Transform from '../drawables/transform/Transform';
 
 describe('SceneLayer', () => {
 
@@ -16,7 +17,7 @@ describe('SceneLayer', () => {
         const layer = SceneLayer.staticLayer('a');
         const drawable = primitiveDrawable(
             '1',
-            rect(0, 0, 10, 15),
+            rect(10, 15),
         );
 
         expect(SceneLayer.transition(layer, SceneLayer.addDrawable(
@@ -33,7 +34,7 @@ describe('SceneLayer', () => {
     test('RemoveDrawable', () => {
         const drawable = primitiveDrawable(
             '1',
-            rect(0, 0, 10, 15),
+            rect(10, 15),
         );
         const layer: SceneLayer.State<StaticDrawable> = {
             id: 'a',
@@ -52,7 +53,7 @@ describe('SceneLayer', () => {
     test('UpdateDrawable', () => {
         const drawable = primitiveDrawable(
             '1',
-            rect(0, 0, 10, 15),
+            rect(10, 15),
         );
         const layer: SceneLayer.State<StaticDrawable> = {
             id: 'a',
@@ -64,7 +65,10 @@ describe('SceneLayer', () => {
 
         const updatedDrawable = primitiveDrawable(
             '1',
-            rect(5, 7, 21, 38),
+            rect(21, 38),
+            Transform.create({
+                translate: {x: 5, y: 7},
+            }),
         );
 
         expect(SceneLayer.transition(

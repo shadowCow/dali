@@ -39,56 +39,56 @@ if (!painter) {
     const drawables: Drawable[] = [
         primitiveDrawable(
             '0-rectangle',
-            rect(3, 3, 500, rowH * 8 + 20),
-            Transform.create(),
+            rect(500, rowH * 8 + 20),
+            Transform.translated(3,3),
             fillStyle(color(230, 230, 230)),
         ),
         primitiveDrawable(
             '1-line_label',
-            text(10, rowH, 'line', font),
-            Transform.create(),
+            text('line', font),
+            Transform.translated(10, rowH),
             stroke(),
         ),
         primitiveDrawable(
             '1-line',
-            line(col2, 15, col2 + 100, 45),
-            Transform.create(),
+            line(col2 + 100, 45),
+            Transform.translated(col2, 15),
             noFillStyle,
         ),
         primitiveDrawable(
             '2-rectangle_label',
-            text(10, rowH * 2, 'rectangle', font),
-            Transform.create(),
+            text('rectangle', font),
+            Transform.translated(10, rowH * 2),
             stroke(),
         ),
         primitiveDrawable(
             '2-rectangle',
-            rect(col2, rowH * 2 - 2 - 20, 100, 20),
-            Transform.create(),
+            rect(100, 20),
+            Transform.translated(col2, rowH * 2 - 2 - 20),
             noFillStyle,
         ),
         primitiveDrawable(
             '3-ellipse_label',
-            text(10, rowH * 3, 'ellipse', font),
-            Transform.create(),
+            text('ellipse', font),
+            Transform.translated(10, rowH * 3),
             stroke(),
         ),
         primitiveDrawable(
             '3-ellipse-circle',
-            ellipse(col2 + 15, rowH * 3 - 15, 15, 15),
-            Transform.create(),
+            ellipse(15, 15),
+            Transform.translated(col2 + 15, rowH * 3 - 15),
             fillStyle(Colors.White()),
         ),
         primitiveDrawable(
             '3-ellipse-oval',
-            ellipse(col2 + 70, rowH * 3 - 15, 35, 15),
-            Transform.create(),
+            ellipse(35, 15),
+            Transform.translated(col2 + 70, rowH * 3 - 15),
             fillStyle(Colors.Green()),
         ),
         primitiveDrawable(
             '4-polyline_line_label',
-            text(10, rowH * 4, 'polyline', font),
-            Transform.create(),
+            text('polyline', font),
+            Transform.translated(10, rowH * 4),
             stroke(),
         ),
         primitiveDrawable(
@@ -107,8 +107,8 @@ if (!painter) {
         ),
         primitiveDrawable(
             '5-polygon_label',
-            text(10, rowH * 5, 'polygon', font),
-            Transform.create(),
+            text('polygon', font),
+            Transform.translated(10, rowH * 5),
             stroke(),
         ),
         primitiveDrawable(
@@ -127,103 +127,99 @@ if (!painter) {
         ),
         primitiveDrawable(
             '6-path_label',
-            text(10, rowH * 6, 'path', font),
-            Transform.create(),
+            text('path', font),
+            Transform.translated(10, rowH * 6),
             stroke(),
         ),
         primitiveDrawable(
             '6-path',
-            path(
-                col2,
-                rowH * 6,
-                [
-                    lineTo(col2 + 40, rowH * 6),
-                    moveTo(col2 + 60, rowH * 6 - 20),
-                    lineTo(col2 + 60, rowH * 6),
-                    bezierCurveTo(
-                        col2 + 80, rowH * 6 + 20,
-                        col2 + 120, rowH * 6 - 20,
-                        col2 + 140, rowH * 6
-                    ),
-                    lineTo(col2 + 160, rowH * 6),
-                    quadraticCurveTo(
-                        col2 + 180, rowH * 6 + 40,
-                        col2 + 200, rowH * 6 - 40
-                    ),
-                    lineTo(col2 + 260, rowH * 6),
-                ]
-            ),
-            Transform.create(),
+            path([
+                lineTo(40, 0),
+                moveTo(60, 0 - 20),
+                lineTo(60, 0),
+                bezierCurveTo(
+                    80, 0 + 20,
+                    120, 0 - 20,
+                    140, 0
+                ),
+                lineTo(160, 0),
+                quadraticCurveTo(
+                    180, 0 + 40,
+                    200, 0 - 40
+                ),
+                lineTo(260, 0),
+            ]),
+            Transform.translated(col2, rowH * 6),
             fillStyle(Colors.Blue()),
         ),
         primitiveDrawable(
             '7-equilateral_polygon_label',
-            text(10, rowH * 7, 'eq n gon', font),
-            Transform.create(),
+            text('eq n gon', font),
+            Transform.translated(10, rowH * 7),
             stroke(),
         ),
         primitiveDrawable(
             '7-equilateral_polygon_3',
             equilateralPolygon(
-                col2 + 0 + 15, rowH * 7, 3, 20
+                3, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 0 + 15, rowH * 7),
             noFillStyle,
         ),
         primitiveDrawable(
             '7-equilateral_polygon_4',
             equilateralPolygon(
-                col2 + 50 + 15, rowH * 7, 4, 20
+                4, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 50 + 15, rowH * 7),
             noFillStyle,
         ),
         primitiveDrawable(
             '7-equilateral_polygon_5',
             equilateralPolygon(
-                col2 + 100 + 15, rowH * 7, 5, 20
+                5, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 100 + 15, rowH * 7),
             noFillStyle,
         ),
         primitiveDrawable(
             '7-equilateral_polygon_6',
             equilateralPolygon(
-                col2 + 150 + 15, rowH * 7, 6, 20
+                6, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 150 + 15, rowH * 7),
             noFillStyle,
         ),
         primitiveDrawable(
             '7-equilateral_polygon_7',
             equilateralPolygon(
-                col2 + 0 + 15, rowH * 8, 7, 20
+                7, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 0 + 15, rowH * 8),
             noFillStyle,
         ),
         primitiveDrawable(
             '7-equilateral_polygon_8',
             equilateralPolygon(
-                col2 + 50 + 15, rowH * 8, 8, 20
+                8, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 50 + 15, rowH * 8),
             noFillStyle,
         ),
         primitiveDrawable(
             '7-equilateral_polygon_9',
             equilateralPolygon(
-                col2 + 100 + 15, rowH * 8, 9, 20
+                9, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 100 + 15, rowH * 8),
             noFillStyle,
         ),
         primitiveDrawable(
             '7-equilateral_polygon_10',
             equilateralPolygon(
-                col2 + 150 + 15, rowH * 8, 10, 20
+                10, 20
             ),
-            Transform.create(),
+            Transform.translated(col2 + 150 + 15, rowH * 8),
             noFillStyle,
         ),
     ];

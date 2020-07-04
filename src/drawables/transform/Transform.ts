@@ -20,6 +20,15 @@ export function create(
     };
 }
 
+export function translated(
+    x: number,
+    y: number,
+): State {
+    return create({
+        translate: Translate.create(x, y),
+    });
+}
+
 export type State = {
     translate: Translate.State,
     rotate: Rotate.State,

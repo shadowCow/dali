@@ -25,8 +25,10 @@ export type Primitive =
 
 export type Text = {
     kind: typeof PrimitiveTypes.TEXT,
-    x: number,
-    y: number,
+    params: TextParams,
+}
+
+export type TextParams = {
     text: string,
     font?: Font,
 }
@@ -37,17 +39,12 @@ export type Font = {
 }
 
 export function text(
-    x: number,
-    y: number,
     text: string,
     font?: Font,
 ): Text {
     return {
         kind: PrimitiveTypes.TEXT,
-        x,
-        y,
-        text,
-        font,
+        params: { text, font },
     };
 }
 
@@ -59,82 +56,75 @@ export function fontString(
 
 export type Ellipse = {
   kind: typeof PrimitiveTypes.ELLIPSE,
-  cx: number,
-  cy: number,
-  rx: number,
-  ry: number
+  params: EllipseParams,
+}
+
+export type EllipseParams = {
+    rx: number,
+    ry: number,
 }
 
 export function ellipse(
-    cx: number,
-    cy: number,
     rx: number,
-    ry: number
+    ry: number,
 ): Ellipse {
     return {
         kind: PrimitiveTypes.ELLIPSE,
-        cx,
-        cy,
-        rx,
-        ry,
+        params: { rx, ry },
     };
 }
 
 export type Rect = {
   kind: typeof PrimitiveTypes.RECT,
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  rx?: number,
-  ry?: number
+  params: RectParams,
+}
+
+export type RectParams = {
+    w: number,
+    h: number,
+    rx?: number,
+    ry?: number
 }
 
 export function rect(
-    x: number,
-    y: number,
-    width: number,
-    height: number,
+    w: number,
+    h: number,
     rx?: number,
-    ry?: number
+    ry?: number,
 ): Rect {
     return {
         kind: PrimitiveTypes.RECT,
-        x,
-        y,
-        width,
-        height,
-        rx,
-        ry,
+        params: { w, h, rx, ry },
     };
 }
 
 export type Line = {
   kind: typeof PrimitiveTypes.LINE,
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
+  params: LineParams,
+}
+
+export type LineParams = {
+    toX: number,
+    toY: number,
 }
 
 export function line(
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number,
+    toX: number,
+    toY: number,
 ): Line {
     return {
         kind: PrimitiveTypes.LINE,
-        x1,
-        y1,
-        x2,
-        y2,
+        params: { toX, toY },
     };
 }
 
 export type Polyline = {
   kind: typeof PrimitiveTypes.POLYLINE,
-  points: Array<Vec2>;
+  params: PolylineParams,
+}
+
+export type PolylineParams = {
+    points: Array<Vec2>,
 }
 
 export function polyline(
@@ -142,13 +132,17 @@ export function polyline(
 ): Polyline {
     return {
         kind: PrimitiveTypes.POLYLINE,
-        points,
+        params: { points },
     };
 }
 
 export type Polygon = {
-  kind: typeof PrimitiveTypes.POLYGON,
-  points: Array<Vec2>;
+    kind: typeof PrimitiveTypes.POLYGON,
+    params: PolygonParams,
+}
+
+export type PolygonParams = {
+    points: Array<Vec2>,
 }
 
 export function polygon(
@@ -156,50 +150,45 @@ export function polygon(
 ): Polygon {
     return {
         kind: PrimitiveTypes.POLYGON,
-        points,
+        params: { points },
     };
 }
 
 export type EquilateralPolygon = {
     kind: typeof PrimitiveTypes.EQUILATERAL_POLYGON,
-    cx: number,
-    cy: number,
+    params: EquilateralPolygonParams,
+}
+
+export type EquilateralPolygonParams = {
     n: number,
     radius: number,
 }
 
 export function equilateralPolygon(
-    cx: number,
-    cy: number,
     n: number,
     radius: number,
 ): EquilateralPolygon {
     return {
         kind: PrimitiveTypes.EQUILATERAL_POLYGON,
-        cx,
-        cy,
-        n,
-        radius,
+        params: { n, radius },
     };
 }
 
 export type Path = {
-  kind: typeof PrimitiveTypes.PATH,
-  startX: number,
-  startY: number,
-  segments: Array<PathSegment>
+    kind: typeof PrimitiveTypes.PATH,
+    params: PathParams,
+}
+
+export type PathParams = {
+    segments: Array<PathSegment>
 }
 
 export function path(
-    startX: number,
-    startY: number,
-    segments: Array<PathSegment>
+    segments: Array<PathSegment>,
 ): Path {
     return {
         kind: PrimitiveTypes.PATH,
-        startX,
-        startY,
-        segments,
+        params: { segments },
     };
 }
 
@@ -304,7 +293,19 @@ export function quadraticCurveTo(
 
 export type Image = {
     kind: typeof PrimitiveTypes.IMAGE,
+    params: ImageParams,
+}
+
+export type ImageParams = {
     image: HTMLImageElement
+}
+
+export function imageParams(
+    image: HTMLImageElement,
+): ImageParams {
+    return {
+        image,
+    };
 }
 
 export function image(
@@ -312,6 +313,6 @@ export function image(
 ): Image {
     return {
         kind: PrimitiveTypes.IMAGE,
-        image,
+        params: imageParams(image),
     };
 }

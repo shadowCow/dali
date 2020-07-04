@@ -3,31 +3,43 @@ import * as Transform from '../transform/Transform';
 import { PrimitiveDrawable, primitiveDrawable } from '../drawable';
 import { quadraticCurveTo, path } from '../primitives/primitiveShapes';
 
-export function waves(
-    id: string,
-    x: number,
-    y: number,
+export type WavesParams = {
     waveLength: number,
     amplitude: number,
     cycleCount: number,
-    styles: Styles,
-    transform: Transform.State,
+}
+
+export function wavesParams(
+    waveLength: number,
+    amplitude: number,
+    cycleCount: number,
+): WavesParams {
+    return {
+        waveLength,
+        amplitude,
+        cycleCount,
+    };
+}
+
+export function waves(
+    id: string,
+    params: WavesParams,
 ): PrimitiveDrawable {
 
     let segments = [
         quadraticCurveTo(
-            x + waveLength/2,
-            y + amplitude,
-            x + waveLength,
-            y
+            params.waveLength/2,
+            params.amplitude,
+            params.waveLength,
+            0,
         ),
     ];
 
-    for (let i = 1; i < cycleCount; i++) {
+    for (let i = 1; i < params.cycleCount; i++) {
         segments.push(quadraticCurveTo(
-            segments[i-1].toX + waveLength/2,
-            segments[i-1].toY + amplitude,
-            segments[i-1].toX + waveLength,
+            segments[i-1].toX + params.waveLength/2,
+            segments[i-1].toY + params.amplitude,
+            segments[i-1].toX + params.waveLength,
             segments[i-1].toY
         ));
     }
@@ -35,11 +47,7 @@ export function waves(
     return primitiveDrawable(
         id,
         path(
-            x,
-            y,
             segments
         ),
-        transform,
-        styles,
     );
 }
