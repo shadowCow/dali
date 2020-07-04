@@ -1,8 +1,8 @@
 module.exports = {
     preset: 'ts-jest',
-    rootDir: '..',
+    rootDir: '../src',
     testMatch: [
-        '<rootDir>/src/**/*.test.ts',
+        '<rootDir>/**/*.test.ts',
     ],
     testPathIgnorePatterns: [
         'node_modules',
@@ -10,7 +10,7 @@ module.exports = {
         'public',
     ],
     collectCoverageFrom: [
-        '<rootDir>/src/**/*.ts',
+        '<rootDir>/**/*.ts',
     ],
     coverageDirectory: '<rootDir>/coverage',
     coverageThreshold: {

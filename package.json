@@ -11,7 +11,7 @@
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "^3.2.0",
     "eslint": "^7.0.0",
-    "jest": "^25.0.1",
+    "jest": ">=25.0.0 <26.0.0",
     "ts-jest": "^25.5.1",
     "ts-loader": "^7.0.3",
     "typescript": "=3.8.3",
@@ -26,7 +26,7 @@
     "build": "webpack --progress --colors",
     "build:watch": "npm run build -- --watch",
     "test": "npm run test:unit",
-    "test:unit": "jest config=jest/jest.config.unit.js",
+    "test:unit": "jest --config=jest/jest.config.unit.js",
     "coverage:unit": "npm run test:unit -- --coverage",
     "lint": "eslint */**/*.ts --fix"
   },
