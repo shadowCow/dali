@@ -1,5 +1,5 @@
 import { primitiveDrawable, Drawable, DrawableTypes, at, withStyles, animatedDrawable, createAnimation } from '../../drawables/drawable';
-import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect, equilateralPolygon, PrimitiveTypes, EllipseParams } from '../../drawables/primitives/primitiveShapes';
+import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect, equilateralPolygon, PrimitiveTypes, EllipseParams, RectParams } from '../../drawables/primitives/primitiveShapes';
 import { strokeAndFill, stroke, fill, Fill } from '../../drawables/styles/Styles';
 import { eyePair, eyePairParams } from '../../drawables/composites/eye';
 import { waves, wavesParams } from '../../drawables/composites/wave';
@@ -7,11 +7,13 @@ import * as Duration from '../../drawables/transition/Duration';
 import * as Interpolator from '../../drawables/transition/Interpolator';
 import * as Transform from '../../drawables/transform/Transform';
 import * as Rotate from '../../drawables/transform/Rotate';
+import * as Translate from '../../drawables/transform/Translate';
 import { Colors } from '../../drawables/styles/Color';
 import { ImageCache } from '../../drawables/ImageCache';
 import { through, pipe } from '../../util/pipe';
 import * as Scene from '../../scene/Scene';
 import * as SceneLayer from '../../scene/SceneLayer';
+import * as Motion from '../../drawables/motion/motion';
 
 export function exampleScene(
     imageCache: ImageCache,
@@ -43,6 +45,7 @@ export function exampleScene(
         ),
     ];
 
+    const rectOscillator = Motion.oscillator(0, 400, 1);
     const layerTwoDrawables: Drawable[] = [
         animatedDrawable(
             'a1',
@@ -65,6 +68,32 @@ export function exampleScene(
                 }),
                 fill(),
             ),
+        ),
+        animatedDrawable(
+            'a2',
+            createAnimation<RectParams>(
+                (p: RectParams) => {
+                    return primitiveDrawable('a2', rect(p.w, p.h), Transform.create(), fill(Colors.Red()));
+                },
+                (t, dt, pI, pT, pS) => {
+                    return [
+                        pI,
+                        Transform.transition(
+                            pT,
+                            Translate.setTranslation(
+                                pT.translate.x,
+                                rectOscillator(dt),
+                            ),
+                        ),
+                        pS,
+                    ];
+                },
+                { w: 30, h: 30 },
+                Transform.create({
+                    translate: {x: 700, y: 100},
+                }),
+                fill(Colors.Red()),
+            )
         ),
     ];
 
