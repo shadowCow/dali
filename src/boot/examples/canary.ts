@@ -1,4 +1,4 @@
-import { primitiveDrawable, Drawable, DrawableTypes, at, withStyles, animatedDrawable, createAnimation } from '../../drawables/drawable';
+import { primitiveDrawable, Drawable, DrawableTypes, at, withStyles, animatedDrawable, createAnimation, StaticDrawable } from '../../drawables/drawable';
 import { ellipse, rect, line, polygon, path, lineTo, bezierCurveTo, text, Rect, equilateralPolygon, PrimitiveTypes, EllipseParams, RectParams } from '../../drawables/primitives/primitiveShapes';
 import { strokeAndFill, stroke, fill, Fill } from '../../drawables/styles/Styles';
 import { eyePair, eyePairParams } from '../../drawables/composites/eye';
@@ -14,6 +14,7 @@ import { through, pipe } from '../../util/pipe';
 import * as Scene from '../../scene/Scene';
 import * as SceneLayer from '../../scene/SceneLayer';
 import * as Motion from '../../drawables/motion/motion';
+import { grid } from '../../drawables/composites/grid';
 
 export function exampleScene(
     imageCache: ImageCache,
@@ -109,6 +110,32 @@ export function exampleScene(
             through(
                 at({x: 50, y: 400}),
                 withStyles(stroke(Colors.Green(), 2)),
+            ),
+        ),
+        pipe(
+            grid(
+                'g1',
+                {
+                    rows: 4,
+                    columns: 4,
+                    cellWidth: 40,
+                    cellHeight: 40,
+                    drawables: (() => {
+                        const ds: StaticDrawable[] = [];
+                        for (let i = 0; i < 16; i++) {
+                            ds.push(primitiveDrawable(
+                                'g1p' + i,
+                                rect(40, 40),
+                                Transform.create(),
+                                strokeAndFill(Colors.Black(), 1, Colors.Red()),
+                            ));
+                        }
+                        return ds;
+                    })(),
+                }
+            ),
+            through(
+                at({x: 100, y: 400}),
             ),
         ),
     ];
