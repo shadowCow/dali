@@ -15,6 +15,7 @@ import * as Scene from '../../scene/Scene';
 import * as SceneLayer from '../../scene/SceneLayer';
 import * as Motion from '../../drawables/motion/motion';
 import { grid } from '../../drawables/composites/grid';
+import { radial } from '../../drawables/radial';
 
 export function exampleScene(
     imageCache: ImageCache,
@@ -136,6 +137,31 @@ export function exampleScene(
             ),
             through(
                 at({x: 100, y: 400}),
+            ),
+        ),
+        pipe(
+            radial(
+                'rad1',
+                {
+                    radius: 80,
+                    angleSpacing: Math.PI / 4,
+                    angleOffset: 0,
+                    drawables: (() => {
+                        const ds: StaticDrawable[] = [];
+                        for (let i = 0; i < 8; i++) {
+                            ds.push(primitiveDrawable(
+                                'rad1p' + i,
+                                ellipse(20, 20),
+                                Transform.create(),
+                                fill(Colors.Black()),
+                            ));
+                        }
+                        return ds;
+                    })(),
+                }
+            ),
+            through(
+                at({x: 500, y: 450}),
             ),
         ),
     ];
