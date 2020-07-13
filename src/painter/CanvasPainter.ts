@@ -84,8 +84,8 @@ function getCanvas(
 
 export class CanvasPainter implements Painter {
     constructor(
-    private readonly canvas: HTMLCanvasElement,
-    private readonly ctx: CanvasRenderingContext2D
+        private readonly canvas: HTMLCanvasElement,
+        private readonly ctx: CanvasRenderingContext2D
     ) {}
 
     draw(drawable: StaticDrawable): void {

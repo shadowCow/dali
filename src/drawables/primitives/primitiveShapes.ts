@@ -74,6 +74,12 @@ export function ellipse(
     };
 }
 
+export function circle(
+    r: number,
+): Ellipse {
+    return ellipse(r, r);
+}
+
 export type Rect = {
   kind: typeof PrimitiveTypes.RECT,
   params: RectParams,

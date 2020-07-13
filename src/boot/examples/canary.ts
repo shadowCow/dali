@@ -16,10 +16,21 @@ import * as SceneLayer from '../../scene/SceneLayer';
 import * as Motion from '../../drawables/motion/motion';
 import { grid } from '../../drawables/composites/grid';
 import { radial } from '../../drawables/radial';
+import { sun } from '../../drawables/composites/celestial/Sun';
+import { moon, MoonParams } from '../../drawables/composites/celestial/Moon';
 
 export function exampleScene(
     imageCache: ImageCache,
 ): Scene.State<Drawable> {
+    const layerFourDrawables = [
+        primitiveDrawable(
+            'background-night',
+            rect(2000, 300),
+            Transform.create(),
+            fill(Colors.DarkSlateGrey()),
+        ),
+    ];
+
     const layerThreeDrawables = [
         primitiveDrawable(
             '1',
@@ -99,6 +110,7 @@ export function exampleScene(
         ),
     ];
 
+    const moonCycles = Motion.cycle(0, 1, 0.25);
     const layerOneDrawables = [
         pipe(
             eyePair('4', eyePairParams(50, 50, Colors.Blue())),
@@ -164,10 +176,50 @@ export function exampleScene(
                 at({x: 500, y: 450}),
             ),
         ),
+        pipe(
+            sun(
+                'sun1',
+                { radius: 40},
+            ),
+            through(
+                at({x: 300, y: 100}),
+            ),
+        ),
+        animatedDrawable(
+            'a-moon1',
+            createAnimation<MoonParams>(
+                (p: MoonParams) => {
+                    return moon('a-moon1', p);
+                },
+                (t, dt, pI, pT, pS) => {
+                    const phaseRatio = moonCycles(dt);
+                    return [
+                        { radius: pI.radius, phaseRatio },
+                        pT,
+                        pS,
+                    ];
+                },
+                { radius: 40, phaseRatio: 0 },
+                Transform.create({
+                    translate: {x: 100, y: 100},
+                }),
+                fill(Colors.Red()),
+            )
+        ),
+        // pipe(
+        //     moon(
+        //         'moon1',
+        //         { radius: 40, phaseRatio: 0 },
+        //     ),
+        //     through(
+        //         at({x: 100, y: 100}),
+        //     ),
+        // ),
     ];
 
     return Scene.animatedScene({
         layers: [
+            SceneLayer.animatedLayer('4', SceneLayer.toState(layerFourDrawables)),
             SceneLayer.animatedLayer('3', SceneLayer.toState(layerThreeDrawables)),
             SceneLayer.animatedLayer('2', SceneLayer.toState(layerTwoDrawables)),
             SceneLayer.animatedLayer('1', SceneLayer.toState(layerOneDrawables)),

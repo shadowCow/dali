@@ -16,3 +16,19 @@ export function oscillator(
         return sinFn(MathExt.radians(totalDistance));
     };
 }
+
+export function cycle(
+    min: number,
+    max: number,
+    repetitionsPerSecond: number,
+): (dt: number) => number {
+    let totalDt = 0;
+    let range = max - min;
+
+    return (dt) => {
+        totalDt += dt;
+        const offset = (totalDt * (repetitionsPerSecond / 1000)) % range;
+
+        return min + offset;
+    };
+}

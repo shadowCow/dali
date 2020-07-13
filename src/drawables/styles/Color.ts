@@ -27,16 +27,34 @@ export function cssColorString(
 
 export type ColorConstants = {
     Black: () => Color;
+    DarkSlateGrey: () => Color;
     Red: () => Color;
+    Orange: () => Color;
+    Yellow: () => Color;
     Green: () => Color;
     Blue: () => Color;
+    SkyBlue: () => Color;
+    MidnightBlue: () => Color;
+    Navy: () => Color;
+    DarkSlateBlue: () => Color;
+    Purple: () => Color;
+    Indigo: () => Color;
     White: () => Color;
 }
 
 export const Colors: ColorConstants = {
     Black: () => color(),
+    DarkSlateGrey: () => color(47, 79, 79),
     Red: () => color(255, 0, 0),
+    Orange: () => color(255, 165, 0),
+    Yellow: () => color(255, 255, 0),
     Green: () => color(0, 255, 0),
     Blue: () => color(0, 0, 255),
+    SkyBlue: () => color(135, 206, 235),
+    MidnightBlue: () => color(25, 25, 112),
+    Navy: () => color(0, 0, 128),
+    DarkSlateBlue: () => color(72, 61, 139),
+    Purple: () => color(128, 0, 128),
+    Indigo: () => color(75, 0, 130),
     White: () => color(255, 255, 255),
 };
