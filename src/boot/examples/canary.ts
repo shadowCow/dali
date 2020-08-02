@@ -18,6 +18,7 @@ import { grid } from '../../drawables/composites/grid';
 import { radial } from '../../drawables/radial';
 import { sun } from '../../drawables/composites/celestial/Sun';
 import { moon, MoonParams } from '../../drawables/composites/celestial/Moon';
+import { window } from '../../drawables/composites/buildings/Window';
 
 export function exampleScene(
     imageCache: ImageCache,
@@ -112,6 +113,20 @@ export function exampleScene(
 
     const moonCycles = Motion.cycle(0, 1, 0.25);
     const layerOneDrawables = [
+        pipe(
+            window(
+                'window-1',
+                {
+                    frameWidth: 50,
+                    frameHeight: 100,
+                    frameThickness: 4,
+                    frameColor: Colors.Black(),
+                },
+            ),
+            through(
+                at({x: 400, y: 400}),
+            )
+        ),
         pipe(
             eyePair('4', eyePairParams(50, 50, Colors.Blue())),
             through(
