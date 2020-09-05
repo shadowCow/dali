@@ -1,29 +1,25 @@
-import { Drawable, primitiveDrawable } from '../drawables/drawable';
-import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text, equilateralPolygon, Font } from '../drawables/primitives/primitiveShapes';
-import { stroke, strokeAndFill, Styles } from '../drawables/styles/Styles';
-import { run } from '../index';
-import { createCanvasAndPainter } from '../painter/CanvasPainter';
-import { Painter } from '../painter/Painter';
-import * as Scene from '../scene/Scene';
-import * as SceneLayer from '../scene/SceneLayer';
-import * as Transform from '../drawables/transform/Transform';
-import { Colors, Color, color } from '../drawables/styles/Color';
+import { Drawable, primitiveDrawable } from '../../drawables/drawable';
+import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text, equilateralPolygon, Font } from '../../drawables/primitives/primitiveShapes';
+import { stroke, strokeAndFill, Styles } from '../../drawables/styles/Styles';
+import { run } from '../../index';
+import { createCanvasAndPainter } from '../../painter/CanvasPainter';
+import { Painter } from '../../painter/Painter';
+import * as Scene from '../../scene/Scene';
+import * as SceneLayer from '../../scene/SceneLayer';
+import * as Transform from '../../drawables/transform/Transform';
+import { Colors, Color, color } from '../../drawables/styles/Color';
+import { ImageCache } from '../../drawables/ImageCache';
+import { boot } from '../boot';
 
 
-const canvasContainerId = 'canvas-container';
-const canvasId = 'drawing-canvas';
-
-const painter: Painter | null = createCanvasAndPainter(
-    document,
-    canvasContainerId,
-    canvasId
+boot(
+    [],
+    kenCanary,
 );
 
-
-if (!painter) {
-    throw new Error('Unable to create canvas');
-} else {
-    
+function kenCanary(
+    imageCache: ImageCache,
+): Scene.State<Drawable> {
     // populate this with whatever you want
     const col2 = 200;
     const rowH = 50;
@@ -233,5 +229,5 @@ if (!painter) {
         ],
     });
 
-    run(painter, scene);
+    return scene;
 }

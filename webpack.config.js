@@ -32,11 +32,11 @@ const baseConfig = {
 module.exports = function(env, args) {
     if (env && env.entryPoint) {
         if (env.entryPoint === 'ken') {
-            baseConfig.entry = './src/boot/boot.ken.ts';
+            baseConfig.entry = './src/boot/ken/boot.ken.ts';
         } else if (env.entryPoint === 'pop') {
-            baseConfig.entry = './src/boot/boot.pop.ts';
+            baseConfig.entry = './src/boot/pop/boot.pop.ts';
         } else {
-            baseConfig.entry = './src/boot/boot.example.ts';
+            baseConfig.entry = './src/boot/dan/canary.ts';
         }
     }
     return baseConfig;

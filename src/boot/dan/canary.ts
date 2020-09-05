@@ -22,6 +22,12 @@ import { window } from '../../drawables/composites/buildings/Window';
 import { grassBlade } from '../../drawables/composites/grass/GrassBlade';
 import { grassTuft } from '../../drawables/composites/grass/GrassTuft';
 import { fir } from '../../drawables/composites/tree/Fir';
+import { boot } from '../boot';
+
+boot(
+    [ '3d_box.png' ],
+    exampleScene,
+);
 
 export function exampleScene(
     imageCache: ImageCache,
