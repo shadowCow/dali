@@ -21,6 +21,7 @@ import { moon, MoonParams } from '../../drawables/composites/celestial/Moon';
 import { window } from '../../drawables/composites/buildings/Window';
 import { grassBlade } from '../../drawables/composites/grass/GrassBlade';
 import { grassTuft } from '../../drawables/composites/grass/GrassTuft';
+import { fir } from '../../drawables/composites/tree/Fir';
 
 export function exampleScene(
     imageCache: ImageCache,
@@ -259,7 +260,23 @@ export function exampleScene(
             through(
                 at({x: 150, y: 60})
             )
-        )
+        ),
+        pipe(
+            fir(
+                'fir1',
+                {
+                    foliageColor: Colors.Red(),
+                    trunkColor: Colors.White(),
+                    treeWidth: 50,
+                    treeHeight: 150,
+                    trunkWidth: 20,
+                    trunkHeight: 20,
+                }
+            ),
+            through(
+                at({x: 1000, y: 150})
+            )
+        ),
     ];
 
     return Scene.animatedScene({
