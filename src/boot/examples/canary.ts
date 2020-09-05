@@ -19,6 +19,8 @@ import { radial } from '../../drawables/radial';
 import { sun } from '../../drawables/composites/celestial/Sun';
 import { moon, MoonParams } from '../../drawables/composites/celestial/Moon';
 import { window } from '../../drawables/composites/buildings/Window';
+import { grassBlade } from '../../drawables/composites/grass/GrassBlade';
+import { grassTuft } from '../../drawables/composites/grass/GrassTuft';
 
 export function exampleScene(
     imageCache: ImageCache,
@@ -230,6 +232,34 @@ export function exampleScene(
         //         at({x: 100, y: 100}),
         //     ),
         // ),
+        pipe(
+            grassBlade(
+                'grassblade1',
+                {
+                    color: Colors.Green(),
+                    halfWidth: 3,
+                    height: 40,
+                    tipOffset: 5,
+                },
+            ),
+            through(
+                at({x: 200, y: 50})
+            ),
+        ),
+        pipe(
+            grassTuft(
+                'grasstuft1',
+                {
+                    color: Colors.Orange(),
+                    bladeHalfWidth: 3,
+                    minBladeHeight: 30,
+                    maxBladeHeight: 50,
+                }
+            ),
+            through(
+                at({x: 150, y: 60})
+            )
+        )
     ];
 
     return Scene.animatedScene({
