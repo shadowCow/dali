@@ -23,11 +23,14 @@ import { grassBlade } from '../../drawables/composites/grass/GrassBlade';
 import { grassTuft } from '../../drawables/composites/grass/GrassTuft';
 import { fir } from '../../drawables/composites/tree/Fir';
 import { boot } from '../boot';
+import { drawSprites } from './drawSprites';
 
-boot(
-    [ '3d_box.png' ],
-    exampleScene,
-);
+drawSprites();
+
+// boot(
+//     [ '3d_box.png' ],
+//     exampleScene,
+// );
 
 export function exampleScene(
     imageCache: ImageCache,
