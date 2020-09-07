@@ -24,7 +24,7 @@ function exampleScene(
             Transform.create({
                 translate: {x: 100, y: 100},
             }),
-            fill(Colors.Red()),
+            fill(Colors.Blue()),
         ),
     ];
 
