@@ -1,13 +1,42 @@
 import { ImageCache } from '../drawables/ImageCache';
 
-export function loadSpriteSheet(
-    spriteSheet: HTMLImageElement,
-    id: string,
+export type LoadSpriteSheetParams = {
+    imageName: string,
+    spriteMapId: string,
     offsetX: number,
     offsetY: number,
     spriteWidth: number,
     spriteHeight: number,
+}
+
+export function loadSpriteSheets(
+    imageCache: ImageCache,
+    params: LoadSpriteSheetParams[],
+): Promise<SpriteMapCache> {
+    return Promise.all(
+        params.map(p => loadSpriteSheet(
+            imageCache,
+            p,
+        )),
+    ).then(spriteMaps =>
+        createSpriteMapCache(spriteMaps)    
+    );
+}
+
+export function loadSpriteSheet(
+    imageCache: ImageCache,
+    params: LoadSpriteSheetParams,
 ): Promise<SpriteMap> {
+    const {
+        imageName,
+        spriteMapId,
+        offsetX,
+        offsetY,
+        spriteWidth,
+        spriteHeight,
+    } = params;
+
+    const spriteSheet = imageCache[imageName];
     const spritePromises: Promise<ImageBitmap>[] = [];
     
     let row = 0;
@@ -30,7 +59,7 @@ export function loadSpriteSheet(
 
     return Promise.all(spritePromises).then(bitmaps => {
         const spriteMap: SpriteMap = {
-            id,
+            id: spriteMapId,
             sprites: [],
         };
 
@@ -56,4 +85,20 @@ export function loadSpriteSheet(
 export type SpriteMap = {
     id: string,
     sprites: Array<Array<ImageBitmap>>;
+}
+
+export type SpriteMapCache = {
+    [id: string]: SpriteMap,
+}
+
+export function createSpriteMapCache(
+    spriteMaps: SpriteMap[],
+): SpriteMapCache {
+    const cache: SpriteMapCache = {};
+
+    spriteMaps.forEach(m => {
+        cache[m.id] = m;
+    });
+
+    return cache;
 }

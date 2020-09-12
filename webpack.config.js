@@ -30,14 +30,9 @@ const baseConfig = {
 };
 
 module.exports = function(env, args) {
+    baseConfig.entry = './src/boot/dan/canary.ts';
     if (env && env.entryPoint) {
-        if (env.entryPoint === 'ken') {
-            baseConfig.entry = './src/boot/ken/boot.ken.ts';
-        } else if (env.entryPoint === 'pop') {
-            baseConfig.entry = './src/boot/pop/boot.pop.ts';
-        } else {
-            baseConfig.entry = './src/boot/dan/canary.ts';
-        }
+        baseConfig.entry = './src/boot/' + env.entryPoint;
     }
     return baseConfig;
 };

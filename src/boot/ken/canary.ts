@@ -12,10 +12,11 @@ import { ImageCache } from '../../drawables/ImageCache';
 import { boot } from '../boot';
 
 
-boot(
-    [],
-    kenCanary,
-);
+boot({
+    imagePaths: [],
+    loadSpriteSheetParams: [],
+    sceneCreator: kenCanary,
+});
 
 function kenCanary(
     imageCache: ImageCache,

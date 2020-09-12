@@ -1,51 +1,65 @@
 import { boot } from '../boot';
 import { ImageCache, loadImages } from '../../drawables/ImageCache';
 import * as Scene from '../../scene/Scene';
-import { Drawable } from '../../drawables/drawable';
+import * as SceneLayer from '../../scene/SceneLayer';
+import { Drawable, primitiveDrawable } from '../../drawables/drawable';
 import { Painter } from '../../painter/Painter';
 import { createCanvasAndPainter } from '../../painter/CanvasPainter';
 import { run } from '../../index';
-import { loadSpriteSheet } from '../../spritesheet/sprites';
+import { loadSpriteSheet, SpriteMapCache } from '../../spritesheet/sprites';
+import { PrimitiveTypes, image } from '../../drawables/primitives/primitiveShapes';
+import * as Transform from '../../drawables/transform/Transform';
 
-export function drawSprites(): void {
-    const canvasContainerId = 'canvas-container';
-    const canvasId = 'drawing-canvas';
-    
-    const painter: Painter | null = createCanvasAndPainter(
-        document,
-        canvasContainerId,
-        canvasId
-    );
-    const imagePaths = ['zelda_1_overworld.png'];
-    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
-    const ctx = canvas.getContext('2d');
-        
-    
-    if (!painter) {
-        throw new Error('Unable to create canvas');
-    } else if (!ctx) {
-        throw new Error('Unable to create canvas');
-    } else {
-        
-        loadImages(imagePaths).then(imageCache => {
-            loadSpriteSheet(
-                imageCache['zelda_1_overworld.png'],
-                'zelda',
-                0,
-                0,
-                16,
-                16,
-            ).then(spriteMap => {
-                spriteMap.sprites.forEach((row, ri) => {
-                    row.forEach((bitmap, ci) => {
-                        ctx.drawImage(
-                            bitmap,
-                            ci * 16,
-                            ri * 16,
-                        );
-                    });
-                });
-            });
+boot({
+    imagePaths: ['zelda_1_overworld.png'],
+    loadSpriteSheetParams: [{
+        imageName: 'zelda_1_overworld.png',
+        spriteMapId: 'zelda',
+        offsetX: 0,
+        offsetY: 0,
+        spriteWidth: 16,
+        spriteHeight: 16,
+    }],
+    sceneCreator: zeldaScene,
+});
+
+function zeldaScene(
+    imageCache: ImageCache,
+    spriteMapCache: SpriteMapCache,
+): Scene.State<Drawable> {
+    const drawables: Drawable[] = [];
+
+    // iterate through sprites
+    spriteMapCache['zelda'].sprites.forEach((row, ri) => {
+        row.forEach((bitmap, ci) => {
+            drawables.push(primitiveDrawable(
+                '' + ri + ',' + ci,
+                image(bitmap),
+                // set the sprite position based on its indices and
+                // the size of each sprite
+                Transform.create({
+                    translate: {
+                        x: ci * 16,
+                        y: ri * 16,
+                    },
+                }),
+            ));
         });
-    }
+    });
+
+    // you could also reference them by indexes
+    //   spriteMapCache['zelda'].sprites[3][2]
+    //
+    // would get the sprite at row index 3, column index 2
+
+    return Scene.animatedScene({
+        layers: [
+            SceneLayer.animatedLayer(
+                '1',
+                SceneLayer.toState(
+                    drawables,
+                ),
+            ),
+        ],
+    });
 }

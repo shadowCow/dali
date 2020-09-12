@@ -303,11 +303,11 @@ export type Image = {
 }
 
 export type ImageParams = {
-    image: HTMLImageElement
+    image: HTMLImageElement | ImageBitmap,
 }
 
 export function imageParams(
-    image: HTMLImageElement,
+    image: HTMLImageElement | ImageBitmap,
 ): ImageParams {
     return {
         image,
@@ -315,7 +315,7 @@ export function imageParams(
 }
 
 export function image(
-    image: HTMLImageElement,
+    image: HTMLImageElement | ImageBitmap,
 ): Image {
     return {
         kind: PrimitiveTypes.IMAGE,

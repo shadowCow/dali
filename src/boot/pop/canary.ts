@@ -9,10 +9,11 @@ import { rect } from '../../drawables/primitives/primitiveShapes';
 import { fill } from '../../drawables/styles/Styles';
 
 
-boot(
-    [],
-    exampleScene,
-);
+boot({
+    imagePaths: [],
+    loadSpriteSheetParams: [],
+    sceneCreator: exampleScene,
+});
 
 function exampleScene(
     imageCache: ImageCache,
