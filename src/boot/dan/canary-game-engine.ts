@@ -3,10 +3,8 @@ import { Buttons, ButtonMap, createKeyboard } from '../../input/Keyboard';
 import * as Matter from 'matter-js';
 import { createEngine } from './top-down-physics';
 import { text } from '../../drawables/primitives/primitiveShapes';
-import { EntityStore, GameEngine } from '../../game/GameEntity';
+import { EntityStore, GameEngine, GameEntity } from '../../game/Game';
 
-const Engine = Matter.Engine;
-const World = Matter.World;
 const Bodies = Matter.Bodies;
  
 // to run the engine from a game loop...
@@ -74,25 +72,7 @@ function run(
         container.addChild(s);
     }));
 
-
-    // try out collisions!
-    const invisibleRock = {
-        id: 'rock',
-        physics: Bodies.rectangle(72, 72, 16, 16, {isStatic: true}),
-    };
-
-    const linkCollider = Bodies.rectangle(8,8,16,16);
-    const linkSprite = new PIXI.Sprite(
-        zeldaTextures['link']['link_idle_down.png'],
-    );
-    linkSprite.anchor.set(0.5, 0.5);
-    linkSprite.x = linkCollider.position.x;
-    linkSprite.y = linkCollider.position.y;
-    const link = {
-        id: 'link',
-        renderer: linkSprite,
-        physics: linkCollider,
-    };
+    const gameEntities = createEntities(zeldaTextures);
 
     const updateGameState: GameEngine.GameUpdateFn = (entities, deltaFrame) => {
         const linkVelocity = {x: 0, y: 0};
@@ -113,13 +93,11 @@ function run(
             // linkSprite.x += movementPer16ms * delta;
         }
 
-        const linkPhysics = entities[link.id].physics;
-        if (linkPhysics) {
-            Matter.Body.setVelocity(
-                linkPhysics,
-                linkVelocity,
-            );
-        }
+        const linkEntity = entities['link'];
+        GameEntity.setVelocity(
+            linkEntity,
+            linkVelocity,
+        );
     
         return [];
     };
@@ -128,10 +106,7 @@ function run(
         renderer,
         stage: container,
         physicsEngine: engine,
-        entities: EntityStore.create([
-            invisibleRock,
-            link,
-        ]),
+        entities: EntityStore.create(gameEntities),
     };
 
     GameEngine.run(
@@ -203,4 +178,31 @@ function createMap(
     }
 
     return mapSprites;
+}
+
+function createEntities(
+    zeldaTextures: TextureGroupLookup,
+): GameEntity.State[] {
+    const invisibleRock = {
+        id: 'rock',
+        physics: Bodies.rectangle(72, 72, 16, 16, {isStatic: true}),
+    };
+
+    const linkCollider = Bodies.rectangle(8,8,16,16);
+    const linkSprite = new PIXI.Sprite(
+        zeldaTextures['link']['link_idle_down.png'],
+    );
+    linkSprite.anchor.set(0.5, 0.5);
+    linkSprite.x = linkCollider.position.x;
+    linkSprite.y = linkCollider.position.y;
+    const link = {
+        id: 'link',
+        renderer: linkSprite,
+        physics: linkCollider,
+    };
+
+    return [
+        invisibleRock,
+        link,
+    ];
 }

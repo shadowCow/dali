@@ -1,12 +1,26 @@
 import { Bodies, Body, Engine, World } from 'matter-js';
 import { Sprite, Renderer, Container } from 'pixi.js';
 import { assertNever } from '../util/typeGuards';
+import { Vec2 } from '../drawables/transform/Vec';
 
 export namespace GameEntity {
     export type State = {
         id: string,
         renderer?: Sprite,
         physics?: Body,
+    }
+
+    export function setVelocity(
+        entity: State,
+        velocity: Vec2,
+    ): void {
+        const physics = entity.physics;
+        if (physics) {
+            Body.setVelocity(
+                physics,
+                velocity,
+            );
+        }
     }
 }
 
