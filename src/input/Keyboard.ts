@@ -22,12 +22,13 @@ export function createKeyboard<B extends string>(
         keyToButton[buttonMap[b]] = b;
         buttons[b] = false;
     }
-    
+
     document.addEventListener('keydown', (event) => {
         const buttonName = keyToButton[event.keyCode];
         if (typeof buttonName !== 'undefined') {
             buttons[buttonName] = true;
         }
+        event.preventDefault();
     });
 
     document.addEventListener('keyup', (event) => {
@@ -35,6 +36,7 @@ export function createKeyboard<B extends string>(
         if (typeof buttonName !== 'undefined') {
             buttons[buttonName] = false;
         }
+        event.preventDefault();
     });
 
     return buttons;

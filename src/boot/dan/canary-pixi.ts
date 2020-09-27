@@ -14,8 +14,8 @@ const buttons = createKeyboard(
 );
 
 const app = new PIXI.Application({
-    width: 800,
-    height: 600,
+    width: 256*2,
+    height: 176*2,
     backgroundColor: 0x1099bb,
     autoStart: false,
     //resolution: window.devicePixelRatio || 1,
@@ -23,39 +23,51 @@ const app = new PIXI.Application({
 document.body.appendChild(app.view);
 
 app.loader
-    //.add('spritesheet', 'zelda_toons.json')
+    .add('link', 'link_sprites.json')
     .load(run);
 
 function run(
     loader: PIXI.Loader,
     resources: Partial<Record<string, PIXI.LoaderResource>>,
 ) {
-    
-    // Create a new texture
-    const texture = PIXI.Texture.from('zelda_1_overworld.png');
-    
-    const map = new PIXI.Sprite(texture);
-    // map.anchor.set(0.5);
-    map.x = 0;
-    map.y = 0;
-    app.stage.addChild(map);
-    
     const movementPer16ms = 2;
-    // Listen for animate update
-    app.ticker.add((delta) => {
-        if (buttons.up) {
-            map.y -= movementPer16ms * delta;
+
+    const container = new PIXI.Container();
+    container.scale.set(2,2);
+
+    app.stage.addChild(container);
+
+    const linkResource = resources['link'];
+    if (linkResource) {
+        const linkTextures = linkResource.textures;
+        if (linkTextures) {
+            const linkSprite = new PIXI.Sprite(
+                linkTextures['link_idle_down.png'],
+            );
+            linkSprite.x = 0;
+            linkSprite.y = 0;
+
+            container.addChild(linkSprite);
+
+            // Listen for animate update
+            app.ticker.add((delta) => {
+                if (buttons.up) {
+                    linkSprite.y -= movementPer16ms * delta;
+                }
+                if (buttons.down) {
+                    linkSprite.y += movementPer16ms * delta;
+                }
+                if (buttons.left) {
+                    linkSprite.x -= movementPer16ms * delta;
+                }
+                if (buttons.right) {
+                    linkSprite.x += movementPer16ms * delta;
+                }
+            });
+            
+            app.start();
         }
-        if (buttons.down) {
-            map.y += movementPer16ms * delta;
-        }
-        if (buttons.left) {
-            map.x -= movementPer16ms * delta;
-        }
-        if (buttons.right) {
-            map.x += movementPer16ms * delta;
-        }
-    });
+        
+    }
     
-    app.start();
 }
