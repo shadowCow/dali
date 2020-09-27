@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Buttons, ButtonMap, createKeyboard } from '../../input/Keyboard';
 import * as Matter from 'matter-js';
 import { createEngine } from './top-down-physics';
+import { text } from '../../drawables/primitives/primitiveShapes';
 
 const Engine = Matter.Engine;
 const World = Matter.World;
@@ -23,10 +24,14 @@ const buttons = createKeyboard(
     buttonMap,
     document,
 );
+const scale = 3;
+const mapRows = 11;
+const mapColumns = 16;
+const tileDimensions = { x: 16, y: 16 };
 
 const app = new PIXI.Application({
-    width: 256*2,
-    height: 176*2,
+    width: tileDimensions.x * mapColumns * scale,
+    height: tileDimensions.y * mapRows * scale,
     backgroundColor: 0x1099bb,
     autoStart: false,
     //resolution: window.devicePixelRatio || 1,
@@ -35,7 +40,7 @@ document.body.appendChild(app.view);
 
 app.loader
     .add('link', 'link_sprites.json')
-    .add('tileset', 'zelda_1_overworld.json')
+    .add('tileset', 'tiles-overworld.json')
     .load(run);
 
 function run(
@@ -49,23 +54,24 @@ function run(
             textureNames: ['link_idle_down.png'],
         },{
             resourceName: 'tileset',
-            textureNames: ['grave_dirt.png'],
+            textureNames: ['autumn_ground.png'],
         }],
     );
     const movementPer16ms = 2;
 
     const container = new PIXI.Container();
-    container.scale.set(2,2);
+    container.scale.set(scale, scale);
 
     app.stage.addChild(container);
 
     const map = createMap(
-        zeldaTextures['tileset']['grave_dirt.png'],
+        zeldaTextures['tileset']['autumn_ground.png'],
     );
 
     map.forEach((r,ri) => r.forEach((s,ci) => {
-        s.x = ci * 16;
-        s.y = ri * 16;
+        s.roundPixels = true;
+        s.x = ci * tileDimensions.x;
+        s.y = ri * tileDimensions.y;
         container.addChild(s);
     }));
 
@@ -151,6 +157,7 @@ function getZeldaTextures(
                 textureGroupLookup[resourceKey.resourceName] = textureLookup;
                 resourceKey.textureNames.forEach(textureName => {
                     const texture = textures[textureName];
+                    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
                     if (texture) {
                         textureLookup[textureName] = texture;
                     } else {
@@ -173,13 +180,10 @@ function createMap(
     texture: PIXI.Texture,
 ): Array<Array<PIXI.Sprite>> {
     const mapSprites: Array<Array<PIXI.Sprite>> = [];
-    
-    const numRows = 11;
-    const numColumns = 16;
 
-    for (let r = 0; r < numRows; r++) {
+    for (let r = 0; r < mapRows; r++) {
         mapSprites.push(<PIXI.Sprite[]>[]);
-        for (let c = 0; c < numColumns; c++) {
+        for (let c = 0; c < mapColumns; c++) {
             mapSprites[r].push(new PIXI.Sprite(texture));
         }
     }
