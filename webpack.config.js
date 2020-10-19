@@ -30,7 +30,7 @@ const baseConfig = {
 };
 
 module.exports = function(env, args) {
-    baseConfig.entry = './src/boot/dan/canary.ts';
+    baseConfig.entry = './src/boot/dan/canary-game-engine.ts';
     if (env && env.entryPoint) {
         baseConfig.entry = './src/boot/' + env.entryPoint;
     }

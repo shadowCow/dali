@@ -36,13 +36,13 @@ export namespace GameEngine {
         renderer: Painter<SpriteRendererCanvas.Renderable>,
         stage: Sprite.Container.State,
         physicsEngine: Engine,
-        entities: EntityStore.State,
+        entityStore: EntityStore.State,
     }
 
     export type GameUpdateFn = (
         resources: Resources,
-        entities: EntityStore.State,
-        deltaFrame: number
+        entityStore: EntityStore.State,
+        dt: number
     ) => EntityStore.Update[]
 
     export function run(
@@ -50,31 +50,30 @@ export namespace GameEngine {
         state: State,
         updateGameState: GameUpdateFn,
     ): void {
-        Object.values(state.entities).forEach(entity => {
+        Object.values(state.entityStore).forEach(entity => {
             addEntity(state, entity);
         });
 
         let oldTime = Date.now();
         function gameLoop(newTime: number) {
-            let deltaTime = newTime - oldTime;
+            let dt = newTime - oldTime;
             oldTime = newTime;	
-            if (deltaTime < 0) deltaTime = 0;
-            if (deltaTime > 1000) deltaTime = 1000;
-            let deltaFrame = deltaTime * 60 / 1000; //1.0 is for single frame
+            if (dt < 0) { dt = 0; }
+            if (dt > 1000) { dt = 1000; }
             
             const entityUpdates = updateGameState(
                 resources,
-                state.entities,
-                deltaFrame,
+                state.entityStore,
+                dt,
             );
             applyUpdates(
                 state,
                 entityUpdates,
             );
 
-            Engine.update(state.physicsEngine, deltaTime);
+            Engine.update(state.physicsEngine, dt);
             
-            Object.values(state.entities).forEach(entity => {
+            Object.values(state.entityStore).forEach(entity => {
                 if (entity.physics && entity.renderer) {
                     entity.renderer.cx = entity.physics.position.x;
                     entity.renderer.cy = entity.physics.position.y; 
@@ -85,7 +84,7 @@ export namespace GameEngine {
                     if (sprite.tag === Sprite.StateTag.ANIMATED) {
                         Sprite.transition(
                             sprite,
-                            Sprite.tick(deltaTime),
+                            Sprite.tick(dt),
                         );
                     }
                 }
@@ -120,7 +119,7 @@ export namespace GameEngine {
         state: State,
         entity: GameEntity.State,
     ): void {
-        state.entities[entity.id] = entity;
+        state.entityStore[entity.id] = entity;
         if (entity.renderer) {
             Sprite.Container.addChild(
                 state.stage,
@@ -137,7 +136,7 @@ export namespace GameEngine {
         state: State,
         entity: GameEntity.State,
     ): void {
-        delete state.entities[entity.id];
+        delete state.entityStore[entity.id];
         if (entity.renderer) {
             Sprite.Container.removeChild(
                 state.stage,

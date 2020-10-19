@@ -3,7 +3,9 @@ import * as Matter from 'matter-js';
 import { createEngine } from './top-down-physics';
 import { text } from '../../drawables/primitives/primitiveShapes';
 import { EntityStore, GameEngine, GameEntity } from '../../game/Game';
-import { TextureLoader } from '../../sprites/Texture';
+import { TextureLoader, Texture } from '../../sprites/Texture';
+import { bootUp } from '../game2dTopDown';
+import { Sprite } from '../../sprites/Sprite';
 
 const textureParams: TextureLoader.Params[] = [
     TextureLoader.irregularParams(
@@ -14,10 +16,16 @@ const textureParams: TextureLoader.Params[] = [
             0,
             16,
             16,
+        ),TextureLoader.irregularReference(
+            'link_moving_down',
+            0,
+            32,
+            16,
+            16,
         )],
     ),
     TextureLoader.irregularParams(
-        'tiles-overworld',
+        'tiles-overworld.png',
         [TextureLoader.irregularReference(
             'autumn_ground',
             0,
@@ -46,168 +54,119 @@ const mapRows = 11;
 const mapColumns = 16;
 const tileDimensions = { x: 16, y: 16 };
 
+bootUp({
+    textureParams,
+    createInitialEntities,
+    gameUpdateFn,
+    scale,
+});
 
-function run(
-    loader: PIXI.Loader,
-    resources: Partial<Record<string, PIXI.LoaderResource>>,
-) {
-    const zeldaTextures = getZeldaTextures(
-        resources,
-        [{
-            resourceName: 'link',
-            textureNames: ['link_idle_down.png'],
-        },{
-            resourceName: 'tileset',
-            textureNames: ['autumn_ground.png'],
-        }],
-    );
-    const movementPer16ms = 2;
-
-    const container = new PIXI.Container();
-    container.scale.set(scale, scale);
-
+function createInitialEntities(
+    resources: GameEngine.Resources,
+): GameEntity.State[] {
     const map = createMap(
-        zeldaTextures['tileset']['autumn_ground.png'],
+        resources.textureCache['autumn_ground'],
     );
 
     map.forEach((r,ri) => r.forEach((s,ci) => {
-        s.roundPixels = true;
-        s.x = ci * tileDimensions.x;
-        s.y = ri * tileDimensions.y;
-        container.addChild(s);
+        s.cx = ci * tileDimensions.x;
+        s.cy = ri * tileDimensions.y;
     }));
 
-    const gameEntities = createEntities(zeldaTextures);
-
-    const updateGameState: GameEngine.GameUpdateFn = (entities, deltaFrame) => {
-        const linkVelocity = {x: 0, y: 0};
-        if (buttons.up) {
-            linkVelocity.y += -1 * movementPer16ms * deltaFrame;
-            // linkSprite.y -= movementPer16ms * delta;
-        }
-        if (buttons.down) {
-            linkVelocity.y += movementPer16ms * deltaFrame;
-            // linkSprite.y += movementPer16ms * delta;
-        }
-        if (buttons.left) {
-            linkVelocity.x += -1 * movementPer16ms * deltaFrame;
-            // linkSprite.x -= movementPer16ms * delta;
-        }
-        if (buttons.right) {
-            linkVelocity.x += movementPer16ms * deltaFrame;
-            // linkSprite.x += movementPer16ms * delta;
-        }
-
-        const linkEntity = entities['link'];
-        GameEntity.setVelocity(
-            linkEntity,
-            linkVelocity,
-        );
-    
-        return [];
-    };
-
-    const gameEngineState: GameEngine.State = {
-        renderer,
-        stage: container,
-        physicsEngine: engine,
-        entities: EntityStore.create(gameEntities),
-    };
-
-    GameEngine.run(
-        gameEngineState,
-        updateGameState,
-    );
-}
-
-/*
-Texture lookups for non-null guaranteed usage.
-*/
-type TextureGroupLookup = {
-    [k: string]: TextureLookup,
-}
-
-type TextureLookup = {
-    [k: string]: PIXI.Texture,
-}
-
-type ResourceKeys = {
-    resourceName: string,
-    textureNames: string[]
-}
-
-function getZeldaTextures(
-    resources: Partial<Record<string, PIXI.LoaderResource>>,
-    resourceKeys: ResourceKeys[],
-): TextureGroupLookup {
-    const textureGroupLookup: TextureGroupLookup = {};
-
-    resourceKeys.forEach(resourceKey => {
-        const resource = resources[resourceKey.resourceName];
-        if (resource) {
-            const textures = resource.textures;
-            if (textures) {
-                const textureLookup: TextureLookup = {};
-                textureGroupLookup[resourceKey.resourceName] = textureLookup;
-                resourceKey.textureNames.forEach(textureName => {
-                    const texture = textures[textureName];
-                    texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-                    if (texture) {
-                        textureLookup[textureName] = texture;
-                    } else {
-                        throw `Missing texture ${textureName} from resource ${resourceKey.resourceName}`;
-                    }
-                });
-            } else {
-                throw `Missing textures for ${resourceKey.resourceName}`;
-            }
-        } else {
-            throw `Missing resource ${resourceKey.resourceName}`;
-        }
-    });
-    
-    return textureGroupLookup;
-}
-
-
-function createMap(
-    texture: PIXI.Texture,
-): Array<Array<PIXI.Sprite>> {
-    const mapSprites: Array<Array<PIXI.Sprite>> = [];
-
-    for (let r = 0; r < mapRows; r++) {
-        mapSprites.push(<PIXI.Sprite[]>[]);
-        for (let c = 0; c < mapColumns; c++) {
-            mapSprites[r].push(new PIXI.Sprite(texture));
-        }
-    }
-
-    return mapSprites;
-}
-
-function createEntities(
-    zeldaTextures: TextureGroupLookup,
-): GameEntity.State[] {
     const invisibleRock = {
         id: 'rock',
         physics: Bodies.rectangle(72, 72, 16, 16, {isStatic: true}),
     };
 
+    const linkId = 'link';
     const linkCollider = Bodies.rectangle(8,8,16,16);
-    const linkSprite = new PIXI.Sprite(
-        zeldaTextures['link']['link_idle_down.png'],
+    const linkSprite = Sprite.createAnimated(
+        linkId,
+        linkCollider.position.x,
+        linkCollider.position.y,
+        resources.textureCache['link_idle_down'],
+        [
+            resources.textureCache['link_idle_down'],
+            resources.textureCache['link_moving_down'],
+        ],
+        250,
+        0,
     );
-    linkSprite.anchor.set(0.5, 0.5);
-    linkSprite.x = linkCollider.position.x;
-    linkSprite.y = linkCollider.position.y;
     const link = {
-        id: 'link',
+        id: linkId,
         renderer: linkSprite,
         physics: linkCollider,
     };
 
-    return [
-        invisibleRock,
-        link,
-    ];
+    const entities: GameEntity.State[] = [];
+
+    map.forEach(r => r.forEach(item => {
+        entities.push({
+            id: item.id,
+            renderer: item,
+        });
+    }));
+
+    entities.push(link);
+    entities.push(invisibleRock);
+
+    return entities;
+}
+
+const movementPerMs = 48 / 1000;
+
+function gameUpdateFn(
+    resources: GameEngine.Resources,
+    entities: EntityStore.State,
+    dt: number
+): EntityStore.Update[] {
+    const updates: EntityStore.Update[] = [];
+
+    const linkVelocity = {x: 0, y: 0};
+    if (buttons.up) {
+        linkVelocity.y += -1 * movementPerMs * dt;
+        // linkSprite.y -= movementPerMs * delta;
+    }
+    if (buttons.down) {
+        linkVelocity.y += movementPerMs * dt;
+        // linkSprite.y += movementPerMs * delta;
+    }
+    if (buttons.left) {
+        linkVelocity.x += -1 * movementPerMs * dt;
+        // linkSprite.x -= movementPerMs * delta;
+    }
+    if (buttons.right) {
+        linkVelocity.x += movementPerMs * dt;
+        // linkSprite.x += movementPerMs * delta;
+    }
+
+    const linkEntity = entities['link'];
+    GameEntity.setVelocity(
+        linkEntity,
+        linkVelocity,
+    );
+
+    return updates;
+}
+
+
+function createMap(
+    texture: Texture.State,
+): Array<Array<Sprite.Static>> {
+    const mapSprites: Array<Array<Sprite.Static>> = [];
+
+    for (let r = 0; r < mapRows; r++) {
+        mapSprites.push(<Sprite.Static[]>[]);
+        for (let c = 0; c < mapColumns; c++) {
+            const id = `map_${c}_${r}`;
+            mapSprites[r].push(Sprite.createStatic(
+                id,
+                0,
+                0,
+                texture,
+            ));
+        }
+    }
+
+    return mapSprites;
 }

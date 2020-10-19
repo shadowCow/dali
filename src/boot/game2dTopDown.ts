@@ -1,5 +1,5 @@
 import { TextureLoader } from "../sprites/Texture";
-import { GameEngine, EntityStore } from "../game/Game";
+import { GameEngine, EntityStore, GameEntity } from "../game/Game";
 import { Engine } from "matter-js";
 import { Painter, prepareCanvas } from "../painter/Painter";
 import { SpriteRendererCanvas } from "../sprites/SpriteRenderer";
@@ -8,7 +8,11 @@ import { Sprite } from "../sprites/Sprite";
 
 export type Game2dTopDownParams = {
     textureParams: TextureLoader.Params[],
+    createInitialEntities: (
+        resources: GameEngine.Resources,
+    ) => GameEntity.State[],
     gameUpdateFn: GameEngine.GameUpdateFn,
+    scale: number,
 }
 
 export const canvasId = 'game-canvas';
@@ -36,19 +40,21 @@ export function bootUp(
             const renderer = SpriteRendererCanvas.create(
                 canvas,
                 ctx,
+                params.scale,
             );
     
             const stage = Sprite.Container.create();
             const physicsEngine = createEngine();
     
-            const entities: EntityStore.State =
-                EntityStore.create([]);
+            const entities = params.createInitialEntities(resources);
+            const entityStore: EntityStore.State =
+                EntityStore.create(entities);
 
             const state: GameEngine.State = {
                 renderer,
                 stage,
                 physicsEngine,
-                entities,
+                entityStore,
             };
 
             GameEngine.run(

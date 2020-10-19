@@ -123,7 +123,9 @@ export namespace Sprite {
                     (s.cyclePositionMs + a.dtMs) %
                     (s.frameIntervalMs * s.frames.length);
 
-                const frameIndex = s.cyclePositionMs / s.frameIntervalMs;
+                const frameIndex = Math.floor(
+                    s.cyclePositionMs / s.frameIntervalMs
+                );
                 s.texture = s.frames[frameIndex];
             },
             [ActionTag.SET_POSITION]: (s, a) => {

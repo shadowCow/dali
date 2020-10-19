@@ -127,31 +127,27 @@ export namespace TextureLoader {
         allParams: Params[],
     ): Promise<Texture.Cache> {
         return new Promise<Texture.Cache>(resolve => {
-            const texturePromises: Promise<Texture.State>[] = [];
-        
-            allParams.forEach(p => {
-                switch (p.tag) {
-                    case Tags.IMAGE:
-                        loadImageBitmap(p);
-                        break;
-                    case Tags.ATLAS_IRREGULAR:
-                        loadAtlasIrregular(p);
-                        break;
-                    case Tags.ATLAS_GRID:
-                        loadAtlasGrid(p);
-                        break;
-                    default:
-                        assertNever(p);
-                }
-            });
+            const texturePromises: Promise<Texture.State[]>[] =
+                allParams.map(p => {
+                    switch (p.tag) {
+                        case Tags.IMAGE:
+                            return loadImageBitmap(p);
+                        case Tags.ATLAS_IRREGULAR:
+                            return loadAtlasIrregular(p);
+                        case Tags.ATLAS_GRID:
+                            return loadAtlasGrid(p);
+                        default:
+                            assertNever(p);
+                    }
+                });
 
             const cachePromise = Promise.all(texturePromises)
                 .then(textures => {
                     const cache: Texture.Cache = {};
         
-                    textures.forEach(t => {
+                    textures.forEach(r => r.forEach(t => {
                         cache[t.id] = t;
-                    });
+                    }));
 
                     return cache;
                 });
