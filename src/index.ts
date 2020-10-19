@@ -3,7 +3,7 @@ import * as Scene from './scene/Scene';
 import { Drawable, StaticDrawable } from './drawables/drawable';
 
 export function run<D extends Drawable>(
-    painter: Painter,
+    painter: Painter<StaticDrawable>,
     scene: Scene.State<D>,
 ) {
     animate(
@@ -14,7 +14,7 @@ export function run<D extends Drawable>(
 
 function animate<D extends Drawable>(
     scene: Scene.State<D>,
-    painter: Painter,
+    painter: Painter<StaticDrawable>,
 ): void {
     let previousTimestampMs = 0;
     function animationCallback(timestampMs: number): void {
@@ -33,12 +33,12 @@ function animate<D extends Drawable>(
 
 function drawScene(
     scene: Scene.State<StaticDrawable>,
-    painter: Painter,
+    painter: Painter<StaticDrawable>,
 ): void {
     painter.clear();
     scene.layers.forEach(layer => {
         layer.drawOrder.forEach(id => {
-            painter.draw(layer.drawables[id]);
+            painter.paint(layer.drawables[id]);
         });
     });
 }

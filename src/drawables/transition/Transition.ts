@@ -3,7 +3,7 @@ import * as Interpolator from './Interpolator';
 import { Styles, Stroke, Fill, StrokeAndFill, stroke } from '../styles/Styles';
 import { Primitive, Text, Rect, Ellipse, Line, Polyline, Polygon, Path, Image, EquilateralPolygon } from '../primitives/primitiveShapes';
 import * as Transform from '../transform/Transform';
-import { assertNever } from '../../util/typeGuards';
+import { assertNever } from '../../util/patternMatching';
 
 
 export function create<T>(

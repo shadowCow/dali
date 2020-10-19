@@ -1,12 +1,15 @@
 import { Bodies, Body, Engine, World } from 'matter-js';
-import { Sprite, Renderer, Container } from 'pixi.js';
-import { assertNever } from '../util/typeGuards';
+import { assertNever } from '../util/patternMatching';
 import { Vec2 } from '../drawables/transform/Vec';
+import { Sprite } from '../sprites/Sprite';
+import { Painter } from '../painter/Painter';
+import { SpriteRendererCanvas } from '../sprites/SpriteRenderer';
+import { Texture } from '../sprites/Texture';
 
 export namespace GameEntity {
     export type State = {
         id: string,
-        renderer?: Sprite,
+        renderer?: Sprite.State,
         physics?: Body,
     }
 
@@ -25,19 +28,25 @@ export namespace GameEntity {
 }
 
 export namespace GameEngine {
+    export type Resources = {
+        textureCache: Texture.Cache,
+    }
+
     export type State = {
-        renderer: Renderer,
-        stage: Container,
+        renderer: Painter<SpriteRendererCanvas.Renderable>,
+        stage: Sprite.Container.State,
         physicsEngine: Engine,
         entities: EntityStore.State,
     }
 
     export type GameUpdateFn = (
+        resources: Resources,
         entities: EntityStore.State,
         deltaFrame: number
     ) => EntityStore.Update[]
 
     export function run(
+        resources: Resources,
         state: State,
         updateGameState: GameUpdateFn,
     ): void {
@@ -54,6 +63,7 @@ export namespace GameEngine {
             let deltaFrame = deltaTime * 60 / 1000; //1.0 is for single frame
             
             const entityUpdates = updateGameState(
+                resources,
                 state.entities,
                 deltaFrame,
             );
@@ -66,12 +76,22 @@ export namespace GameEngine {
             
             Object.values(state.entities).forEach(entity => {
                 if (entity.physics && entity.renderer) {
-                    entity.renderer.x = entity.physics.position.x;
-                    entity.renderer.y = entity.physics.position.y; 
+                    entity.renderer.cx = entity.physics.position.x;
+                    entity.renderer.cy = entity.physics.position.y; 
+                }
+
+                if (entity.renderer) {
+                    const sprite = entity.renderer;
+                    if (sprite.tag === Sprite.StateTag.ANIMATED) {
+                        Sprite.transition(
+                            sprite,
+                            Sprite.tick(deltaTime),
+                        );
+                    }
                 }
             });
 
-            state.renderer.render(state.stage);
+            state.renderer.paint(state.stage);
             requestAnimationFrame(gameLoop);
         }
 
@@ -102,7 +122,10 @@ export namespace GameEngine {
     ): void {
         state.entities[entity.id] = entity;
         if (entity.renderer) {
-            state.stage.addChild(entity.renderer);
+            Sprite.Container.addChild(
+                state.stage,
+                entity.renderer,
+            );
         }
         
         if (entity.physics) {
@@ -116,13 +139,17 @@ export namespace GameEngine {
     ): void {
         delete state.entities[entity.id];
         if (entity.renderer) {
-            state.stage.removeChild(entity.renderer);
+            Sprite.Container.removeChild(
+                state.stage,
+                entity.renderer,
+            );
         }
         
         if (entity.physics) {
             World.remove(state.physicsEngine.world, entity.physics);
         }
     }
+
 }
 
 export namespace EntityStore {
@@ -169,7 +196,5 @@ export namespace EntityStore {
             kind: 'delete_entity',
             entity,
         };
-    }
-
-    
+    }   
 }

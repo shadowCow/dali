@@ -1,6 +1,4 @@
 # TODO
 
-  - add more composites
-  - svg transforms behaving strangely? maybe due to canvas width/height/lack-of-view-box
-  - bezier curve is drawn differently in svg vs canvas
-  
+## Game2d
+- seem to have game engine updated, need to finish the canary file to make sure.

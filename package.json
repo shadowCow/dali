@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "matter-js": "^0.14.2",
-    "pixi.js": "^5.3.3",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

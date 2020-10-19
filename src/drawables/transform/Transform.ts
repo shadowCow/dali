@@ -2,7 +2,7 @@ import * as Translate from './Translate';
 import * as Rotate from './Rotate';
 import * as Scale from './Scale';
 import * as Skew from './Skew';
-import { assertNever } from '../../util/typeGuards';
+import { assertNever } from '../../util/patternMatching';
 
 export function create(
     init: Partial<State> = {},

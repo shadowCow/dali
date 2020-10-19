@@ -1,5 +1,5 @@
 import { Vec2 } from './Vec';
-import { assertNever } from '../../util/typeGuards';
+import { assertNever } from '../../util/patternMatching';
 
 export function create(
     x: number = 0,

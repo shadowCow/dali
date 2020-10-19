@@ -1,5 +1,5 @@
 import { Drawable, DrawableTypes, StaticDrawable } from '../drawables/drawable';
-import { assertNever } from '../util/typeGuards';
+import { assertNever } from '../util/patternMatching';
 
 export function staticLayer(
     id: string,

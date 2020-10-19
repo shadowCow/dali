@@ -4,9 +4,8 @@ import * as Scene from '../../scene/Scene';
 import * as SceneLayer from '../../scene/SceneLayer';
 import { Drawable, primitiveDrawable, compositeDrawable } from '../../drawables/drawable';
 import { Painter } from '../../painter/Painter';
-import { createCanvasAndPainter } from '../../painter/CanvasPainter';
 import { run } from '../../index';
-import { loadSpriteSheet, SpriteMapCache } from '../../spritesheet/sprites';
+import { loadSpriteSheet, SpriteMapCache } from '../../sprites/SpriteSheet';
 import { PrimitiveTypes, image } from '../../drawables/primitives/primitiveShapes';
 import * as Transform from '../../drawables/transform/Transform';
 

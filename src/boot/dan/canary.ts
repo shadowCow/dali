@@ -23,7 +23,7 @@ import { grassBlade } from '../../drawables/composites/grass/GrassBlade';
 import { grassTuft } from '../../drawables/composites/grass/GrassTuft';
 import { fir } from '../../drawables/composites/tree/Fir';
 import { boot } from '../boot';
-import { SpriteMapCache } from '../../spritesheet/sprites';
+import { SpriteMapCache } from '../../sprites/SpriteSheet';
 
 boot({
     imagePaths: [ '3d_box.png' ],

@@ -1,16 +1,34 @@
-import * as PIXI from 'pixi.js';
 import { Buttons, ButtonMap, createKeyboard } from '../../input/Keyboard';
 import * as Matter from 'matter-js';
 import { createEngine } from './top-down-physics';
 import { text } from '../../drawables/primitives/primitiveShapes';
 import { EntityStore, GameEngine, GameEntity } from '../../game/Game';
+import { TextureLoader } from '../../sprites/Texture';
 
+const textureParams: TextureLoader.Params[] = [
+    TextureLoader.irregularParams(
+        'link_sprites.png',
+        [TextureLoader.irregularReference(
+            'link_idle_down',
+            0,
+            0,
+            16,
+            16,
+        )],
+    ),
+    TextureLoader.irregularParams(
+        'tiles-overworld',
+        [TextureLoader.irregularReference(
+            'autumn_ground',
+            0,
+            0,
+            16,
+            16,
+        )],
+    ),
+];
 const Bodies = Matter.Bodies;
  
-// to run the engine from a game loop...
-// Engine.update(engine, delta)
-
-const engine = createEngine();
 
 const buttonMap: ButtonMap = {
     up: 87, // W
@@ -28,19 +46,6 @@ const mapRows = 11;
 const mapColumns = 16;
 const tileDimensions = { x: 16, y: 16 };
 
-const renderer = new PIXI.Renderer({
-    width: tileDimensions.x * mapColumns * scale,
-    height: tileDimensions.y * mapRows * scale,
-    backgroundColor: 0x1099bb,
-    //resolution: window.devicePixelRatio || 1,
-});
-document.body.appendChild(renderer.view);
-
-const loader = new PIXI.Loader();
-loader
-    .add('link', 'link_sprites.json')
-    .add('tileset', 'tiles-overworld.json')
-    .load(run);
 
 function run(
     loader: PIXI.Loader,

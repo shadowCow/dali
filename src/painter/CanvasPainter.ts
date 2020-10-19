@@ -1,5 +1,5 @@
-import { Painter } from './Painter';
-import { assertNever } from '../util/typeGuards';
+import { Painter, prepareCanvas } from './Painter';
+import { assertNever } from '../util/patternMatching';
 import { CompositeDrawable, PrimitiveDrawable, DrawableTypes, StaticDrawable } from '../drawables/drawable';
 import { Styles, MatchStylesHandler, matchStyles } from '../drawables/styles/Styles';
 import { Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, Text, Image, fontString, PrimitiveTypes, PathSegmentTypes, EquilateralPolygon } from '../drawables/primitives/primitiveShapes';
@@ -10,104 +10,38 @@ import * as Scale from '../drawables/transform/Scale';
 import * as Skew from '../drawables/transform/Skew';
 import { cssColorString } from '../drawables/styles/Color';
 
-export function createCanvasAndPainter(
-    document: Document,
-    containerId: string,
-    canvasId: string
-): CanvasPainter | null {
+export namespace CanvasPainter {
+    export function create(
+        canvas: HTMLCanvasElement,
+        ctx: CanvasRenderingContext2D,
+    ): Painter<StaticDrawable> {
+        const draw: (drawable: StaticDrawable) => void =
+        (drawable) => {
+            switch (drawable.kind) {
+                case DrawableTypes.COMPOSITE_DRAWABLE:
+                    drawComposite(drawable, ctx);
+                    break;
+                case DrawableTypes.PRIMITIVE_DRAWABLE:
+                    drawPrimitive(drawable, ctx);
+                    break;
+                default:
+                    assertNever(drawable);
+            }
+        };
 
-    const container = getCanvasContainer(
-        document,
-        containerId
-    );
+        const clear: () => void = () => {
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height,
+            );
+        };
 
-    const canvas = getCanvas(
-        document,
-        container,
-        canvasId
-    );
-
-    const ctx = canvas.getContext('2d');
-
-    if (ctx) {
-        return new CanvasPainter(
-            canvas,
-            ctx
-        );
-    } else {
-        return null;
-    }
-}
-
-function getCanvasContainer(
-    document: Document,
-    containerId: string
-): HTMLElement {
-    const maybeContainer = document.getElementById(containerId);
-
-    if (maybeContainer) {
-        return maybeContainer;
-    } else {
-        const container = document.createElement('div');
-        container.id = containerId;
-
-        document.body.appendChild(
-            container
-        );
-
-        return container;
-    }
-}
-
-function getCanvas(
-    document: Document,
-    container: HTMLElement,
-    canvasId: string
-): HTMLCanvasElement {
-    const maybeAlreadyCanvas = document.getElementById(canvasId);
-  
-    if (maybeAlreadyCanvas && maybeAlreadyCanvas.tagName === 'canvas') {
-        return maybeAlreadyCanvas as HTMLCanvasElement;
-    } else {
-        const canvas = document.createElement('canvas');
-        canvas.id = canvasId;
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-        canvas.width = container.offsetWidth;
-        canvas.height = container.offsetHeight;
-
-        container.appendChild(canvas);
-
-        return canvas;
-    }
-}
-
-export class CanvasPainter implements Painter {
-    constructor(
-        private readonly canvas: HTMLCanvasElement,
-        private readonly ctx: CanvasRenderingContext2D
-    ) {}
-
-    draw(drawable: StaticDrawable): void {
-        switch (drawable.kind) {
-            case DrawableTypes.COMPOSITE_DRAWABLE:
-                drawComposite(drawable, this.ctx);
-                break;
-            case DrawableTypes.PRIMITIVE_DRAWABLE:
-                drawPrimitive(drawable, this.ctx);
-                break;
-            default:
-                assertNever(drawable);
-        }
-    }
-
-    clear(): void {
-        this.ctx.clearRect(
-            0,
-            0,
-            this.canvas.width,
-            this.canvas.height,
-        );
+        return {
+            paint: draw,
+            clear,
+        };
     }
 }
 

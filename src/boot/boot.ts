@@ -1,10 +1,10 @@
 import { Painter } from '../painter/Painter';
-import { createCanvasAndPainter } from '../painter/CanvasPainter';
 import { run } from '../index';
 import { loadImages, ImageCache } from '../drawables/ImageCache';
 import * as Scene from '../scene/Scene';
 import { Drawable } from '../drawables/drawable';
-import { LoadSpriteSheetParams, loadSpriteSheets, SpriteMapCache } from '../spritesheet/sprites';
+import { LoadSpriteSheetParams, loadSpriteSheets, SpriteMapCache } from '../sprites/SpriteSheet';
+import { CanvasPainter } from '../painter/CanvasPainter';
 
 const canvasContainerId = 'canvas-container';
 const canvasId = 'drawing-canvas';
@@ -21,7 +21,7 @@ export type BootParams = {
 export function boot(
     params: BootParams,
 ): void {
-    const painter: Painter | null = createCanvasAndPainter(
+    const painter: Painter | null = CanvasPainter.create(
         document,
         canvasContainerId,
         canvasId

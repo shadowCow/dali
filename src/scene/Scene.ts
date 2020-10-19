@@ -1,5 +1,5 @@
 import { Drawable, StaticDrawable } from '../drawables/drawable';
-import { assertNever } from '../util/typeGuards';
+import { assertNever } from '../util/patternMatching';
 
 import * as SceneLayer from './SceneLayer';
 

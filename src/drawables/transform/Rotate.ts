@@ -1,4 +1,4 @@
-import { assertNever } from '../../util/typeGuards';
+import { assertNever } from '../../util/patternMatching';
 
 export function create(
     a: number = 0,

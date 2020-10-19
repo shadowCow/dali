@@ -1,4 +1,4 @@
-import { assertNever } from '../../util/typeGuards';
+import { assertNever } from '../../util/patternMatching';
 import { Color, Colors } from './Color';
 
 export type Styles =

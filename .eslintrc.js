@@ -19,10 +19,6 @@ module.exports = {
             'error',
             'always',
         ],
-        quotes: [
-            'error',
-            'single',
-        ],
         'comma-dangle': [
             'error',
             'always-multiline',

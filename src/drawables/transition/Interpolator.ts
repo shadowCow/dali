@@ -1,4 +1,4 @@
-import { assertNever } from '../../util/typeGuards';
+import { assertNever } from '../../util/patternMatching';
 import { RecursivePartial } from './Transition';
 
 export enum InterpolatorTypes {

@@ -2,7 +2,6 @@ import { Drawable, primitiveDrawable } from '../../drawables/drawable';
 import { bezierCurveTo, ellipse, line, lineTo, moveTo, path, polygon, polyline, quadraticCurveTo, rect, text, equilateralPolygon, Font } from '../../drawables/primitives/primitiveShapes';
 import { stroke, strokeAndFill, Styles } from '../../drawables/styles/Styles';
 import { run } from '../../index';
-import { createCanvasAndPainter } from '../../painter/CanvasPainter';
 import { Painter } from '../../painter/Painter';
 import * as Scene from '../../scene/Scene';
 import * as SceneLayer from '../../scene/SceneLayer';
