@@ -33,10 +33,8 @@ describe('Sprite', () => {
             'a',
             0,
             0,
-            t1,
             [t1, t2],
             500,
-            0,
         );
 
         const fsm = Fsm.create(

@@ -81,7 +81,9 @@ export namespace GameEngine {
 
                 if (entity.renderer) {
                     const sprite = entity.renderer;
-                    if (sprite.tag === Sprite.StateTag.ANIMATED) {
+                    if (sprite.tag === Sprite.StateTag.ANIMATED &&
+                        sprite.playing === true) {
+                            
                         Sprite.transition(
                             sprite,
                             Sprite.tick(dt),

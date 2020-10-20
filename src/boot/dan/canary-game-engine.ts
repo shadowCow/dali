@@ -28,8 +28,14 @@ const textureParams: TextureLoader.Params[] = [
         'tiles-overworld.png',
         [TextureLoader.irregularReference(
             'autumn_ground',
-            0,
-            0,
+            2 * (1 + 16),
+            1,
+            16,
+            16,
+        ),TextureLoader.irregularReference(
+            'autumn_rock',
+            1 * (1 + 16),
+            1,
             16,
             16,
         )],
@@ -69,13 +75,20 @@ function createInitialEntities(
     );
 
     map.forEach((r,ri) => r.forEach((s,ci) => {
-        s.cx = ci * tileDimensions.x;
-        s.cy = ri * tileDimensions.y;
+        s.cx = ci * tileDimensions.x + tileDimensions.x/2;
+        s.cy = ri * tileDimensions.y + tileDimensions.y/2;
     }));
 
-    const invisibleRock = {
+    const rockPhysics = Bodies.rectangle(72, 72, 16, 16, {isStatic: true});
+    const rock = {
         id: 'rock',
-        physics: Bodies.rectangle(72, 72, 16, 16, {isStatic: true}),
+        renderer: Sprite.createStatic(
+            'autumn_rock',
+            rockPhysics.position.x,
+            rockPhysics.position.y,
+            resources.textureCache['autumn_rock'],
+        ),
+        physics: rockPhysics,
     };
 
     const linkId = 'link';
@@ -84,13 +97,11 @@ function createInitialEntities(
         linkId,
         linkCollider.position.x,
         linkCollider.position.y,
-        resources.textureCache['link_idle_down'],
         [
             resources.textureCache['link_idle_down'],
             resources.textureCache['link_moving_down'],
         ],
         250,
-        0,
     );
     const link = {
         id: linkId,
@@ -108,7 +119,7 @@ function createInitialEntities(
     }));
 
     entities.push(link);
-    entities.push(invisibleRock);
+    entities.push(rock);
 
     return entities;
 }
@@ -145,7 +156,18 @@ function gameUpdateFn(
         linkEntity,
         linkVelocity,
     );
-
+    const renderer = linkEntity.renderer;
+    if (renderer && renderer.tag === Sprite.StateTag.ANIMATED) {
+        if (linkVelocity.x !== 0 || linkVelocity.y !== 0) {
+            renderer.playing = true;
+        } else {
+            Sprite.transition(
+                renderer,
+                Sprite.reset(),
+            );
+        }
+    }
+    
     return updates;
 }
 

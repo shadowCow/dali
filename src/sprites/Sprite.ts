@@ -44,37 +44,39 @@ export namespace Sprite {
         frames: Texture.State[],
         frameIntervalMs: number,
         cyclePositionMs: number,
+        playing: boolean,
     } & CommonState;
 
     export function createAnimated(
         id: string,
         cx: number,
         cy: number,
-        texture: Texture.State,
         frames: Texture.State[],
         frameIntervalMs: number,
-        cyclePositionMs: number,
     ): Animated {
         return {
             tag: StateTag.ANIMATED,
             id,
             cx,
             cy,
-            texture,
+            texture: frames[0],
             frames,
             frameIntervalMs,
-            cyclePositionMs,
+            cyclePositionMs: 0,
+            playing: false,
         };
     }
 
     export enum ActionTag {
         TICK = 'TICK',
         SET_POSITION = 'SET_POSITION',
+        RESET = 'RESET',
     }
 
     export type Action =
         Tick |
-        SetPosition;
+        SetPosition |
+        Reset;
 
     export type Tick = {
         tag: typeof ActionTag.TICK,
@@ -107,6 +109,16 @@ export namespace Sprite {
         };
     }
 
+    export type Reset = {
+        tag: typeof ActionTag.RESET,
+    }
+
+    export function reset(): Reset {
+        return {
+            tag: ActionTag.RESET,
+        };
+    }
+
     export type AnimatedFsm =
         Fsm.Container<Animated,Action>;
 
@@ -131,6 +143,11 @@ export namespace Sprite {
             [ActionTag.SET_POSITION]: (s, a) => {
                 s.cx = a.cx;
                 s.cy = a.cy;
+            },
+            [ActionTag.RESET]: (s, a) => {
+                s.playing = false;
+                s.texture = s.frames[0];
+                s.cyclePositionMs = 0;
             },
         },
     });
