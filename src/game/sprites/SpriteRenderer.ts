@@ -1,5 +1,5 @@
 import { Sprite } from "./Sprite";
-import { Painter } from "../painter/Painter";
+import { Painter } from "../../painter/Painter";
 
 export namespace SpriteRendererCanvas {
 

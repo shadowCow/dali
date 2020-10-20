@@ -1,6 +1,6 @@
 import { Texture } from "./Texture";
-import { Fsm } from "../util/Fsm";
-import { MatcherDict2, matcher2, Tags } from "../util/patternMatching";
+import { Fsm } from "../../util/Fsm";
+import { MatcherDict2, matcher2, Tags } from "../../util/patternMatching";
 
 export namespace Sprite {
     

@@ -1,9 +1,9 @@
 import { TextureLoader } from "../sprites/Texture";
-import { GameEngine, EntityStore, GameEntity } from "../game/Game";
+import { GameEngine, EntityStore, GameEntity } from "../GameEngine";
 import { Engine } from "matter-js";
-import { Painter, prepareCanvas } from "../painter/Painter";
+import { Painter, prepareCanvas } from "../../painter/Painter";
 import { SpriteRendererCanvas } from "../sprites/SpriteRenderer";
-import { createEngine } from "./dan/top-down-physics";
+import { createEngine } from "./top-down-physics";
 import { Sprite } from "../sprites/Sprite";
 
 export type Game2dTopDownParams = {

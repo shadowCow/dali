@@ -1,11 +1,11 @@
-import { Buttons, ButtonMap, createKeyboard } from '../../input/Keyboard';
+import { Buttons, ButtonMap, createKeyboard } from '../input/Keyboard';
 import * as Matter from 'matter-js';
 import { createEngine } from './top-down-physics';
 import { text } from '../../drawables/primitives/primitiveShapes';
-import { EntityStore, GameEngine, GameEntity } from '../../game/Game';
-import { TextureLoader, Texture } from '../../sprites/Texture';
-import { bootUp } from '../game2dTopDown';
-import { Sprite } from '../../sprites/Sprite';
+import { EntityStore, GameEngine, GameEntity } from '../GameEngine';
+import { TextureLoader, Texture } from '../sprites/Texture';
+import { bootUp } from './game2dTopDown';
+import { Sprite } from '../sprites/Sprite';
 
 const textureParams: TextureLoader.Params[] = [
     TextureLoader.irregularParams(

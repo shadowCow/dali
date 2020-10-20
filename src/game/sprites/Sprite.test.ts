@@ -1,5 +1,5 @@
 import { Sprite } from "./Sprite";
-import { Fsm } from "../util/Fsm";
+import { Fsm } from "../../util/Fsm";
 
 describe('Sprite', () => {
 

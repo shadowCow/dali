@@ -1,4 +1,4 @@
-import { assertNever } from "../util/patternMatching";
+import { assertNever } from "../../util/patternMatching";
 
 export namespace Texture {
     export type State = {
