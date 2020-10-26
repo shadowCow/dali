@@ -5,6 +5,8 @@ import { Sprite } from './sprites/Sprite';
 import { Painter } from '../painter/Painter';
 import { SpriteRendererCanvas } from './sprites/SpriteRenderer';
 import { Texture } from './sprites/Texture';
+import { GameStateController } from './input/Keyboard';
+import { PauseMenu } from './menu/Menu';
 
 export namespace GameEntity {
     export type State = {
@@ -37,9 +39,10 @@ export namespace GameEngine {
         stage: Sprite.Container.State,
         physicsEngine: Engine,
         entityStore: EntityStore.State,
+        isPaused: boolean,
     }
 
-    export type GameUpdateFn = (
+    export type GameLogicFn = (
         resources: Resources,
         entityStore: EntityStore.State,
         dt: number
@@ -47,8 +50,10 @@ export namespace GameEngine {
 
     export function run(
         resources: Resources,
+        gameStateController: GameStateController,
+        pauseMenuController: PauseMenu.Controller,
         state: State,
-        updateGameState: GameUpdateFn,
+        gameLogicFn: GameLogicFn,
     ): void {
         Object.values(state.entityStore).forEach(entity => {
             addEntity(state, entity);
@@ -60,43 +65,67 @@ export namespace GameEngine {
             oldTime = newTime;	
             if (dt < 0) { dt = 0; }
             if (dt > 1000) { dt = 1000; }
-            
-            const entityUpdates = updateGameState(
-                resources,
-                state.entityStore,
-                dt,
-            );
-            applyUpdates(
-                state,
-                entityUpdates,
-            );
 
-            Engine.update(state.physicsEngine, dt);
-            
-            Object.values(state.entityStore).forEach(entity => {
-                if (entity.physics && entity.renderer) {
-                    entity.renderer.cx = entity.physics.position.x;
-                    entity.renderer.cy = entity.physics.position.y; 
-                }
+            if (!state.isPaused && gameStateController.pause) {
+                state.isPaused = true;
+            }
 
-                if (entity.renderer) {
-                    const sprite = entity.renderer;
-                    if (sprite.tag === Sprite.StateTag.ANIMATED &&
-                        sprite.playing === true) {
-                            
-                        Sprite.transition(
-                            sprite,
-                            Sprite.tick(dt),
-                        );
-                    }
-                }
-            });
+            if (state.isPaused) {
+                pauseMenuController.show();
+            } else {
+                updateGame(
+                    resources,
+                    state,
+                    gameLogicFn,
+                    dt,
+                );
+            }
 
-            state.renderer.paint(state.stage);
             requestAnimationFrame(gameLoop);
         }
 
         requestAnimationFrame(gameLoop);
+    }
+
+    function updateGame(
+        resources: Resources,
+        state: State,
+        gameLogicFn: GameLogicFn,
+        dt: number,
+    ): void {
+        const entityUpdates = gameLogicFn(
+            resources,
+            state.entityStore,
+            dt,
+        );
+        applyUpdates(
+            state,
+            entityUpdates,
+        );
+
+        Engine.update(state.physicsEngine, dt);
+        
+        Object.values(state.entityStore).forEach(entity => {
+            if (entity.physics && entity.renderer) {
+                entity.renderer.cx = entity.physics.position.x;
+                entity.renderer.cy = entity.physics.position.y; 
+            }
+
+            if (entity.renderer) {
+                const sprite = entity.renderer;
+                if (sprite.tag === Sprite.StateTag.ANIMATED &&
+                    sprite.playing === true) {
+                        
+                    Sprite.transition(
+                        sprite,
+                        Sprite.tick(dt),
+                    );
+                }
+            }
+        });
+
+        state.renderer.clear();
+        state.renderer.paint(state.stage);
     }
 
     function applyUpdates(

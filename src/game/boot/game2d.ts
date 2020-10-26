@@ -3,22 +3,26 @@ import { GameEngine, EntityStore, GameEntity } from "../GameEngine";
 import { Engine } from "matter-js";
 import { Painter, prepareCanvas } from "../../painter/Painter";
 import { SpriteRendererCanvas } from "../sprites/SpriteRenderer";
-import { createEngine } from "./top-down-physics";
+import { createTopDownPhysicsEngine } from "../physics/top-down-physics";
 import { Sprite } from "../sprites/Sprite";
+import { PauseMenu } from "../menu/Menu";
+import { KeyboardController } from "../input/Keyboard";
 
-export type Game2dTopDownParams = {
+export type Game2dParams = {
+    keyboardController: KeyboardController,
     textureParams: TextureLoader.Params[],
     createInitialEntities: (
         resources: GameEngine.Resources,
     ) => GameEntity.State[],
-    gameUpdateFn: GameEngine.GameUpdateFn,
+    createPhysicsEngine: () => Matter.Engine,
+    gameLogicFn: GameEngine.GameLogicFn,
     scale: number,
 }
 
 export const canvasId = 'game-canvas';
 
 export function bootUp(
-    params: Game2dTopDownParams,
+    params: Game2dParams,
     containerId?: string,
 ): void {
     const maybeCanvas = prepareCanvas(
@@ -44,7 +48,7 @@ export function bootUp(
             );
     
             const stage = Sprite.Container.create();
-            const physicsEngine = createEngine();
+            const physicsEngine = params.createPhysicsEngine();
     
             const entities = params.createInitialEntities(resources);
             const entityStore: EntityStore.State =
@@ -55,12 +59,19 @@ export function bootUp(
                 stage,
                 physicsEngine,
                 entityStore,
+                isPaused: false,
             };
+            const pauseMenu = PauseMenu.create(
+                document,
+                state,
+            );
 
             GameEngine.run(
                 resources,
+                params.keyboardController,
+                pauseMenu,
                 state,
-                params.gameUpdateFn,
+                params.gameLogicFn,
             );
         });
     } else {

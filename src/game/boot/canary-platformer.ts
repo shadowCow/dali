@@ -1,11 +1,11 @@
-import { Buttons, ButtonMap, createKeyboard } from '../input/Keyboard';
+import { ButtonMap, createKeyboard, createKeyboardControllerMap } from '../input/Keyboard';
 import * as Matter from 'matter-js';
-import { createEngine } from './top-down-physics';
-import { text } from '../../drawables/primitives/primitiveShapes';
+import { createTopDownPhysicsEngine } from '../physics/top-down-physics';
 import { EntityStore, GameEngine, GameEntity } from '../GameEngine';
 import { TextureLoader, Texture } from '../sprites/Texture';
-import { bootUp } from './game2dTopDown';
+import { bootUp } from './game2d';
 import { Sprite } from '../sprites/Sprite';
+import { createPlatformerPhysicsEngine } from '../physics/platformer-physics';
 
 const textureParams: TextureLoader.Params[] = [
     TextureLoader.irregularParams(
@@ -27,12 +27,6 @@ const textureParams: TextureLoader.Params[] = [
     TextureLoader.irregularParams(
         'tiles-overworld.png',
         [TextureLoader.irregularReference(
-            'autumn_ground',
-            2 * (1 + 16),
-            1,
-            16,
-            16,
-        ),TextureLoader.irregularReference(
             'autumn_rock',
             1 * (1 + 16),
             1,
@@ -44,40 +38,26 @@ const textureParams: TextureLoader.Params[] = [
 const Bodies = Matter.Bodies;
  
 
-const buttonMap: ButtonMap = {
-    up: 87, // W
-    down: 83, // S
-    left: 65, // A
-    right: 68, // D
-};
+const keyboardControllerMap = createKeyboardControllerMap();
 
-const buttons = createKeyboard(
-    buttonMap,
+const keyboardController = createKeyboard(
+    keyboardControllerMap,
     document,
 );
 const scale = 3;
-const mapRows = 11;
-const mapColumns = 16;
-const tileDimensions = { x: 16, y: 16 };
 
 bootUp({
+    keyboardController,
     textureParams,
     createInitialEntities,
-    gameUpdateFn,
+    createPhysicsEngine: createPlatformerPhysicsEngine,
+    gameLogicFn: gameUpdateFn,
     scale,
 });
 
 function createInitialEntities(
     resources: GameEngine.Resources,
 ): GameEntity.State[] {
-    const map = createMap(
-        resources.textureCache['autumn_ground'],
-    );
-
-    map.forEach((r,ri) => r.forEach((s,ci) => {
-        s.cx = ci * tileDimensions.x + tileDimensions.x/2;
-        s.cy = ri * tileDimensions.y + tileDimensions.y/2;
-    }));
 
     const rockPhysics = Bodies.rectangle(72, 72, 16, 16, {isStatic: true});
     const rock = {
@@ -92,7 +72,7 @@ function createInitialEntities(
     };
 
     const linkId = 'link';
-    const linkCollider = Bodies.rectangle(8,8,16,16);
+    const linkCollider = Bodies.rectangle(8,8,16,16,{isStatic:true});
     const linkSprite = Sprite.createAnimated(
         linkId,
         linkCollider.position.x,
@@ -109,22 +89,22 @@ function createInitialEntities(
         physics: linkCollider,
     };
 
-    const entities: GameEntity.State[] = [];
+    const ground = {
+        id: 'ground',
+        physics: Bodies.rectangle(0, 8*16, 8*16, 16, {isStatic:true}),
+    };
 
-    map.forEach(r => r.forEach(item => {
-        entities.push({
-            id: item.id,
-            renderer: item,
-        });
-    }));
+    const entities: GameEntity.State[] = [];
 
     entities.push(link);
     entities.push(rock);
+    entities.push(ground);
 
     return entities;
 }
 
 const movementPerMs = 48 / 1000;
+const jumpSpeed = 100 / 1000;
 
 function gameUpdateFn(
     resources: GameEngine.Resources,
@@ -132,30 +112,33 @@ function gameUpdateFn(
     dt: number
 ): EntityStore.Update[] {
     const updates: EntityStore.Update[] = [];
+    const linkEntity = entities['link'];
 
     const linkVelocity = {x: 0, y: 0};
-    if (buttons.up) {
-        linkVelocity.y += -1 * movementPerMs * dt;
-        // linkSprite.y -= movementPerMs * delta;
+    if (keyboardController.verticalAxisMinus) {
+        linkVelocity.y += -1 * jumpSpeed * dt;
     }
-    if (buttons.down) {
-        linkVelocity.y += movementPerMs * dt;
-        // linkSprite.y += movementPerMs * delta;
-    }
-    if (buttons.left) {
+    if (keyboardController.horizontalAxisMinus) {
         linkVelocity.x += -1 * movementPerMs * dt;
         // linkSprite.x -= movementPerMs * delta;
     }
-    if (buttons.right) {
+    if (keyboardController.horizontalAxisPlus) {
         linkVelocity.x += movementPerMs * dt;
         // linkSprite.x += movementPerMs * delta;
     }
 
-    const linkEntity = entities['link'];
-    GameEntity.setVelocity(
-        linkEntity,
-        linkVelocity,
-    );
+    const physics = linkEntity.physics;
+    if (physics) {
+        Matter.Body.setVelocity(
+            physics,
+            {
+                x: physics.velocity.x + linkVelocity.x,
+                y: physics.velocity.y + linkVelocity.y,
+            }
+            
+        );
+    }
+
     const renderer = linkEntity.renderer;
     if (renderer && renderer.tag === Sprite.StateTag.ANIMATED) {
         if (linkVelocity.x !== 0 || linkVelocity.y !== 0) {
@@ -171,24 +154,3 @@ function gameUpdateFn(
     return updates;
 }
 
-
-function createMap(
-    texture: Texture.State,
-): Array<Array<Sprite.Static>> {
-    const mapSprites: Array<Array<Sprite.Static>> = [];
-
-    for (let r = 0; r < mapRows; r++) {
-        mapSprites.push(<Sprite.Static[]>[]);
-        for (let c = 0; c < mapColumns; c++) {
-            const id = `map_${c}_${r}`;
-            mapSprites[r].push(Sprite.createStatic(
-                id,
-                0,
-                0,
-                texture,
-            ));
-        }
-    }
-
-    return mapSprites;
-}

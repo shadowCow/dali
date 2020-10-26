@@ -42,6 +42,7 @@ function createCanvas(
 ): HTMLCanvasElement {
     const canvas = document.createElement('canvas');
     canvas.id = canvasId;
+    canvas.style.zIndex = '100';
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.width = container.offsetWidth;
