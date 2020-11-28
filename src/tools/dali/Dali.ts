@@ -1,10 +1,7 @@
 import { withCanvas } from "../../painter/Painter";
 import { createDaliPainter, DaliPainter } from "./DaliPainter";
-import { branchEntity, BranchEntity, LeafEntity, leafEntity } from "./DaliEntity";
-import { Branch, branch, leaf, traverseDepthFirst } from "./Tree";
-import { rect } from "./drawables/primitives/primitiveShapes";
-import { fill } from "./drawables/styles/Styles";
-import { Colors } from "./drawables/styles/Color";
+import { BranchEntity, LeafEntity } from "./DaliEntity";
+import { Branch, traverseDepthFirst } from "./Tree";
 
 const canvasId = 'dali-canvas';
 

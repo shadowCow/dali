@@ -18,3 +18,10 @@ need to set up the multiple channels for music, ambience, etc
 
 - finish up the Persistence system
 finish the menu system first so we can test it out
+
+## Dali
+- Need to get composites working.
+  Specifically, need the 'params', which i can update, which 
+  propagates down the line.  or something.
+
+- Need to get the DOM views working so i can manipulate the scene.
