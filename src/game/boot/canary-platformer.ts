@@ -1,6 +1,5 @@
 import { ButtonMap, createKeyboard, createKeyboardControllerMap } from '../input/Keyboard';
 import * as Matter from 'matter-js';
-import { createTopDownPhysicsEngine } from '../physics/top-down-physics';
 import { EntityStore, GameEngine, GameEntity } from '../GameEngine';
 import { TextureLoader, Texture } from '../sprites/Texture';
 import { bootUp } from './game2d';
@@ -59,7 +58,13 @@ function createInitialEntities(
     resources: GameEngine.Resources,
 ): GameEntity.State[] {
 
-    const rockPhysics = Bodies.rectangle(72, 72, 16, 16, {isStatic: true});
+    const rockPhysics = Bodies.rectangle(
+        72, 72, 16, 16,
+        {
+            isStatic: true,
+            restitution: 0,
+        },
+    );
     const rock = {
         id: 'rock',
         renderer: Sprite.createStatic(
@@ -72,7 +77,15 @@ function createInitialEntities(
     };
 
     const linkId = 'link';
-    const linkCollider = Bodies.rectangle(8,8,16,16,{isStatic:true});
+
+    // const linkCollider = Bodies.rectangle(
+    //     8,8,16,16,
+    //     { restitution: 0 },
+    // );
+    const linkCollider = Bodies.circle(
+        8, 8, 8,
+        { restitution: 0 },
+    );
     const linkSprite = Sprite.createAnimated(
         linkId,
         linkCollider.position.x,
@@ -91,7 +104,13 @@ function createInitialEntities(
 
     const ground = {
         id: 'ground',
-        physics: Bodies.rectangle(0, 8*16, 8*16, 16, {isStatic:true}),
+        physics: Bodies.rectangle(
+            0, 8*16, 16*16, 16,
+            {
+                isStatic:true,
+                restitution: 0,
+            },
+        ),
     };
 
     const entities: GameEntity.State[] = [];
@@ -127,22 +146,25 @@ function gameUpdateFn(
         // linkSprite.x += movementPerMs * delta;
     }
 
+    GameEntity.setVelocity(
+        linkEntity,
+        linkVelocity,
+    );
     const physics = linkEntity.physics;
     if (physics) {
-        Matter.Body.setVelocity(
-            physics,
-            {
-                x: physics.velocity.x + linkVelocity.x,
-                y: physics.velocity.y + linkVelocity.y,
-            }
-            
-        );
+        // Matter.Body.setVelocity(
+        //     physics,
+        //     {
+        //         x: physics.velocity.x + linkVelocity.x,
+        //         y: physics.velocity.y + linkVelocity.y,
+        //     }
+        // );
     }
 
     const renderer = linkEntity.renderer;
     if (renderer && renderer.tag === Sprite.StateTag.ANIMATED) {
         if (linkVelocity.x !== 0 || linkVelocity.y !== 0) {
-            renderer.playing = true;
+            //renderer.playing = true;
         } else {
             Sprite.transition(
                 renderer,

@@ -1,9 +1,7 @@
 import { TextureLoader } from "../sprites/Texture";
 import { GameEngine, EntityStore, GameEntity } from "../GameEngine";
-import { Engine } from "matter-js";
-import { Painter, prepareCanvas } from "../../painter/Painter";
+import { prepareCanvas } from "../../painter/Painter";
 import { SpriteRendererCanvas } from "../sprites/SpriteRenderer";
-import { createTopDownPhysicsEngine } from "../physics/top-down-physics";
 import { Sprite } from "../sprites/Sprite";
 import { PauseMenu } from "../menu/Menu";
 import { KeyboardController } from "../input/Keyboard";

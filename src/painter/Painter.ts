@@ -4,6 +4,29 @@ export type Painter<T> = {
     clear: () => void,
 }
 
+export function withCanvas(
+    document: Document,
+    canvasId: string,
+    containerId?: string,
+): (f: (c: {
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+}) => void) => void {
+    const maybeCanvas = prepareCanvas(
+        document,
+        canvasId,
+        containerId,
+    );
+
+    if (maybeCanvas) {
+        return (f) => {
+            f(maybeCanvas);
+        };
+    } else {
+        throw 'Unable to create canvas';
+    }
+}
+
 export function prepareCanvas(
     document: Document,
     canvasId: string,

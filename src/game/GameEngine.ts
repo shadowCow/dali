@@ -27,6 +27,19 @@ export namespace GameEntity {
             );
         }
     }
+
+    export function setPosition(
+        entity: State,
+        position: Vec2,
+    ): void {
+        const physics = entity.physics;
+        if (physics) {
+            Body.setPosition(
+                physics,
+                position,
+            );
+        }
+    }
 }
 
 export namespace GameEngine {

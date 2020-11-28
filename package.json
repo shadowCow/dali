@@ -17,18 +17,22 @@
     "ts-jest": "^25.5.1",
     "ts-loader": "^7.0.3",
     "typescript": "=3.8.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11",
+    "webpack": "^5.8.0",
+    "webpack-cli": "^4.2.0",
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "webpack --progress --colors",
+    "start": "npm run dali:start",
+    "build": "webpack --progress --color",
     "build:watch": "npm run build -- --watch",
     "test": "npm run test:unit",
     "test:unit": "jest --config=jest/jest.config.unit.js",
     "coverage:unit": "npm run test:unit -- --coverage",
-    "lint": "eslint */**/*.ts --fix"
+    "lint": "eslint */**/*.ts --fix",
+    "dali:start": "webpack serve --config ./config/webpack.dali.js",
+    "dali:build": "webpack --progress --color --config ./config/webpack.dali.js",
+    "game:start": "webpack serve --config ./config/webpack.game.js",
+    "game:build": "webpack --progress --color --config ./config/webpack.game.js"
   },
   "repository": {
     "type": "git",

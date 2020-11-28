@@ -74,7 +74,10 @@ function createInitialEntities(
         s.cy = ri * tileDimensions.y + tileDimensions.y/2;
     }));
 
-    const rockPhysics = Bodies.rectangle(72, 72, 16, 16, {isStatic: true});
+    const rockPhysics = Bodies.rectangle(
+        72, 72, 16, 16,
+        {isStatic: true},
+    );
     const rock = {
         id: 'rock',
         renderer: Sprite.createStatic(
@@ -87,7 +90,10 @@ function createInitialEntities(
     };
 
     const linkId = 'link';
-    const linkCollider = Bodies.rectangle(8,8,16,16);
+    const linkCollider = Bodies.rectangle(
+        8,8,16,16,
+        {restitution: 0},
+    );
     const linkSprite = Sprite.createAnimated(
         linkId,
         linkCollider.position.x,
@@ -127,7 +133,9 @@ function gameUpdateFn(
     dt: number
 ): EntityStore.Update[] {
     const updates: EntityStore.Update[] = [];
-
+    
+    const linkEntity = entities['link'];
+    
     const linkVelocity = {x: 0, y: 0};
     if (keyboardController.verticalAxisMinus) {
         linkVelocity.y += -1 * movementPerMs * dt;
@@ -145,8 +153,7 @@ function gameUpdateFn(
         linkVelocity.x += movementPerMs * dt;
         // linkSprite.x += movementPerMs * delta;
     }
-
-    const linkEntity = entities['link'];
+  
     GameEntity.setVelocity(
         linkEntity,
         linkVelocity,
