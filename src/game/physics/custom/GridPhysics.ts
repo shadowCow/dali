@@ -1,5 +1,5 @@
-import { Vec2 } from "../../../drawables/transform/Vec";
 import { PhysicsBody } from "./Bodies";
+import { Vec2 } from "../../../math/Vec";
 
 export namespace GridPhysics {
 

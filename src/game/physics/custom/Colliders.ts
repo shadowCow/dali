@@ -1,4 +1,5 @@
-import { Vec2 } from "../../../drawables/transform/Vec";
+import { Vec2 } from "../../../math/Vec";
+
 
 export namespace AABB {
     /**

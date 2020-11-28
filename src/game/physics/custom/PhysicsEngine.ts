@@ -1,6 +1,6 @@
 import { PhysicsBody } from "./Bodies";
-import { Vec2 } from "../../../drawables/transform/Vec";
 import { AABB } from "./Colliders";
+import { Vec2 } from "../../../math/Vec";
 
 export namespace PhysicsEngine {
 

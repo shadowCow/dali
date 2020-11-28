@@ -1,12 +1,12 @@
 import { Bodies, Body, Engine, World } from 'matter-js';
 import { assertNever } from '../util/patternMatching';
-import { Vec2 } from '../drawables/transform/Vec';
 import { Sprite } from './sprites/Sprite';
 import { Painter } from '../painter/Painter';
 import { SpriteRendererCanvas } from './sprites/SpriteRenderer';
 import { Texture } from './sprites/Texture';
 import { GameStateController } from './input/Keyboard';
 import { PauseMenu } from './menu/Menu';
+import { Vec2 } from '../math/Vec';
 
 export namespace GameEntity {
     export type State = {
