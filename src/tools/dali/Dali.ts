@@ -8,34 +8,26 @@ import { Colors } from "./drawables/styles/Color";
 
 const canvasId = 'dali-canvas';
 
-withCanvas(
-    document,
-    canvasId,
-)(({canvas, ctx}) => {
-    // TODO - add dom around the canvas
-
-    const painter = createDaliPainter(
-        canvas,
-        ctx,
-    );
-
-    const myLeaf = leaf<LeafEntity>(
-        leafEntity(
-            'myLeaf',
-            rect(100, 200),
-            fill(Colors.Blue()),
-        ),
-    );
-    const root = branch(
-        [myLeaf],
-        branchEntity('root'),
-    );
-
-    runPainterAnimationLoop(
-        root,
-        painter,
-    );
-});
+export function start(
+    root: Branch<BranchEntity, LeafEntity>,
+): void {
+    withCanvas(
+        document,
+        canvasId,
+    )(({canvas, ctx}) => {
+        // TODO - add dom around the canvas
+    
+        const painter = createDaliPainter(
+            canvas,
+            ctx,
+        );
+    
+        runPainterAnimationLoop(
+            root,
+            painter,
+        );
+    });
+}
 
 function runPainterAnimationLoop(
     root: Branch<BranchEntity, LeafEntity>,
