@@ -7,7 +7,6 @@ export enum GeometricPrimitive2Kinds {
     LINE = 'LINE',
     POLYLINE = 'POLYLINE',
     POLYGON = 'POLYGON',
-    EQUILATERAL_POLYGON = 'EQUILATERAL_POLYGON',
     PATH = 'PATH',
     IMAGE = 'IMAGE',
 }
@@ -19,7 +18,6 @@ export type GeometricPrimitive2 =
     Line |
     Polyline |
     Polygon |
-    EquilateralPolygon |
     Path |
     Quad;
 
@@ -157,26 +155,6 @@ export function polygon(
     return {
         kind: GeometricPrimitive2Kinds.POLYGON,
         params: { points },
-    };
-}
-
-export type EquilateralPolygon = {
-    kind: typeof GeometricPrimitive2Kinds.EQUILATERAL_POLYGON,
-    params: EquilateralPolygonParams,
-}
-
-export type EquilateralPolygonParams = {
-    n: number,
-    radius: number,
-}
-
-export function equilateralPolygon(
-    n: number,
-    radius: number,
-): EquilateralPolygon {
-    return {
-        kind: GeometricPrimitive2Kinds.EQUILATERAL_POLYGON,
-        params: { n, radius },
     };
 }
 

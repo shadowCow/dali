@@ -1,16 +1,16 @@
 
-import { GeometricPrimitive2 } from './primitives/primitiveShapes';
+import { GeometricPrimitive2 } from './primitives/GeometricPrimitive2';
 import { Styles } from './styles/Styles';
 import { Transform, createTransform } from './transform/Transform';
 
-export enum DrawableTypes {
-    PRIMITIVE_DRAWABLE = 'PRIMITIVE_DRAWABLE',
-    COMPOSITE_DRAWABLE = 'COMPOSITE_DRAWABLE',
-}
-
 export type Drawable =
     PrimitiveDrawable |
-    CompositeDrawable;
+    DrawableGroup;
+
+export enum DrawableTypes {
+    PRIMITIVE_DRAWABLE = 'PRIMITIVE_DRAWABLE',
+    DRAWABLE_GROUP = 'DRAWABLE_GROUP',
+}
 
 export type PrimitiveDrawable = {
     kind: typeof DrawableTypes.PRIMITIVE_DRAWABLE;
@@ -35,23 +35,22 @@ export function primitiveDrawable(
     };
 }
 
-export type CompositeDrawable = {
-    kind: typeof DrawableTypes.COMPOSITE_DRAWABLE;
+export type DrawableGroup = {
+    kind: typeof DrawableTypes.DRAWABLE_GROUP;
     id: string;
-    transform: Transform;
-    drawables: Array<Drawable>;
+    transform: Transform,
+    styles?: Styles,
 }
 
-export function compositeDrawable(
+export function drawableGroup(
     id: string,
-    drawables: Array<Drawable>,
     transform?: Transform,
-): CompositeDrawable {
+    styles?: Styles,
+): DrawableGroup {
     return {
-        kind: DrawableTypes.COMPOSITE_DRAWABLE,
+        kind: DrawableTypes.DRAWABLE_GROUP,
         id,
         transform: transform || createTransform(),
-        drawables,
+        styles,
     };
 }
-

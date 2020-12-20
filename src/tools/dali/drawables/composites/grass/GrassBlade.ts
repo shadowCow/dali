@@ -1,5 +1,5 @@
 import { PrimitiveDrawable, primitiveDrawable } from '../../drawable';
-import { path, bezierCurveTo, quadraticCurveTo, moveTo, lineTo } from '../../primitives/primitiveShapes';
+import { path, bezierCurveTo, quadraticCurveTo, moveTo, lineTo } from '../../primitives/GeometricPrimitive2';
 import { Color } from '../../styles/Color';
 import * as Transform from '../../transform/Transform';
 import { fill } from '../../styles/Styles';

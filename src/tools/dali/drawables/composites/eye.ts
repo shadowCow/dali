@@ -1,144 +1,134 @@
-// import { CompositeDrawable, compositeDrawable, PrimitiveDrawable, primitiveDrawable, withTransform } from '../drawable';
-// import { ellipse } from '../primitives/primitiveShapes';
-// import { fill, strokeAndFill } from '../styles/Styles';
-// import * as Transform from '../transform/Transform';
-// import { Color, Colors } from '../styles/Color';
-// import { pipe, through } from '../../../../util/pipe';
 
-// export type EyePairParams = {
-//     eyeSpacing: number,
-//     eyeParams: EyeParams,
-// }
+import { fill, strokeAndFill } from '../styles/Styles';
+import { Color, Colors } from '../styles/Color';
+import { pipe, through } from '../../../../util/pipe';
+import { Composer } from './Composer';
+import { branch, Leaf, leaf } from '../../Tree';
+import { drawableGroup, PrimitiveDrawable, primitiveDrawable } from '../drawable';
+import { ellipse } from '../primitives/GeometricPrimitive2';
+import { createTransform } from '../transform/Transform';
 
-// export function eyePairParams(
-//     eyeSpacing: number,
-//     irisRadius: number,
-//     irisColor: Color,
-// ): EyePairParams {
-//     return {
-//         eyeSpacing,
-//         eyeParams: { irisRadius, irisColor },
-//     };
-// }
+export type EyePairProps = {
+    eyeSpacing: number,
+    eyeProps: EyeProps,
+}
 
-// export function eyePair(
-//     id: string,
-//     params: EyePairParams,
-// ): CompositeDrawable {
-//     const {
-//         eyeSpacing,
-//         eyeParams,
-//     } = params;
+export const EyePair: Composer<EyePairProps> = (
+    id: string,
+    props: EyePairProps,
+) => {
+    const {
+        eyeSpacing,
+        eyeProps,
+    } = props;
 
-//     const centerXEye1 = 0 - eyeSpacing/2 - eyeParams.irisRadius*2;
-//     const centerXEye2 = 0 + eyeSpacing/2 + eyeParams.irisRadius*2;
+    const centerXEye1 = 0 - eyeSpacing/2 - eyeProps.irisRadius*2;
+    const centerXEye2 = 0 + eyeSpacing/2 + eyeProps.irisRadius*2;
 
-//     const drawables = [
-//         pipe(
-//             eye(
-//                 id + 'eyeOne',
-//                 eyeParams,
-//             ),
-//             through(
-//                 withTransform(Transform.create({
-//                     translate: { x: centerXEye1, y: 0 },
-//                 }))
-//             )
-//         ),
-//         pipe(
-//             eye(
-//                 id + 'eyeTwo',
-//                 eyeParams,
-//             ),
-//             through(
-//                 withTransform(Transform.create({
-//                     translate: { x: centerXEye2, y: 0 },
-//                 }))
-//             )
-//         ),
-//     ];
+    const leftEye = Eye(
+        id + 'eyeOne',
+        eyeProps,
+    );
+    leftEye.content.transform.translation = { x: centerXEye1, y: 0, z: 0};
 
-//     return compositeDrawable(
-//         id,
-//         drawables,
-//     );
-// }
+    const rightEye = Eye(
+        id + 'eyeTwo',
+        eyeProps,
+    );
+    rightEye.content.transform.translation = { x: centerXEye2, y: 0, z: 0};
 
-// export type EyeParams = {
-//     irisRadius: number,
-//     irisColor: Color,
-// }
+    const drawables = [
+        leftEye,
+        rightEye,
+    ];
 
-// export function eye(
-//     id: string,
-//     params: EyeParams,
-// ): CompositeDrawable {
-//     const {
-//         irisRadius,
-//         irisColor,
-//     } = params;
+    return branch(
+        drawables,
+        drawableGroup(id),
+    );
+};
+
+export type EyeProps = {
+    irisRadius: number,
+    irisColor: Color,
+}
+
+export const Eye: Composer<EyeProps> = (
+    id: string,
+    props: EyeProps,
+) => {
+    const {
+        irisRadius,
+        irisColor,
+    } = props;
   
-//     const drawables = [
-//         eyeOutline(id, { irisRadius }),
-//         iris(id, { radius: irisRadius, color: irisColor }),
-//         pupil(id, { radius: irisRadius/2 }),
-//     ];
+    const drawables = [
+        eyeOutline(id, { irisRadius }),
+        iris(id, { radius: irisRadius, color: irisColor }),
+        pupil(id, { radius: irisRadius/2 }),
+    ];
 
-//     return compositeDrawable(
-//         id,
-//         drawables,
-//     );
-// }
+    return branch(
+        drawables,
+        drawableGroup(id),
+    );
+};
 
-// export type IrisParams = {
-//     radius: number,
-//     color: Color,
-// }
+export type IrisProps = {
+    radius: number,
+    color: Color,
+}
 
-// function iris(
-//     eyeId: string,
-//     params: IrisParams,
-// ): PrimitiveDrawable {
-//     return primitiveDrawable(
-//         eyeId + '-iris',
-//         ellipse(params.radius, params.radius),
-//         Transform.create(),
-//         fill(params.color),
-//     );
-// }
+function iris(
+    eyeId: string,
+    params: IrisProps,
+): Leaf<PrimitiveDrawable> {
+    const pd = primitiveDrawable(
+        eyeId + '-iris',
+        ellipse(params.radius, params.radius),
+        createTransform(),
+        fill(params.color),
+    );
 
-// export type PupilParams = {
-//     radius: number,
-// }
+    return leaf(pd);
+}
 
-// function pupil(
-//     eyeId: string,
-//     params: PupilParams,
-// ): PrimitiveDrawable {
-//     return primitiveDrawable(
-//         eyeId + '-pupil',
-//         ellipse(params.radius, params.radius),
-//         Transform.create(),
-//         fill(Colors.Black()),
-//     );
-// }
+export type PupilProps = {
+    radius: number,
+}
 
-// export type EyeOutlineParams = {
-//     irisRadius: number,
-// }
+function pupil(
+    eyeId: string,
+    params: PupilProps,
+): Leaf<PrimitiveDrawable> {
+    const pd = primitiveDrawable(
+        eyeId + '-pupil',
+        ellipse(params.radius, params.radius),
+        createTransform(),
+        fill(Colors.Black()),
+    );
 
-// function eyeOutline(
-//     eyeId: string,
-//     params: EyeOutlineParams,
-// ): PrimitiveDrawable {
-//     return primitiveDrawable(
-//         eyeId + '-eyeOutline',
-//         ellipse(params.irisRadius * 2, params.irisRadius * 2),
-//         Transform.create(),
-//         strokeAndFill(
-//             Colors.Black(),
-//             3,
-//             Colors.White(),
-//         ),
-//     );
-// }
+    return leaf(pd);
+}
+
+export type EyeOutlineProps = {
+    irisRadius: number,
+}
+
+function eyeOutline(
+    eyeId: string,
+    params: EyeOutlineProps,
+): Leaf<PrimitiveDrawable> {
+    const pd = primitiveDrawable(
+        eyeId + '-eyeOutline',
+        ellipse(params.irisRadius * 2, params.irisRadius * 2),
+        createTransform(),
+        strokeAndFill(
+            Colors.Black(),
+            3,
+            Colors.White(),
+        ),
+    );
+
+    return leaf(pd);
+}

@@ -1,4 +1,4 @@
-import { CompositeDrawable, DrawableTypes, compositeDrawable, Drawable } from './drawable';
+import { DrawableGroup, DrawableTypes, drawableGroup, Drawable } from './drawable';
 
 export type RadialParams = {
     radius: number,

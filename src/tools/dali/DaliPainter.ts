@@ -1,16 +1,15 @@
 import { Painter } from "../../painter/Painter";
-import { Drawable, DrawableTypes, CompositeDrawable, PrimitiveDrawable } from "./drawables/drawable";
+import { Drawable, DrawableTypes, DrawableGroup, PrimitiveDrawable } from "./drawables/drawable";
 import { assertNever } from "../../util/patternMatching";
 import { MatchStylesHandler, Styles, matchStyles } from "./drawables/styles/Styles";
 import { cssColorString } from "./drawables/styles/Color";
-import { GeometricPrimitive2Kinds, Quad, Text, fontString, Ellipse, Rect, Line, Polyline, Polygon, EquilateralPolygon, Path, PathSegment, PathSegmentTypes } from "./drawables/primitives/primitiveShapes";
+import { GeometricPrimitive2Kinds, Quad, Text, fontString, Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, PathSegmentTypes } from "./drawables/primitives/GeometricPrimitive2";
 import { Transform } from "./drawables/transform/Transform";
 import { VecXY } from "../../math/Vec";
 import { TreeNode, TreeNodeKind, Branch, Leaf } from "./Tree";
-import { BranchEntity, LeafEntity } from "./DaliEntity";
 
 export type DaliPainter = Painter<
-    TreeNode<BranchEntity, LeafEntity>
+    TreeNode<DrawableGroup, PrimitiveDrawable>
 >;
 
 export function createDaliPainter(
@@ -20,7 +19,7 @@ export function createDaliPainter(
 ): DaliPainter {
     ctx.scale(scale, scale);
 
-    const paint = (node: TreeNode<BranchEntity, LeafEntity>) => {
+    const paint = (node: TreeNode<DrawableGroup, PrimitiveDrawable>) => {
         switch (node.kind) {
             case TreeNodeKind.BRANCH:
                 drawComposite(node, ctx);
@@ -50,7 +49,7 @@ export function createDaliPainter(
 
 
 function drawComposite(
-    node: Branch<BranchEntity, LeafEntity>,
+    node: Branch<DrawableGroup, PrimitiveDrawable>,
     ctx: CanvasRenderingContext2D
 ): void {
     ctx.save();
@@ -74,7 +73,7 @@ function drawComposite(
 }
 
 function drawPrimitive(
-    node: Leaf<LeafEntity>,
+    node: Leaf<PrimitiveDrawable>,
     ctx: CanvasRenderingContext2D
 ): void {
     ctx.save();
@@ -103,9 +102,6 @@ function drawPrimitive(
             break;
         case GeometricPrimitive2Kinds.POLYGON:
             drawPolygon(ctx, drawable.primitive, drawable.styles);
-            break;
-        case GeometricPrimitive2Kinds.EQUILATERAL_POLYGON:
-            drawEquilateralPolygon(ctx, drawable.primitive, drawable.styles);
             break;
         case GeometricPrimitive2Kinds.IMAGE:
             drawImage(ctx, drawable.primitive);
@@ -287,42 +283,6 @@ function drawPolygon(
         ctx.lineTo(points[i].x, points[i].y);
     }
     ctx.lineTo(points[points.length-1].x, points[points.length-1].y);
-
-    drawToCanvas({
-        stroke: s => ctx.stroke(),
-        fill: f => ctx.fill(),
-        strokeAndFill: sf => {
-            ctx.fill();
-            ctx.stroke();
-        },
-    }, styles);
-
-    ctx.closePath();
-}
-
-function drawEquilateralPolygon(
-    ctx: CanvasRenderingContext2D,
-    equilateralPolygon: EquilateralPolygon,
-    styles?: Styles
-): void {
-    styleCanvas(ctx, styles);
-
-    const { n, radius } = equilateralPolygon.params;
-    const angle = (2*Math.PI) / n;
-    const firstPoint = {
-        x: 0,
-        y: -1 * radius,
-    };
-
-    ctx.beginPath();
-    ctx.moveTo(firstPoint.x, firstPoint.y);
-    for (let i = 1; i < n; i++) {
-        ctx.save();
-        ctx.rotate(i * angle);
-        ctx.lineTo(firstPoint.x, firstPoint.y);
-        ctx.restore();
-    }
-    ctx.lineTo(firstPoint.x, firstPoint.y);
 
     drawToCanvas({
         stroke: s => ctx.stroke(),

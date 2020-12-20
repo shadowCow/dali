@@ -1,7 +1,7 @@
 import * as Duration from './Duration';
 import * as Interpolator from './Interpolator';
 import { Styles, Stroke, Fill, StrokeAndFill, stroke } from '../styles/Styles';
-import { GeometricPrimitive2, Text, Rect, Ellipse, Line, Polyline, Polygon, Path, Quad, EquilateralPolygon } from '../primitives/primitiveShapes';
+import { GeometricPrimitive2, Text, Rect, Ellipse, Line, Polyline, Polygon, Path, Quad } from '../primitives/GeometricPrimitive2';
 import { assertNever } from '../../../../util/patternMatching';
 import { Transform, createTransform } from '../transform/Transform';
 

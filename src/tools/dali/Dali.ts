@@ -1,12 +1,12 @@
 import { withCanvas } from "../../painter/Painter";
 import { createDaliPainter, DaliPainter } from "./DaliPainter";
-import { BranchEntity, LeafEntity } from "./DaliEntity";
 import { Branch, traverseDepthFirst } from "./Tree";
+import { DrawableGroup, PrimitiveDrawable } from "./drawables/drawable";
 
 const canvasId = 'dali-canvas';
 
 export function start(
-    root: Branch<BranchEntity, LeafEntity>,
+    root: Branch<DrawableGroup, PrimitiveDrawable>,
 ): void {
     withCanvas(
         document,
@@ -27,7 +27,7 @@ export function start(
 }
 
 function runPainterAnimationLoop(
-    root: Branch<BranchEntity, LeafEntity>,
+    root: Branch<DrawableGroup, PrimitiveDrawable>,
     painter: DaliPainter,
 ): void {
     let previousTimestampMs = 0;
@@ -53,21 +53,32 @@ function runPainterAnimationLoop(
 }
 
 function updateEntities(
-    root: Branch<BranchEntity, LeafEntity>,
+    root: Branch<DrawableGroup, PrimitiveDrawable>,
     t: number,
     dt: number,
 ): void {
-    traverseDepthFirst<BranchEntity, LeafEntity>(
-        root,
-        (b) => b.content.update(
-            t,
-            dt,
-            b.content,
-        ),
-        (l) => l.content.update(
-            t,
-            dt,
-            l.content,
-        ),
-    );
+    // traverseDepthFirst<BranchEntity, LeafEntity>(
+    //     root,
+    //     (b) => b.content.update(
+    //         t,
+    //         dt,
+    //         b.content,
+    //     ),
+    //     (l) => l.content.update(
+    //         t,
+    //         dt,
+    //         l.content,
+    //     ),
+    // );
 }
+
+
+// export type UpdateFn<T> = (
+//     t: number,
+//     dt: number,
+//     target: T,
+// ) => void;
+
+// export function createNoOpUpdate<T>(): UpdateFn<T> {
+//     return () => {};
+// }
