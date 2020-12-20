@@ -11,6 +11,7 @@ import { Window } from '../drawables/composites/buildings/Window';
 import { Sun } from '../drawables/composites/celestial/Sun';
 import { GrassTuft } from '../drawables/composites/grass/GrassTuft';
 import { Fir } from '../drawables/composites/tree/Fir';
+import { Moon } from '../drawables/composites/celestial/Moon';
 
 
 const myLeaf = leaf<PrimitiveDrawable>(
@@ -90,6 +91,15 @@ const sun = Sun(
 );
 sun.content.transform.translation = {x: 500, y: 200, z: 0};
 
+const moon = Moon(
+    'the-moon',
+    {
+        radius: 50,
+        phaseRatio: 0.42,
+    }
+);
+moon.content.transform.translation = {x: 350, y: 80, z: 0};
+
 const grassTuft = GrassTuft(
     'the-grass',
     {
@@ -115,7 +125,7 @@ const fir = Fir(
 fir.content.transform.translation = {x: 300, y: 250, z: 0};
 
 const root = branch(
-    [reds, waves, eyes, window, sun, grassTuft, fir],
+    [reds, waves, eyes, window, sun, moon, grassTuft, fir],
     drawableGroup('root'),
 );
 
