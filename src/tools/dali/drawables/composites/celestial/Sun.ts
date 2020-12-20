@@ -3,19 +3,21 @@ import { circle } from '../../primitives/GeometricPrimitive2';
 import * as Transform from '../../transform/Transform';
 import { fill } from '../../styles/Styles';
 import { Colors } from '../../styles/Color';
+import { Composer } from '../Composer';
+import { leaf } from '../../../Tree';
 
-export type SunParams = {
+export type SunProps = {
     radius: number,
 }
 
-export function sun(
-    id: string,
-    params: SunParams,
-): PrimitiveDrawable {
-    return primitiveDrawable(
+export const Sun: Composer<SunProps> = (
+    id,
+    props,
+) => {
+    return leaf(primitiveDrawable(
         id,
-        circle(params.radius),
+        circle(props.radius),
         Transform.createTransform(),
         fill(Colors.Yellow()),
-    );
-}
+    ));
+};

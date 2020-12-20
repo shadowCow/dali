@@ -3,19 +3,21 @@ import { path, bezierCurveTo, quadraticCurveTo, moveTo, lineTo } from '../../pri
 import { Color } from '../../styles/Color';
 import * as Transform from '../../transform/Transform';
 import { fill } from '../../styles/Styles';
+import { Composer } from '../Composer';
+import { leaf } from '../../../Tree';
 
-export type GrassBladeParams = {
+export type GrassBladeProps = {
     color: Color,
     halfWidth: number,
     height: number,
     tipOffset: number,
 }
 
-export function grassBlade(
-    id: string,
-    params: GrassBladeParams,
-): PrimitiveDrawable {
-    return primitiveDrawable(
+export const GrassBlade: Composer<GrassBladeProps> = (
+    id,
+    params,
+) => {
+    return leaf(primitiveDrawable(
         id,
         path([
             moveTo(-params.halfWidth, 0),
@@ -35,5 +37,5 @@ export function grassBlade(
         ]),
         Transform.createTransform(),
         fill(params.color),
-    );
-}
+    ));
+};

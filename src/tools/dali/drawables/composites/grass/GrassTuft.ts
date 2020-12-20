@@ -1,98 +1,112 @@
-// import { DrawableGroup, PrimitiveDrawable, drawableGroup } from '../../drawable';
-// import { Color } from '../../styles/Color';
-// import { pipe, through } from '../../../../../util/pipe';
-// import { grassBlade } from './GrassBlade';
+import { DrawableGroup, PrimitiveDrawable, drawableGroup } from '../../drawable';
+import { Color } from '../../styles/Color';
+import { pipe, through } from '../../../../../util/pipe';
+import { GrassBlade } from './GrassBlade';
+import { Composer } from '../Composer';
+import { branch } from '../../../Tree';
 
 
-// export type GrassTuftParams = {
-//     color: Color,
-//     bladeHalfWidth: number,
-//     minBladeHeight: number,
-//     maxBladeHeight: number,
-// }
+export type GrassTuftProps = {
+    color: Color,
+    bladeHalfWidth: number,
+    minBladeHeight: number,
+    maxBladeHeight: number,
+}
 
-// export function grassTuft(
-//     id: string,
-//     params: GrassTuftParams,
-// ): DrawableGroup {
-//     const drawables: PrimitiveDrawable[] = [];
-//     const heightRange = params.maxBladeHeight - params.minBladeHeight;
-
-//     const blade1 = grassBlade(
-//         id + '-1',
-//         {
-//             color: params.color,
-//             halfWidth: params.bladeHalfWidth,
-//             height: params.minBladeHeight,
-//             tipOffset: -params.bladeHalfWidth*3,
-//         },
-//     );
-//     blade1.transform.translation.x = -2.5*params.bladeHalfWidth;
+export const GrassTuft: Composer<GrassTuftProps> = (
+    id,
+    props,
+) => {
+    const {
+        color,
+        bladeHalfWidth,
+        minBladeHeight,
+        maxBladeHeight,
+    } = props;
     
-//     const blade2 = grassBlade(
-//         id + '-2',
-//         {
-//             color: params.color,
-//             halfWidth: params.bladeHalfWidth,
-//             height: params.minBladeHeight + heightRange/2,
-//             tipOffset: -params.bladeHalfWidth*2,
-//         }
-//     );
-//     blade2.transform.translation.x = -1.5*params.bladeHalfWidth;
+    const heightRange = maxBladeHeight - minBladeHeight;
 
-//     const blade3 = grassBlade(
-//         id + '-3',
-//         {
-//             color: params.color,
-//             halfWidth: params.bladeHalfWidth,
-//             height: params.maxBladeHeight,
-//             tipOffset: -params.bladeHalfWidth,
-//         }
-//     );
-//     blade3.transform.translation.x = -0.5*params.bladeHalfWidth;
+    const blade1 = GrassBlade(
+        id + '-1',
+        {
+            color: color,
+            halfWidth: bladeHalfWidth,
+            height: minBladeHeight,
+            tipOffset: -bladeHalfWidth*3,
+        },
+    );
+    blade1.content.transform.translation.x = -2.5*bladeHalfWidth;
+    
+    const blade2 = GrassBlade(
+        id + '-2',
+        {
+            color: color,
+            halfWidth: bladeHalfWidth,
+            height: minBladeHeight + heightRange/2,
+            tipOffset: -bladeHalfWidth*2,
+        }
+    );
+    blade2.content.transform.translation.x = -1.5*bladeHalfWidth;
 
-//     const blade4 = grassBlade(
-//         id + '-4',
-//         {
-//             color: params.color,
-//             halfWidth: params.bladeHalfWidth,
-//             height: params.maxBladeHeight,
-//             tipOffset: params.bladeHalfWidth,
-//         }
-//     );
-//     blade4.transform.translation.x = .5*params.bladeHalfWidth;
+    const blade3 = GrassBlade(
+        id + '-3',
+        {
+            color: color,
+            halfWidth: bladeHalfWidth,
+            height: maxBladeHeight,
+            tipOffset: -bladeHalfWidth,
+        }
+    );
+    blade3.content.transform.translation.x = -0.5*bladeHalfWidth;
 
-//     const blade5 = grassBlade(
-//         id + '-5',
-//         {
-//             color: params.color,
-//             halfWidth: params.bladeHalfWidth,
-//             height: params.minBladeHeight + heightRange/2,
-//             tipOffset: params.bladeHalfWidth*2,
-//         }
-//     );
-//     blade5.transform.translation.x = 1.5*params.bladeHalfWidth;
+    const blade4 = GrassBlade(
+        id + '-4',
+        {
+            color: color,
+            halfWidth: bladeHalfWidth,
+            height: maxBladeHeight,
+            tipOffset: bladeHalfWidth,
+        }
+    );
+    blade4.content.transform.translation.x = .5*bladeHalfWidth;
 
-//     const blade6 = grassBlade(
-//         id + '-6',
-//         {
-//             color: params.color,
-//             halfWidth: params.bladeHalfWidth,
-//             height: params.minBladeHeight,
-//             tipOffset: params.bladeHalfWidth*3,
-//         }
-//     );
-//     blade6.transform.translation.x = 2.5*params.bladeHalfWidth;
+    const blade5 = GrassBlade(
+        id + '-5',
+        {
+            color: color,
+            halfWidth: bladeHalfWidth,
+            height: minBladeHeight + heightRange/2,
+            tipOffset: bladeHalfWidth*2,
+        }
+    );
+    blade5.content.transform.translation.x = 1.5*bladeHalfWidth;
 
-//     drawables.push(blade1);
-//     drawables.push(blade2);
-//     drawables.push(blade3);
-//     drawables.push(blade4);
-//     drawables.push(blade5);
-//     drawables.push(blade6);
+    const blade6 = GrassBlade(
+        id + '-6',
+        {
+            color: color,
+            halfWidth: bladeHalfWidth,
+            height: minBladeHeight,
+            tipOffset: bladeHalfWidth*3,
+        }
+    );
+    blade6.content.transform.translation.x = 2.5*bladeHalfWidth;
 
-//     return drawableGroup(
-//         id,
-//         drawables,
-//     );
-// }
+    const blades = [
+        blade1,
+        blade2,
+        blade3,
+        blade4,
+        blade5,
+        blade6,
+    ];
+
+    const g = drawableGroup(
+        id,
+    );
+
+    return branch(
+        blades,
+        g,
+    );
+};

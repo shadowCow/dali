@@ -7,6 +7,10 @@ import { PrimitiveDrawable, primitiveDrawable, drawableGroup } from '../drawable
 import { createTransform } from '../drawables/transform/Transform';
 import { Waves } from '../drawables/composites/wave';
 import { EyePair } from '../drawables/composites/eye';
+import { Window } from '../drawables/composites/buildings/Window';
+import { Sun } from '../drawables/composites/celestial/Sun';
+import { GrassTuft } from '../drawables/composites/grass/GrassTuft';
+import { Fir } from '../drawables/composites/tree/Fir';
 
 
 const myLeaf = leaf<PrimitiveDrawable>(
@@ -67,8 +71,51 @@ const eyes = EyePair(
 );
 eyes.content.transform.translation = {x: 100, y: 400, z: 0};
 
+const window = Window(
+    'the-window',
+    {
+        frameWidth: 50,
+        frameHeight: 100,
+        frameThickness: 5,
+        frameColor: Colors.Black(),
+    }
+);
+window.content.transform.translation = {x: 500, y: 50, z: 0};
+
+const sun = Sun(
+    'the-sun',
+    {
+        radius: 30,
+    }
+);
+sun.content.transform.translation = {x: 500, y: 200, z: 0};
+
+const grassTuft = GrassTuft(
+    'the-grass',
+    {
+        color: Colors.Green(),
+        bladeHalfWidth: 5,
+        minBladeHeight: 15,
+        maxBladeHeight: 30,
+    }
+);
+grassTuft.content.transform.translation = {x: 250, y: 50, z: 0};
+
+const fir = Fir(
+    'tree',
+    {
+        foliageColor: Colors.Red(),
+        trunkColor: Colors.Black(),
+        treeWidth: 60,
+        treeHeight: 150,
+        trunkWidth: 25,
+        trunkHeight: 20,
+    }
+);
+fir.content.transform.translation = {x: 300, y: 250, z: 0};
+
 const root = branch(
-    [reds, waves, eyes],
+    [reds, waves, eyes, window, sun, grassTuft, fir],
     drawableGroup('root'),
 );
 
