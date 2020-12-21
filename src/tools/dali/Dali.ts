@@ -6,14 +6,16 @@ import { assertNever } from "../../util/patternMatching";
 import { Branch } from "../../data_structures/Tree";
 
 const canvasId = 'dali-canvas';
+const containerId = 'canvas-container';
 
 export function start(
     root: Branch<DrawableGroup, PrimitiveDrawable>,
-    updaters: Array<Updater>,
+    updaters?: Array<Updater>,
 ): void {
     withCanvas(
         document,
         canvasId,
+        containerId,
     )(({canvas, ctx}) => {
         // TODO - add dom around the canvas
     
@@ -24,7 +26,7 @@ export function start(
     
         runPainterAnimationLoop(
             root,
-            updaters,
+            updaters || [],
             painter,
         );
     });

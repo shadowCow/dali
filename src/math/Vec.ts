@@ -78,4 +78,4 @@ export function vecXZ(
     };
 }
 
-export type Vec2 = VecXY;
+export { Vec2 } from './Vec2';

@@ -40,6 +40,8 @@ export type ColorConstants = {
     Purple: () => Color;
     Indigo: () => Color;
     White: () => Color;
+    SaddleBrown: () => Color;
+    LawnGreen: () => Color;
 }
 
 export const Colors: ColorConstants = {
@@ -57,4 +59,6 @@ export const Colors: ColorConstants = {
     Purple: () => color(128, 0, 128),
     Indigo: () => color(75, 0, 130),
     White: () => color(255, 255, 255),
+    SaddleBrown: () => color(139, 69, 19),
+    LawnGreen: () => color(124, 252, 0),
 };

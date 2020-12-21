@@ -150,7 +150,7 @@ export type PolygonParams = {
 }
 
 export function polygon(
-    ...points: Array<VecXY>
+    points: Array<VecXY>
 ): Polygon {
     return {
         kind: GeometricPrimitive2Kinds.POLYGON,
