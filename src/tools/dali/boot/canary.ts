@@ -1,5 +1,4 @@
 import { start } from '../Dali';
-import { branch, leaf } from '../Tree';
 import { rect, ellipse } from '../drawables/primitives/GeometricPrimitive2';
 import { fill, stroke } from '../drawables/styles/Styles';
 import { Colors } from '../drawables/styles/Color';
@@ -12,6 +11,9 @@ import { Sun } from '../drawables/composites/celestial/Sun';
 import { GrassTuft } from '../drawables/composites/grass/GrassTuft';
 import { Fir } from '../drawables/composites/tree/Fir';
 import { Moon } from '../drawables/composites/celestial/Moon';
+import { leaf, branch } from '../../../data_structures/Tree';
+import { modify } from '../drawables/pipeline';
+import { vec3 } from '../../../math/Vec';
 
 
 const myLeaf = leaf<PrimitiveDrawable>(
@@ -56,8 +58,9 @@ const waves = Waves(
         cycleCount: 10,
     }
 );
-waves.content.transform.translation = {x: 300, y: 300, z: 0};
-waves.content.styles = stroke(Colors.Blue());
+modify(waves.content)
+    .translate(vec3(300, 300, 0))
+    .style(stroke(Colors.Blue()));
 
 const eyes = EyePair(
     'the-eyes',
@@ -70,7 +73,8 @@ const eyes = EyePair(
         },
     }
 );
-eyes.content.transform.translation = {x: 100, y: 400, z: 0};
+modify(eyes.content)
+    .translate(vec3(100, 400, 0));
 
 const window = Window(
     'the-window',
@@ -81,7 +85,8 @@ const window = Window(
         frameColor: Colors.Black(),
     }
 );
-window.content.transform.translation = {x: 500, y: 50, z: 0};
+modify(window.content)
+    .translate(vec3(500, 50, 0));
 
 const sun = Sun(
     'the-sun',
@@ -89,7 +94,8 @@ const sun = Sun(
         radius: 30,
     }
 );
-sun.content.transform.translation = {x: 500, y: 200, z: 0};
+modify(sun.content)
+    .translate(vec3(500, 200, 0));
 
 const moon = Moon(
     'the-moon',
@@ -98,7 +104,8 @@ const moon = Moon(
         phaseRatio: 0.42,
     }
 );
-moon.content.transform.translation = {x: 350, y: 80, z: 0};
+modify(moon.content)
+    .translate(vec3(350, 80, 0));
 
 const grassTuft = GrassTuft(
     'the-grass',
@@ -109,7 +116,8 @@ const grassTuft = GrassTuft(
         maxBladeHeight: 30,
     }
 );
-grassTuft.content.transform.translation = {x: 250, y: 50, z: 0};
+modify(grassTuft.content)
+    .translate(vec3(250, 50, 0));
 
 const fir = Fir(
     'tree',
@@ -122,11 +130,15 @@ const fir = Fir(
         trunkHeight: 20,
     }
 );
-fir.content.transform.translation = {x: 300, y: 250, z: 0};
+modify(fir.content)
+    .translate(vec3(300, 250, 0));
 
 const root = branch(
     [reds, waves, eyes, window, sun, moon, grassTuft, fir],
     drawableGroup('root'),
 );
 
-start(root);
+start(
+    root,
+    [],
+);

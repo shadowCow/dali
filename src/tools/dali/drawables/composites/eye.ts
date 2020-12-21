@@ -3,10 +3,10 @@ import { fill, strokeAndFill } from '../styles/Styles';
 import { Color, Colors } from '../styles/Color';
 import { pipe, through } from '../../../../util/pipe';
 import { Composer } from './Composer';
-import { branch, Leaf, leaf } from '../../Tree';
 import { drawableGroup, PrimitiveDrawable, primitiveDrawable } from '../drawable';
 import { ellipse } from '../primitives/GeometricPrimitive2';
 import { createTransform } from '../transform/Transform';
+import { branch, Leaf, leaf } from '../../../../data_structures/Tree';
 
 export type EyePairProps = {
     eyeSpacing: number,

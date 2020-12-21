@@ -1,21 +1,43 @@
-import { assertNever } from "../../util/patternMatching";
+import { assertNever } from "../util/patternMatching";
 
-export type TreeNode<B,L> =
+export type Tree<B extends WithId, L extends WithId> = {
+    root: Branch<B,L>,
+    idPathMap: { [id: string]: Array<number> }
+}
+
+export function tree<B extends WithId, L extends WithId>(
+    root: Branch<B,L>
+): Tree<B,L> {
+    const idPathMap = {};
+    // TODO - populate ye olde map
+
+    return {
+        root,
+        idPathMap,
+    };
+}
+
+
+export type TreeNode<B extends WithId, L extends WithId> =
     Branch<B,L> |
     Leaf<L>;
+
+export type WithId = {
+    id: string,
+}
 
 export enum TreeNodeKind {
     BRANCH = 'BRANCH',
     LEAF = 'LEAF',
 }
 
-export type Branch<B,L> = {
+export type Branch<B extends WithId, L extends WithId> = {
     kind: typeof TreeNodeKind.BRANCH,
     children: Array<TreeNode<B,L>>,
     content: B,
 }
 
-export function branch<B,L>(
+export function branch<B extends WithId, L extends WithId>(
     children: Array<TreeNode<B,L>>,
     content: B,
 ): Branch<B,L> {
@@ -26,12 +48,12 @@ export function branch<B,L>(
     };
 }
 
-export type Leaf<L> = {
+export type Leaf<L extends WithId> = {
     kind: typeof TreeNodeKind.LEAF,
     content: L,
 }
 
-export function leaf<L>(
+export function leaf<L extends WithId>(
     content: L,
 ): Leaf<L> {
     return {
@@ -40,7 +62,7 @@ export function leaf<L>(
     };
 }
 
-export function traverseDepthFirst<B,L>(
+export function traverseDepthFirst<B extends WithId, L extends WithId>(
     root: Branch<B,L>,
     onBranch: (b: Branch<B,L>) => void,
     onLeaf: (l: Leaf<L>) => void,
@@ -69,12 +91,12 @@ function last<T>(
     return arr[arr.length - 1];
 }
 
-type TraversalTracker<B,L> = {
+type TraversalTracker<B extends WithId, L extends WithId> = {
     node: Branch<B,L>,
     currentChild: number,
 }
 
-export function* makeDepthFirstIterator<B,L>(
+export function* makeDepthFirstIterator<B extends WithId, L extends WithId>(
     root: Branch<B,L>,
 ) {
     const visitStack: Array<TraversalTracker<B,L>> = [];

@@ -5,7 +5,7 @@ import { Composer } from '../Composer';
 import { primitiveDrawable, drawableGroup } from '../../drawable';
 import { rect, PathSegment, lineTo, moveTo, path } from '../../primitives/GeometricPrimitive2';
 import { createTransform } from '../../transform/Transform';
-import { leaf, branch } from '../../../Tree';
+import { leaf, branch } from '../../../../../data_structures/Tree';
 
 export type FirProps = {
     foliageColor: Color,

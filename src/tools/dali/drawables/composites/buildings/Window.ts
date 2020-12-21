@@ -4,7 +4,7 @@ import { Color } from '../../styles/Color';
 import { stroke } from '../../styles/Styles';
 import { createTransform } from '../../transform/Transform';
 import { Composer } from '../Composer';
-import { branch, leaf } from '../../../Tree';
+import { leaf, branch } from '../../../../../data_structures/Tree';
 
 export type WindowProps = {
     frameWidth: number,

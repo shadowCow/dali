@@ -1,12 +1,15 @@
 import { withCanvas } from "../../painter/Painter";
 import { createDaliPainter, DaliPainter } from "./DaliPainter";
-import { Branch, traverseDepthFirst } from "./Tree";
 import { DrawableGroup, PrimitiveDrawable } from "./drawables/drawable";
+import { Updater, UpdateActionKind } from "./Updater";
+import { assertNever } from "../../util/patternMatching";
+import { Branch } from "../../data_structures/Tree";
 
 const canvasId = 'dali-canvas';
 
 export function start(
     root: Branch<DrawableGroup, PrimitiveDrawable>,
+    updaters: Array<Updater>,
 ): void {
     withCanvas(
         document,
@@ -21,6 +24,7 @@ export function start(
     
         runPainterAnimationLoop(
             root,
+            updaters,
             painter,
         );
     });
@@ -28,6 +32,7 @@ export function start(
 
 function runPainterAnimationLoop(
     root: Branch<DrawableGroup, PrimitiveDrawable>,
+    updaters: Array<Updater>,
     painter: DaliPainter,
 ): void {
     let previousTimestampMs = 0;
@@ -37,6 +42,7 @@ function runPainterAnimationLoop(
 
         updateEntities(
             root,
+            updaters,
             timestampMs,
             dt,
         );
@@ -54,31 +60,29 @@ function runPainterAnimationLoop(
 
 function updateEntities(
     root: Branch<DrawableGroup, PrimitiveDrawable>,
+    updaters: Array<Updater>,
     t: number,
     dt: number,
 ): void {
-    // traverseDepthFirst<BranchEntity, LeafEntity>(
-    //     root,
-    //     (b) => b.content.update(
-    //         t,
-    //         dt,
-    //         b.content,
-    //     ),
-    //     (l) => l.content.update(
-    //         t,
-    //         dt,
-    //         l.content,
-    //     ),
-    // );
+
+    updaters.forEach((updater, index) => {
+        const action = updater(
+            t,
+            dt,
+        );
+
+        switch (action.kind) {
+            case UpdateActionKind.ADD_DRAWABLE:
+                // add to tree
+                break;
+            case UpdateActionKind.REMOVE_DRAWABLE:
+                // remove from tree
+                break;
+            case UpdateActionKind.NO_OP:
+                break;
+            default:
+                assertNever(action);
+        }
+    });
 }
 
-
-// export type UpdateFn<T> = (
-//     t: number,
-//     dt: number,
-//     target: T,
-// ) => void;
-
-// export function createNoOpUpdate<T>(): UpdateFn<T> {
-//     return () => {};
-// }

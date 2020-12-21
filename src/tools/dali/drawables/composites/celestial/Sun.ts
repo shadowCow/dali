@@ -4,7 +4,7 @@ import * as Transform from '../../transform/Transform';
 import { fill } from '../../styles/Styles';
 import { Colors } from '../../styles/Color';
 import { Composer } from '../Composer';
-import { leaf } from '../../../Tree';
+import { leaf } from '../../../../../data_structures/Tree';
 
 export type SunProps = {
     radius: number,

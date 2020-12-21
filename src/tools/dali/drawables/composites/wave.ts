@@ -4,7 +4,8 @@ import { PrimitiveDrawable, primitiveDrawable, drawableGroup } from '../drawable
 import { quadraticCurveTo, path } from '../primitives/GeometricPrimitive2';
 import { NumberProp } from '../../Props';
 import { Composer } from './Composer';
-import { leaf } from '../../Tree';
+import { leaf } from '../../../../data_structures/Tree';
+
 
 export type WavesProps = {
     waveLength: number,

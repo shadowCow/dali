@@ -3,8 +3,8 @@ import { circle, path, moveTo, quadraticCurveTo, Path, bezierCurveTo } from '../
 import { fill } from '../../styles/Styles';
 import { Colors } from '../../styles/Color';
 import { Composer } from '../Composer';
-import { leaf, branch } from '../../../Tree';
 import { createTransform } from '../../transform/Transform';
+import { leaf, branch } from '../../../../../data_structures/Tree';
 
 export type MoonProps = {
     radius: number,

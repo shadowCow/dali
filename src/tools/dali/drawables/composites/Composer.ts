@@ -1,6 +1,6 @@
 import { Props } from "../../Props";
-import { TreeNode } from "../../Tree";
 import { DrawableGroup, PrimitiveDrawable } from "../drawable";
+import { TreeNode } from "../../../../data_structures/Tree";
 
 export type Composer<Props extends {}> = (
     id: string,

@@ -6,7 +6,7 @@ import { cssColorString } from "./drawables/styles/Color";
 import { GeometricPrimitive2Kinds, Quad, Text, fontString, Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, PathSegmentTypes } from "./drawables/primitives/GeometricPrimitive2";
 import { Transform } from "./drawables/transform/Transform";
 import { VecXY } from "../../math/Vec";
-import { TreeNode, TreeNodeKind, Branch, Leaf } from "./Tree";
+import { TreeNode, TreeNodeKind, Branch, Leaf } from "../../data_structures/Tree";
 
 export type DaliPainter = Painter<
     TreeNode<DrawableGroup, PrimitiveDrawable>

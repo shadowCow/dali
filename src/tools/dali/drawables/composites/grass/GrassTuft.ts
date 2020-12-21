@@ -3,7 +3,7 @@ import { Color } from '../../styles/Color';
 import { pipe, through } from '../../../../../util/pipe';
 import { GrassBlade } from './GrassBlade';
 import { Composer } from '../Composer';
-import { branch } from '../../../Tree';
+import { branch } from '../../../../../data_structures/Tree';
 
 
 export type GrassTuftProps = {

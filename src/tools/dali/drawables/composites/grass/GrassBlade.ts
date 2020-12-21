@@ -4,7 +4,7 @@ import { Color } from '../../styles/Color';
 import * as Transform from '../../transform/Transform';
 import { fill } from '../../styles/Styles';
 import { Composer } from '../Composer';
-import { leaf } from '../../../Tree';
+import { leaf } from '../../../../../data_structures/Tree';
 
 export type GrassBladeProps = {
     color: Color,
