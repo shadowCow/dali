@@ -52,7 +52,9 @@ function runPainterAnimationLoop(
 
         previousTimestampMs = timestampMs;
 
-        requestAnimationFrame(animationCallback);
+        if (updaters.length) {
+            requestAnimationFrame(animationCallback);
+        }
     }
 
     requestAnimationFrame(animationCallback);
@@ -85,4 +87,3 @@ function updateEntities(
         }
     });
 }
-
