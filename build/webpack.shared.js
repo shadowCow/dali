@@ -43,8 +43,6 @@ function baseConfig(
         devtool: 'inline-source-map',
         devServer: {
             contentBase: path.join(__dirname, '..', 'public'),
-            open: 'Google Chrome',
-            openPage: `${name}.html`,
         },
     };
 }
