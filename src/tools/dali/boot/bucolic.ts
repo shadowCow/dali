@@ -10,6 +10,7 @@ import { createTransform } from "../drawables/transform/Transform";
 import { Sky } from "../drawables/composites/celestial/Sky";
 import { TopSoil } from "../drawables/composites/land/TopSoil";
 import { Surface } from "../drawables/composites/land/Surface";
+import { OvalTree } from "../drawables/composites/tree/OvalTree";
 
 const sceneDimensions = vec2(1000, 500);
 
@@ -87,8 +88,24 @@ const grassland = Surface(
 modify(grassland.content)
     .translate(vec3(0, 400, 0));
 
+const foliageColor = Colors.Green();
+const trunkColor = Colors.Black();
+const ovalTree = OvalTree(
+    'ovaltree',
+    {
+        foliageColor,
+        width: 50,
+        height: 120,
+        trunkColor,
+        trunkHeightRatio: 0.15,
+        trunkWidthRatio: 0.3,
+    }
+);
+modify(ovalTree.content)
+    .translate(vec3(200, 400, 0));
+
 const root = branch<DrawableGroup, PrimitiveDrawable>(
-    [sky, grassland, mountainRange, topSoil],
+    [sky, grassland, mountainRange, topSoil, ovalTree],
     drawableGroup('root'),
 );
 
