@@ -3,7 +3,7 @@ import { Vec3, toZero3, toVec3, zero3, I3, toUnit3 } from "../../../../math/Vec"
 export type Transform = {
     translation: Vec3,
     scale: Vec3,
-    rotation: Vec3,
+    rotation: Vec3, // radians
 };
 
 export function createTransform(
@@ -45,9 +45,16 @@ export function setScale(
     toVec3(transform.scale, s);
 }
 
+/**
+ * 
+ * @param transform 
+ * @param r angle of rotation on each axis, in radians
+ */
 export function setRotation(
     transform: Transform,
     r: Vec3,
 ): void {
     toVec3(transform.rotation, r);
 }
+
+export type Axis3 = keyof Vec3;
