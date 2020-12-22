@@ -11,6 +11,8 @@ import { Sky } from "../drawables/composites/celestial/Sky";
 import { TopSoil } from "../drawables/composites/land/TopSoil";
 import { Surface } from "../drawables/composites/land/Surface";
 import { OvalTree } from "../drawables/composites/tree/OvalTree";
+import { Hill } from "../drawables/composites/land/Hill";
+import { Sun } from "../drawables/composites/celestial/Sun";
 
 const sceneDimensions = vec2(1000, 500);
 
@@ -88,6 +90,17 @@ const grassland = Surface(
 modify(grassland.content)
     .translate(vec3(0, 400, 0));
 
+const hill = Hill(
+    'hill',
+    {
+        width: 600,
+        height: 300,
+        paint: grassColor,
+    }
+);
+modify(hill.content)
+    .translate(vec3(0, 510, 0));
+
 const foliageColor = Colors.Green();
 const trunkColor = Colors.Black();
 const ovalTree = OvalTree(
@@ -102,10 +115,20 @@ const ovalTree = OvalTree(
     }
 );
 modify(ovalTree.content)
-    .translate(vec3(200, 400, 0));
+    .translate(vec3(100, 300, 0));
+
+const sun = Sun(
+    'sun',
+    {
+        radius: 60,
+        paint: Colors.Yellow(),
+    }
+)
+modify(sun.content)
+    .translate(vec3(900, 100, 0));
 
 const root = branch<DrawableGroup, PrimitiveDrawable>(
-    [sky, grassland, mountainRange, topSoil, ovalTree],
+    [sky, sun, grassland, mountainRange, hill, topSoil, ovalTree],
     drawableGroup('root'),
 );
 

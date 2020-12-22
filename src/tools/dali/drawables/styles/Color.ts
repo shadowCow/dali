@@ -3,8 +3,13 @@ export type Paint =
     Color |
     LinearGradient;
 
+export enum PaintKind {
+    color = 'color',
+    linear_gradient = 'linear_gradient',
+}
+
 export type Color = {
-    kind: 'color',
+    kind: typeof PaintKind.color,
     r: number,
     g: number,
     b: number,
@@ -16,7 +21,7 @@ export function rgb(
     b: number = 0,
 ): Color {
     return {
-        kind: 'color',
+        kind: PaintKind.color,
         r,
         g,
         b,
@@ -49,6 +54,7 @@ export const Colors = {
 };
 
 export type LinearGradient = {
+    kind: typeof PaintKind.linear_gradient,
     colorStops: Array<ColorStop>,
 }
 

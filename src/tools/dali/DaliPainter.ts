@@ -2,7 +2,7 @@ import { Painter } from "../../painter/Painter";
 import { Drawable, DrawableTypes, DrawableGroup, PrimitiveDrawable } from "./drawables/drawable";
 import { assertNever } from "../../util/patternMatching";
 import { MatchStylesHandler, Styles, matchStyles } from "./drawables/styles/Styles";
-import { cssColorString } from "./drawables/styles/Color";
+import { cssColorString, Paint, PaintKind } from "./drawables/styles/Color";
 import { GeometricPrimitive2Kinds, Quad, Text, fontString, Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, PathSegmentTypes } from "./drawables/primitives/GeometricPrimitive2";
 import { Transform } from "./drawables/transform/Transform";
 import { VecXY } from "../../math/Vec";
@@ -410,18 +410,34 @@ function styleAndDrawToCanvas(
                 handler.stroke(styles);
                 break;
             case 'fill':
-                ctx.fillStyle = cssColorString(styles.color);
+                setCtxFillStyle(ctx, styles.color);
                 handler.fill(styles);
                 break;
             case 'stroke_and_fill':
                 ctx.strokeStyle = cssColorString(styles.stroke.color);
                 ctx.lineWidth = styles.stroke.width;
-                ctx.fillStyle = cssColorString(styles.fill.color);
+                setCtxFillStyle(ctx, styles.fill.color);
                 handler.strokeAndFill(styles);
                 break;
             default:
                 assertNever(styles);
         }
+    }
+}
+
+function setCtxFillStyle(
+    ctx: CanvasRenderingContext2D,
+    paint: Paint,
+): void {
+    switch (paint.kind) {
+        case PaintKind.color:
+            ctx.fillStyle = cssColorString(paint);
+            break;
+        case PaintKind.linear_gradient:
+            // TODO - handle weird api...
+            break;
+        default:
+            assertNever(paint);
     }
 }
 

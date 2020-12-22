@@ -1,5 +1,5 @@
 import { assertNever } from '../../../../util/patternMatching';
-import { Color, Colors } from './Color';
+import { Color, Colors, Paint } from './Color';
 
 export type Styles =
     Stroke |
@@ -29,11 +29,11 @@ export function stroke(
 
 export type Fill = {
     kind: 'fill',
-    color: Color,
+    color: Paint,
 }
 
 export function fill(
-    color: Color = Colors.Blue(),
+    color: Paint = Colors.Blue(),
 ): Fill {
     return {
         kind: 'fill',
@@ -50,7 +50,7 @@ export type StrokeAndFill = {
 export function strokeAndFill(
     strokeColor: Color = Colors.Black(),
     strokeWidth: number = 1,
-    fillColor: Color = Colors.Blue(),
+    fillColor: Paint = Colors.Blue(),
 ): StrokeAndFill {
     return {
         kind: 'stroke_and_fill',

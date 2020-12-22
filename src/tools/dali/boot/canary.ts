@@ -92,6 +92,7 @@ const sun = Sun(
     'the-sun',
     {
         radius: 30,
+        paint: Colors.Yellow(),
     }
 );
 modify(sun.content)
