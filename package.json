@@ -28,7 +28,6 @@
     "test": "npm run test:unit",
     "test:unit": "jest --config=test/jest.config.unit.js",
     "coverage:unit": "npm run test:unit -- --coverage",
-    "lint": "eslint */**/*.ts --fix",
     "dali:start": "webpack serve --config ./build/webpack.dali.js",
     "dali:build": "webpack --progress --color --config ./build/webpack.dali.js",
     "game:start": "webpack serve --config ./build/webpack.game.js",
