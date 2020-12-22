@@ -1,4 +1,8 @@
 
+export type Paint =
+    Color |
+    LinearGradient;
+
 export type Color = {
     kind: 'color',
     r: number,
@@ -43,3 +47,12 @@ export const Colors = {
     SaddleBrown: () => rgb(139, 69, 19),
     LawnGreen: () => rgb(124, 252, 0),
 };
+
+export type LinearGradient = {
+    colorStops: Array<ColorStop>,
+}
+
+export type ColorStop = {
+    position: number,
+    color: Color,
+}
