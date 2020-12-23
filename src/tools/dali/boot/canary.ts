@@ -6,7 +6,7 @@ import { PrimitiveDrawable, primitiveDrawable, drawableGroup } from '../drawable
 import { createTransform } from '../drawables/transform/Transform';
 import { Waves } from '../drawables/composites/wave';
 import { EyePair } from '../drawables/composites/eye';
-import { Window } from '../drawables/composites/buildings/Window';
+import { Window } from '../drawables/composites/city/buildings/Window';
 import { Sun } from '../drawables/composites/celestial/Sun';
 import { GrassTuft } from '../drawables/composites/grass/GrassTuft';
 import { Fir } from '../drawables/composites/tree/Fir';

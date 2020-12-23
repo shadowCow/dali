@@ -1,10 +1,10 @@
-import { PrimitiveDrawable, DrawableGroup, primitiveDrawable, drawableGroup } from '../../drawable';
-import { rect, path, lineTo, moveTo, line } from '../../primitives/GeometricPrimitive2';
-import { Color } from '../../styles/Color';
-import { stroke, styles } from '../../styles/Styles';
-import { createTransform } from '../../transform/Transform';
-import { Composer } from '../Composer';
-import { leaf, branch } from '../../../../../data_structures/Tree';
+import { PrimitiveDrawable, DrawableGroup, primitiveDrawable, drawableGroup } from '../../../drawable';
+import { rect, path, lineTo, moveTo, line } from '../../../primitives/GeometricPrimitive2';
+import { Color } from '../../../styles/Color';
+import { stroke, styles } from '../../../styles/Styles';
+import { createTransform } from '../../../transform/Transform';
+import { Composer } from '../../Composer';
+import { leaf, branch } from '../../../../../../data_structures/Tree';
 
 export type WindowProps = {
     frameWidth: number,
