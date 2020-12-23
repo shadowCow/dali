@@ -1,6 +1,6 @@
 
 import { Color, Colors } from '../../styles/Color';
-import { fill } from '../../styles/Styles';
+import { fill, styles } from '../../styles/Styles';
 import { Composer } from '../Composer';
 import { primitiveDrawable, drawableGroup } from '../../drawable';
 import { rect, PathSegment, lineTo, moveTo, path } from '../../primitives/GeometricPrimitive2';
@@ -33,7 +33,7 @@ export const Fir: Composer<FirProps> = (
         id + '-trunk',
         rect(trunkWidth, trunkHeight),
         createTransform(),
-        fill(trunkColor),
+        styles(fill(trunkColor)),
     ));
     trunk.content.transform.translation.x = -trunkWidth/2;
 
@@ -96,7 +96,7 @@ export const Fir: Composer<FirProps> = (
         id + '-foliage',
         path(pathSegments),
         createTransform(),
-        fill(foliageColor),
+        styles(fill(foliageColor)),
     ));
 
     return branch(

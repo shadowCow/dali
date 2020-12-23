@@ -2,7 +2,7 @@ import { PrimitiveDrawable, primitiveDrawable } from '../../drawable';
 import { path, bezierCurveTo, quadraticCurveTo, moveTo, lineTo } from '../../primitives/GeometricPrimitive2';
 import { Color } from '../../styles/Color';
 import * as Transform from '../../transform/Transform';
-import { fill } from '../../styles/Styles';
+import { fill, styles } from '../../styles/Styles';
 import { Composer } from '../Composer';
 import { leaf } from '../../../../../data_structures/Tree';
 
@@ -36,6 +36,6 @@ export const GrassBlade: Composer<GrassBladeProps> = (
             lineTo(-params.halfWidth, 0),
         ]),
         Transform.createTransform(),
-        fill(params.color),
+        styles(fill(params.color)),
     ));
 };

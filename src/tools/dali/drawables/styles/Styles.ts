@@ -1,12 +1,26 @@
 import { assertNever } from '../../../../util/patternMatching';
 import { Color, Colors, Paint } from './Color';
 
-export type Styles =
+export type Styles = {
+    drawStyle: DrawStyle,
+    shadowBlur?: ShadowBlur,
+}
+export function styles(
+    drawStyle: DrawStyle,
+    shadowBlur?: ShadowBlur,
+): Styles {
+    return {
+        drawStyle,
+        shadowBlur,
+    }
+}
+
+export type DrawStyle =
     Stroke |
     Fill |
     StrokeAndFill;
 
-export function createStyles(): Styles {
+export function createStyles(): DrawStyle {
     return stroke();
 }
 
@@ -60,7 +74,7 @@ export function strokeAndFill(
 }
 
 export function matchStyles(
-    styles: Styles,
+    styles: DrawStyle,
     handler: MatchStylesHandler
 ): void {
     switch (styles.kind) {
@@ -82,4 +96,9 @@ export type MatchStylesHandler = {
     stroke: (styles: Stroke) => void,
     fill: (styles: Fill) => void,
     strokeAndFill: (styles: StrokeAndFill) => void
+}
+
+export type ShadowBlur = {
+    color: Color,
+    level: number,
 }

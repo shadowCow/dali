@@ -1,6 +1,6 @@
 import { start } from '../Dali';
 import { rect, ellipse } from '../drawables/primitives/GeometricPrimitive2';
-import { fill, stroke } from '../drawables/styles/Styles';
+import { fill, stroke, styles } from '../drawables/styles/Styles';
 import { Colors } from '../drawables/styles/Color';
 import { PrimitiveDrawable, primitiveDrawable, drawableGroup } from '../drawables/drawable';
 import { createTransform } from '../drawables/transform/Transform';
@@ -23,7 +23,7 @@ const myLeaf = leaf<PrimitiveDrawable>(
         createTransform({
             translation: {x: 50, y: 50, z: 0},
         }),
-        fill(Colors.Blue()),
+        styles(fill(Colors.Blue())),
     )
 );
 
@@ -34,7 +34,7 @@ const myOrb = leaf<PrimitiveDrawable>(
         createTransform({
             translation: {x: -50, y: -50, z: 0},
         }),
-        fill(Colors.Green()),
+        styles(fill(Colors.Green())),
     )
 );
 const group = drawableGroup(
@@ -42,7 +42,7 @@ const group = drawableGroup(
     createTransform({
         translation: {x: 100, y: 100, z: 0},
     }),
-    stroke(Colors.Red()),
+    styles(stroke(Colors.Red())),
 );
 
 const reds = branch(
@@ -60,7 +60,7 @@ const waves = Waves(
 );
 modify(waves.content)
     .translate(vec3(300, 300, 0))
-    .style(stroke(Colors.Blue()));
+    .style(styles(stroke(Colors.Blue())));
 
 const eyes = EyePair(
     'the-eyes',

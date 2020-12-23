@@ -3,7 +3,7 @@ import { Color } from "../../styles/Color";
 import { primitiveDrawable, drawableGroup } from "../../drawable";
 import { ellipse, rect } from "../../primitives/GeometricPrimitive2";
 import { createTransform } from "../../transform/Transform";
-import { fill } from "../../styles/Styles";
+import { fill, styles } from "../../styles/Styles";
 import { branch, leaf } from "../../../../../data_structures/Tree";
 import { vec3 } from "../../../../../math/Vec";
 
@@ -30,7 +30,7 @@ export const OvalTree: Composer<OvalTreeProps> = (id, props) => {
             foliageHeight / 2,
         ),
         createTransform(),
-        fill(props.foliageColor),
+        styles(fill(props.foliageColor)),
     );
 
     const trunk = primitiveDrawable(
@@ -42,7 +42,7 @@ export const OvalTree: Composer<OvalTreeProps> = (id, props) => {
         createTransform({
             translation: vec3(trunkX, trunkY, 0),
         }),
-        fill(props.trunkColor),
+        styles(fill(props.trunkColor)),
     );
 
     return branch(

@@ -1,8 +1,7 @@
-import { Styles } from '../styles/Styles';
+import { DrawStyle } from '../styles/Styles';
 import * as Transform from '../transform/Transform';
 import { PrimitiveDrawable, primitiveDrawable, drawableGroup } from '../drawable';
 import { quadraticCurveTo, path } from '../primitives/GeometricPrimitive2';
-import { NumberProp } from '../../Props';
 import { Composer } from './Composer';
 import { leaf } from '../../../../data_structures/Tree';
 

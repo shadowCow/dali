@@ -1,5 +1,5 @@
 
-import { fill, strokeAndFill } from '../styles/Styles';
+import { fill, strokeAndFill, styles } from '../styles/Styles';
 import { Color, Colors } from '../styles/Color';
 import { pipe, through } from '../../../../util/pipe';
 import { Composer } from './Composer';
@@ -87,7 +87,7 @@ function iris(
         eyeId + '-iris',
         ellipse(params.radius, params.radius),
         createTransform(),
-        fill(params.color),
+        styles(fill(params.color)),
     );
 
     return leaf(pd);
@@ -105,7 +105,7 @@ function pupil(
         eyeId + '-pupil',
         ellipse(params.radius, params.radius),
         createTransform(),
-        fill(Colors.Black()),
+        styles(fill(Colors.Black())),
     );
 
     return leaf(pd);
@@ -123,11 +123,11 @@ function eyeOutline(
         eyeId + '-eyeOutline',
         ellipse(params.irisRadius * 2, params.irisRadius * 2),
         createTransform(),
-        strokeAndFill(
+        styles(strokeAndFill(
             Colors.Black(),
             3,
             Colors.White(),
-        ),
+        )),
     );
 
     return leaf(pd);

@@ -3,7 +3,7 @@ import { Paint } from "../../styles/Color";
 import { primitiveDrawable } from "../../drawable";
 import { path, moveTo, quadraticCurveTo, ellipse } from "../../primitives/GeometricPrimitive2";
 import { createTransform } from "../../transform/Transform";
-import { fill } from "../../styles/Styles";
+import { fill, styles } from "../../styles/Styles";
 import { leaf } from "../../../../../data_structures/Tree";
 
 export type HillProps = {
@@ -20,7 +20,7 @@ export const Hill: Composer<HillProps> = (id, props) => {
             props.height / 2,
         ),
         createTransform(),
-        fill(props.paint),
+        styles(fill(props.paint)),
     );
 
     return leaf(hillShape);

@@ -122,6 +122,10 @@ const sun = Sun(
     {
         radius: 60,
         paint: Colors.Yellow(),
+        blur: {
+            level: 40,
+            color: Colors.Yellow(),
+        }
     }
 )
 modify(sun.content)

@@ -3,7 +3,7 @@ import { branch, leaf } from "../../../../../data_structures/Tree";
 import { rect } from "../../primitives/GeometricPrimitive2";
 import { primitiveDrawable, drawableGroup } from "../../drawable";
 import { createTransform } from "../../transform/Transform";
-import { fill } from "../../styles/Styles";
+import { fill, styles } from "../../styles/Styles";
 import { Colors, Color } from "../../styles/Color";
 import { vec3 } from "../../../../../math/Vec";
 
@@ -32,7 +32,7 @@ export const TopSoil: Composer<TopSoilProps> = (id, props) => {
             grassLayerHeight,
         ),
         createTransform(),
-        fill(grassColor),
+        styles(fill(grassColor)),
     ));
     
     const dirtLayer = leaf(primitiveDrawable(
@@ -44,7 +44,7 @@ export const TopSoil: Composer<TopSoilProps> = (id, props) => {
         createTransform({
             translation: vec3(0, grassLayerHeight - 1, 0),
         }),
-        fill(dirtColor),
+        styles(fill(dirtColor)),
     ));
 
     return branch(

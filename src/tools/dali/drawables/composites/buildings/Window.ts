@@ -1,7 +1,7 @@
 import { PrimitiveDrawable, DrawableGroup, primitiveDrawable, drawableGroup } from '../../drawable';
 import { rect, path, lineTo, moveTo, line } from '../../primitives/GeometricPrimitive2';
 import { Color } from '../../styles/Color';
-import { stroke } from '../../styles/Styles';
+import { stroke, styles } from '../../styles/Styles';
 import { createTransform } from '../../transform/Transform';
 import { Composer } from '../Composer';
 import { leaf, branch } from '../../../../../data_structures/Tree';
@@ -31,7 +31,7 @@ export const Window: Composer<WindowProps> = (
             frameHeight,
         ),
         createTransform(),
-        stroke(frameColor, frameThickness),
+        styles(stroke(frameColor, frameThickness)),
     ));
 
     const verticalCrossBar = leaf(primitiveDrawable(
@@ -47,7 +47,7 @@ export const Window: Composer<WindowProps> = (
                 z: 0,
             },
         }),
-        stroke(frameColor, frameThickness),
+        styles(stroke(frameColor, frameThickness)),
     ));
 
     const horizontalCrossBar = leaf(primitiveDrawable(
@@ -63,7 +63,7 @@ export const Window: Composer<WindowProps> = (
                 z: 0,
             },
         }),
-        stroke(frameColor, frameThickness),
+        styles(stroke(frameColor, frameThickness)),
     ));
 
     const group = drawableGroup(

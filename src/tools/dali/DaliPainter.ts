@@ -1,7 +1,7 @@
 import { Painter } from "../../painter/Painter";
 import { Drawable, DrawableTypes, DrawableGroup, PrimitiveDrawable } from "./drawables/drawable";
 import { assertNever } from "../../util/patternMatching";
-import { MatchStylesHandler, Styles, matchStyles } from "./drawables/styles/Styles";
+import { MatchStylesHandler, DrawStyle, Styles, matchStyles, ShadowBlur } from "./drawables/styles/Styles";
 import { cssColorString, Paint, PaintKind } from "./drawables/styles/Color";
 import { GeometricPrimitive2Kinds, Quad, Text, fontString, Ellipse, Rect, Line, Polyline, Polygon, Path, PathSegment, PathSegmentTypes } from "./drawables/primitives/GeometricPrimitive2";
 import { Transform } from "./drawables/transform/Transform";
@@ -158,14 +158,18 @@ function drawEllipse(
         2 * Math.PI
     );
 
-    drawToCanvas({
-        stroke: s => ctx.stroke(),
-        fill: f => ctx.fill(),
-        strokeAndFill: sf => {
-            ctx.fill();
-            ctx.stroke();
+    drawToCanvas(
+        ctx,
+        {
+            stroke: s => ctx.stroke(),
+            fill: f => ctx.fill(),
+            strokeAndFill: sf => {
+                ctx.fill();
+                ctx.stroke();
+            },
         },
-    }, styles);
+        styles,
+    );
 
     ctx.closePath();
 }
@@ -214,14 +218,18 @@ function drawRoundRect(
     ctx.lineTo(x, y + ry);
     ctx.quadraticCurveTo(x, y, x + rx, y);
   
-    drawToCanvas({
-        stroke: s => ctx.stroke(),
-        fill: f => ctx.fill(),
-        strokeAndFill: sf => {
-            ctx.fill();
-            ctx.stroke();
+    drawToCanvas(
+        ctx,
+        {
+            stroke: s => ctx.stroke(),
+            fill: f => ctx.fill(),
+            strokeAndFill: sf => {
+                ctx.fill();
+                ctx.stroke();
+            },
         },
-    }, styles);
+        styles,
+    );
 
     ctx.closePath();
 }
@@ -257,14 +265,18 @@ function drawPolyline(
     }
     ctx.lineTo(points[points.length-1].x, points[points.length-1].y);
 
-    drawToCanvas({
-        stroke: s => ctx.stroke(),
-        fill: f => ctx.fill(),
-        strokeAndFill: sf => {
-            ctx.fill();
-            ctx.stroke();
+    drawToCanvas(
+        ctx,
+        {
+            stroke: s => ctx.stroke(),
+            fill: f => ctx.fill(),
+            strokeAndFill: sf => {
+                ctx.fill();
+                ctx.stroke();
+            },
         },
-    }, styles);
+        styles,
+    );
 
     ctx.closePath();
 }
@@ -284,14 +296,18 @@ function drawPolygon(
     }
     ctx.lineTo(points[points.length-1].x, points[points.length-1].y);
 
-    drawToCanvas({
-        stroke: s => ctx.stroke(),
-        fill: f => ctx.fill(),
-        strokeAndFill: sf => {
-            ctx.fill();
-            ctx.stroke();
+    drawToCanvas(
+        ctx,
+        {
+            stroke: s => ctx.stroke(),
+            fill: f => ctx.fill(),
+            strokeAndFill: sf => {
+                ctx.fill();
+                ctx.stroke();
+            },
         },
-    }, styles);
+        styles,
+    );
 
     ctx.closePath();
 }
@@ -307,14 +323,18 @@ function drawPath(
     ctx.moveTo(0, 0);
     path.params.segments.forEach(s => drawPathSegment(ctx, s));
 
-    drawToCanvas({
-        stroke: s => ctx.stroke(),
-        fill: f => ctx.fill(),
-        strokeAndFill: sf => {
-            ctx.fill();
-            ctx.stroke();
+    drawToCanvas(
+        ctx,
+        {
+            stroke: s => ctx.stroke(),
+            fill: f => ctx.fill(),
+            strokeAndFill: sf => {
+                ctx.fill();
+                ctx.stroke();
+            },
         },
-    }, styles);
+        styles,
+    );
 
     ctx.closePath();
 }
@@ -391,38 +411,55 @@ function applyScale(
     ctx.scale(scale.x, scale.y);
 }
 
-function resetTransform(
-    ctx: CanvasRenderingContext2D
-): void {
-    ctx.setTransform(1,0,0,1,0,0);
-}
-
 function styleAndDrawToCanvas(
     ctx: CanvasRenderingContext2D,
     handler: MatchStylesHandler,
     styles?: Styles
 ): void {
     if (styles) {
-        switch (styles.kind) {
-            case 'stroke':
-                ctx.strokeStyle = cssColorString(styles.color);
-                ctx.lineWidth = styles.width;
-                handler.stroke(styles);
-                break;
-            case 'fill':
-                setCtxFillStyle(ctx, styles.color);
-                handler.fill(styles);
-                break;
-            case 'stroke_and_fill':
-                ctx.strokeStyle = cssColorString(styles.stroke.color);
-                ctx.lineWidth = styles.stroke.width;
-                setCtxFillStyle(ctx, styles.fill.color);
-                handler.strokeAndFill(styles);
-                break;
-            default:
-                assertNever(styles);
-        }
+        maybeWithShadow(
+            ctx,
+            () => {
+                const paintStyle = styles.drawStyle;
+                switch (paintStyle.kind) {
+                    case 'stroke':
+                        ctx.strokeStyle = cssColorString(paintStyle.color);
+                        ctx.lineWidth = paintStyle.width;
+                        handler.stroke(paintStyle);
+                        break;
+                    case 'fill':
+                        setCtxFillStyle(ctx, paintStyle.color);
+                        handler.fill(paintStyle);
+                        break;
+                    case 'stroke_and_fill':
+                        ctx.strokeStyle = cssColorString(paintStyle.stroke.color);
+                        ctx.lineWidth = paintStyle.stroke.width;
+                        setCtxFillStyle(ctx, paintStyle.fill.color);
+                        handler.strokeAndFill(paintStyle);
+                        break;
+                    default:
+                        assertNever(paintStyle);
+                }
+            },
+            styles.shadowBlur,
+        )
     }
+}
+
+function maybeWithShadow(
+    ctx: CanvasRenderingContext2D,
+    fn: () => void,
+    shadowBlur?: ShadowBlur,
+): void {
+    if (shadowBlur) {
+        ctx.shadowBlur = shadowBlur.level;
+        ctx.shadowColor = cssColorString(shadowBlur.color);
+    }
+
+    fn();
+
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'rgba(0,0,0,0)';
 }
 
 function setCtxFillStyle(
@@ -442,14 +479,21 @@ function setCtxFillStyle(
 }
 
 function drawToCanvas(
+    ctx: CanvasRenderingContext2D,
     handler: MatchStylesHandler,
     styles?: Styles,
 ): void {
     if (styles) {
-        matchStyles(
-            styles,
-            handler,
-        );
+        maybeWithShadow(
+            ctx,
+            () => {
+                matchStyles(
+                    styles.drawStyle,
+                    handler,
+                );
+            },
+            styles.shadowBlur,
+        )
     }
 }
 

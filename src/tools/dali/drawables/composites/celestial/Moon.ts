@@ -1,6 +1,6 @@
 import { DrawableGroup, PrimitiveDrawable, primitiveDrawable, drawableGroup } from '../../drawable';
 import { circle, path, moveTo, quadraticCurveTo, Path, bezierCurveTo } from '../../primitives/GeometricPrimitive2';
-import { fill } from '../../styles/Styles';
+import { fill, styles } from '../../styles/Styles';
 import { Colors } from '../../styles/Color';
 import { Composer } from '../Composer';
 import { createTransform } from '../../transform/Transform';
@@ -24,7 +24,7 @@ export const Moon: Composer<MoonProps> = (
         id + '-moon',
         circle(radius),
         createTransform(),
-        fill(Colors.White()),
+        styles(fill(Colors.White())),
     ));
 
     const shadowPath = phaseRatio < 0.5
@@ -35,7 +35,7 @@ export const Moon: Composer<MoonProps> = (
         id + '-shadow',
         shadowPath,
         createTransform(),
-        fill(Colors.Black()),
+        styles(fill(Colors.Black())),
     ));
 
     return branch(

@@ -3,7 +3,7 @@ import { Color } from "../../styles/Color";
 import { primitiveDrawable } from "../../drawable";
 import { rect } from "../../primitives/GeometricPrimitive2";
 import { createTransform } from "../../transform/Transform";
-import { fill } from "../../styles/Styles";
+import { fill, styles } from "../../styles/Styles";
 import { leaf } from "../../../../../data_structures/Tree";
 
 export type SkyProps = {
@@ -21,7 +21,7 @@ export const Sky: Composer<SkyProps> = (id, props) => {
         id,
         rect(size, size),
         createTransform(),
-        fill(color),
+        styles(fill(color)),
     );
 
     return leaf(sky);

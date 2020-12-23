@@ -1,6 +1,6 @@
 import * as Duration from './Duration';
 import * as Interpolator from './Interpolator';
-import { Styles, Stroke, Fill, StrokeAndFill, stroke } from '../styles/Styles';
+import { DrawStyle, Stroke, Fill, StrokeAndFill, stroke } from '../styles/Styles';
 import { GeometricPrimitive2, Text, Rect, Ellipse, Line, Polyline, Polygon, Path, Quad } from '../primitives/GeometricPrimitive2';
 import { assertNever } from '../../../../util/patternMatching';
 import { Transform, createTransform } from '../transform/Transform';
@@ -62,14 +62,14 @@ export function transformTransition(): TransformTransition {
     };
 }
 
-export function stylesTransition(): StylesTransition<Styles> {
+export function stylesTransition(): StylesTransition<DrawStyle> {
     return {
         kind: 'stroke',
         styles: stroke(),
     };
 }
 
-export type StylesTransition<S extends Styles> = {
+export type StylesTransition<S extends DrawStyle> = {
     kind: S['kind'];
     styles: S;
     transition?: State<S>;

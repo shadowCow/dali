@@ -1,4 +1,3 @@
-import { Props } from "../../Props";
 import { DrawableGroup, PrimitiveDrawable } from "../drawable";
 import { TreeNode } from "../../../../data_structures/Tree";
 
