@@ -11,12 +11,14 @@ export type Updater = (
 export type UpdateAction =
     AddDrawable |
     RemoveDrawable |
-    NoOp;
+    NoOp |
+    RemoveSelf;
 
 export enum UpdateActionKind {
     ADD_DRAWABLE = 'ADD_DRAWABLE',
     REMOVE_DRAWABLE = 'REMOVE_DRAWABLE',
     NO_OP = 'NO_OP',
+    REMOVE_SELF = 'REMOVE_SELF',
 }
 
 export type AddDrawable = {
@@ -32,5 +34,9 @@ export type RemoveDrawable = {
 
 export type NoOp = {
     kind: typeof UpdateActionKind.NO_OP,
+}
+
+export type RemoveSelf = {
+    kind: typeof UpdateActionKind.REMOVE_SELF,
 }
 

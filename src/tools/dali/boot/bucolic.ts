@@ -13,6 +13,7 @@ import { Surface } from "../drawables/composites/land/Surface";
 import { OvalTree } from "../drawables/composites/tree/OvalTree";
 import { Hill } from "../drawables/composites/land/Hill";
 import { Sun } from "../drawables/composites/celestial/Sun";
+import { UpdateActionKind, Updater } from "../Updater";
 
 const sceneDimensions = vec2(1000, 500);
 
@@ -136,7 +137,17 @@ const root = branch<DrawableGroup, PrimitiveDrawable>(
     drawableGroup('root'),
 );
 
+const sunSpeed = 50 / 1000;
+const moveSun: Updater = (t: number, dt: number) => {
+    if (t < 5000) {
+        sun.content.transform.translation.y += (sunSpeed * dt);
+        return { kind: UpdateActionKind.NO_OP };
+    } else {
+        return { kind: UpdateActionKind.REMOVE_SELF }
+    }
+}
+
 start(
     root,
-    [],
+    [moveSun],
 );

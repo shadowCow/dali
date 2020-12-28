@@ -38,14 +38,16 @@ function runPainterAnimationLoop(
     painter: DaliPainter,
 ): void {
     let previousTimestampMs = 0;
+    let elapsedTimeMs = 0;
 
     function animationCallback(timestampMs: number): void {
         const dt = timestampMs - previousTimestampMs;
+        elapsedTimeMs += dt;
 
         updateEntities(
             root,
             updaters,
-            timestampMs,
+            elapsedTimeMs,
             dt,
         );
         
@@ -65,13 +67,14 @@ function runPainterAnimationLoop(
 function updateEntities(
     root: Branch<DrawableGroup, PrimitiveDrawable>,
     updaters: Array<Updater>,
-    t: number,
+    elapsedTimeMs: number,
     dt: number,
 ): void {
+    const toRemove: number[] = [];
 
     updaters.forEach((updater, index) => {
         const action = updater(
-            t,
+            elapsedTimeMs,
             dt,
         );
 
@@ -84,8 +87,16 @@ function updateEntities(
                 break;
             case UpdateActionKind.NO_OP:
                 break;
+            case UpdateActionKind.REMOVE_SELF:
+                toRemove.push(index);
+                break;
             default:
                 assertNever(action);
         }
     });
+
+    toRemove.forEach(i => {
+        updaters.splice(i, 1);
+    });
+    toRemove.length = 0;
 }
