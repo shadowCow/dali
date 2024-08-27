@@ -8,15 +8,8 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.1",
     "@types/matter-js": "^0.14.5",
-    "@typescript-eslint/eslint-plugin": "^2.31.0",
-    "@typescript-eslint/parser": "^3.2.0",
-    "eslint": "^7.0.0",
-    "jest": ">=25.0.0 <26.0.0",
-    "ts-jest": "^25.5.1",
-    "ts-loader": "^7.0.3",
-    "typescript": "=3.8.3",
+    "typescript": "^5.5.4",
     "vite": "^5.4.2"
   },
   "scripts": {
