@@ -17,6 +17,7 @@ import { OvalTree } from "../drawables/composites/tree/OvalTree";
 import { Hill } from "../drawables/composites/land/Hill";
 import { Sun } from "../drawables/composites/celestial/Sun";
 import { UpdateActionKind, Updater } from "../Updater";
+import { Cloud } from "../drawables/composites/weather/Cloud";
 
 const sceneDimensions = vec2(1000, 500);
 
@@ -101,14 +102,28 @@ const sun = Sun("sun", {
 });
 modify(sun.content).translate(vec3(900, 100, 0));
 
+const cloud = Cloud("cloud", {
+  color: Colors.White(),
+  width: 200,
+  height: 50,
+});
+modify(cloud.content).translate(vec3(0, 150, 0));
+
+const cloud2 = Cloud("cloud2", {
+  color: Colors.White(),
+  width: 250,
+  height: 75,
+});
+modify(cloud2.content).translate(vec3(-300, 100, 0));
+
 const root = branch<DrawableGroup, PrimitiveDrawable>(
-  [sky, sun, grassland, mountainRange, hill, topSoil, ovalTree],
+  [sky, sun, grassland, mountainRange, hill, topSoil, ovalTree, cloud, cloud2],
   drawableGroup("root")
 );
 
-const sunSpeed = 50 / 1000;
+const sunSpeed = 5 / 1000;
 const moveSun: Updater = (t: number, dt: number) => {
-  if (t < 5000) {
+  if (t < 500000) {
     sun.content.transform.translation.y += sunSpeed * dt;
     return { kind: UpdateActionKind.NO_OP };
   } else {
@@ -116,6 +131,16 @@ const moveSun: Updater = (t: number, dt: number) => {
   }
 };
 
+const cloudSpeed = 30 / 1000;
+const moveCloud: Updater = (t: number, dt: number) => {
+  cloud.content.transform.translation.x += cloudSpeed * dt;
+  return { kind: UpdateActionKind.NO_OP };
+};
+const moveCloud2: Updater = (t: number, dt: number) => {
+  cloud2.content.transform.translation.x += cloudSpeed * dt;
+  return { kind: UpdateActionKind.NO_OP };
+};
+
 export function startBucolic() {
-  start(root, [moveSun]);
+  start(root, [moveSun, moveCloud, moveCloud2]);
 }
